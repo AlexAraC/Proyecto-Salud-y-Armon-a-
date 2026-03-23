@@ -1,1 +1,6 @@
-Cuestionarios y informacion preliminar/
+# Ignorar solo esa carpeta específica
+Documentacion/Cuestionarios y informacion preliminar/
+
+# Archivos temporales (buena práctica)
+*.tmp
+*.log
