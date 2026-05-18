@@ -110,3 +110,15 @@ CREATE TABLE DetallePedido (
     FOREIGN KEY (producto_id)
     REFERENCES Productos(id)
 );
+CREATE TABLE informacionCeo (
+
+    id INT PRIMARY KEY IDENTITY(1,1),
+
+    nombre VARCHAR(100),
+
+    descripcion VARCHAR(500),
+
+    correo VARCHAR(150) UNIQUE,
+
+    telefono VARCHAR(20)
+);

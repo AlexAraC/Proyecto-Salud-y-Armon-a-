@@ -78,9 +78,19 @@ const verificarAdmin = (req, res, next) => {
     next();
 
 };
+const verificarUser = (req, res, next) => {
 
+    if (req.usuario.rol !== 'admin' && req.usuario.rol !== 'usuario') {
+        return res.status(403).json({
+            mensaje: 'Acceso denegado'
+        });
+    }
 
+    next();
+
+};
 module.exports = {
     verificarToken,
-    verificarAdmin
+    verificarAdmin,
+    verificarUser
 };

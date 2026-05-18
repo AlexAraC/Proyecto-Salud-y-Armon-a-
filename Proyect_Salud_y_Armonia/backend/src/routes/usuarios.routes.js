@@ -6,15 +6,23 @@ const {
     obtenerUsuarios,
     crearUsuario,
     actualizarUsuario,
-    eliminarUsuario
+    eliminarUsuario,
+    cambiarRol
 } = require('../controllers/usuarios.controller');
 
-
+const {
+    verificarToken,
+    verificarAdmin,
+    verificarUser
+} = require('../middlewares/auth.middleware');
 // =====================================
 // GET
 // =====================================
 
-router.get('/', obtenerUsuarios);
+router.get('/', 
+    verificarToken,
+    verificarAdmin,
+    obtenerUsuarios);
 
 
 // =====================================
@@ -28,14 +36,28 @@ router.post('/', crearUsuario);
 // PUT
 // =====================================
 
-router.put('/:id', actualizarUsuario);
+router.put('/:id', 
+    verificarToken,
+    verificarUser,
+    actualizarUsuario);
 
+
+router.put('/:id/rol',
+    verificarToken,
+    verificarAdmin,
+    cambiarRol
+);
 
 // =====================================
 // DELETE
 // =====================================
 
-router.delete('/:id', eliminarUsuario);
+router.delete('/:id', 
+    verificarToken,
+    verificarUser,
+    eliminarUsuario,
+    cambiarRol
+);
 
 
 module.exports = router;

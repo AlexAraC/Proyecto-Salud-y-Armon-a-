@@ -112,30 +112,56 @@ const actualizarUsuario = async (req, res) => {
 
         const { id } = req.params;
 
+        const usuarioTokenId = req.usuario.id;
+
+
+        // =====================================
+        // VALIDAR MISMO USUARIO
+        // =====================================
+
+        if (parseInt(id) !== usuarioTokenId) {
+
+            return res.status(403).json({
+                mensaje: 'Accion no permitida'
+            });
+
+        }
+
+
         const {
             nombre,
             correo,
             contraseña,
-            rol,
             direccion
         } = req.body;
 
-        await sql.query(`
+
+        // =====================================
+        // ACTUALIZAR USUARIO
+        // =====================================
+
+        await sql.query`
+
             UPDATE Usuarios
 
             SET
-                nombre = '${nombre}',
-                correo = '${correo}',
-                contraseña = '${contraseña}',
-                rol = '${rol}',
-                direccion = '${direccion}'
+                nombre = ${nombre},
+                correo = ${correo},
+                contraseña = ${contraseña},
+                direccion = ${direccion}
 
             WHERE id = ${id}
-        `);
+        `;
+
+
+        // =====================================
+        // RESPUESTA
+        // =====================================
 
         res.json({
             mensaje: 'Usuario actualizado'
         });
+
 
     } catch (error) {
 
@@ -160,15 +186,47 @@ const eliminarUsuario = async (req, res) => {
 
         const { id } = req.params;
 
-        await sql.query(`
+        const usuarioTokenId = req.usuario.id;
+
+        const usuarioRol = req.usuario.rol;
+
+
+        // =====================================
+        // VALIDAR PERMISOS
+        // =====================================
+
+        if (
+            parseInt(id) !== usuarioTokenId &&
+            usuarioRol !== 'admin'
+        ) {
+
+            return res.status(403).json({
+                mensaje: 'No tienes permisos para eliminar este usuario'
+            });
+
+        }
+
+
+        // =====================================
+        // ELIMINAR USUARIO
+        // =====================================
+
+        await sql.query`
+
             DELETE FROM Usuarios
 
             WHERE id = ${id}
-        `);
+        `;
+
+
+        // =====================================
+        // RESPUESTA
+        // =====================================
 
         res.json({
             mensaje: 'Usuario eliminado'
         });
+
 
     } catch (error) {
 
@@ -181,11 +239,99 @@ const eliminarUsuario = async (req, res) => {
     }
 
 };
+const cambiarRol = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const { rol } = req.body;
 
 
+        // =====================================
+        // ROLES PERMITIDOS
+        // =====================================
+
+        const rolesValidos = [
+            'admin',
+            'usuario'
+        ];
+
+
+        // =====================================
+        // VALIDAR ROL
+        // =====================================
+
+        if (!rolesValidos.includes(rol)) {
+
+            return res.status(400).json({
+                mensaje: 'Rol no válido'
+            });
+
+        }
+
+
+        // =====================================
+        // VALIDAR USUARIO EXISTE
+        // =====================================
+
+        const usuarioDB = await sql.query`
+
+            SELECT id
+
+            FROM Usuarios
+
+            WHERE id = ${id}
+        `;
+
+
+        if (usuarioDB.recordset.length === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Usuario no encontrado'
+            });
+
+        }
+
+
+        // =====================================
+        // ACTUALIZAR ROL
+        // =====================================
+
+        await sql.query`
+
+            UPDATE Usuarios
+
+            SET rol = ${rol}
+
+            WHERE id = ${id}
+        `;
+
+
+        // =====================================
+        // RESPUESTA
+        // =====================================
+
+        res.json({
+            mensaje: 'Rol del usuario actualizado'
+        });
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: 'Error cambiando rol del usuario'
+        });
+
+    }
+
+};
 module.exports = {
     obtenerUsuarios,
     crearUsuario,
     actualizarUsuario,
-    eliminarUsuario
+    eliminarUsuario,
+    cambiarRol
 };
