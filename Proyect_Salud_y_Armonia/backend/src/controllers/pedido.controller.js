@@ -16,6 +16,7 @@ const crearPedido = async (req, res) => {
             productos
         } = req.body;
 
+
         // =====================================
         // VARIABLES
         // =====================================
@@ -33,19 +34,23 @@ const crearPedido = async (req, res) => {
 
 
             // =====================================
-            // BUSCAR PRODUCTO EN SQL
+            // BUSCAR PRODUCTO + INVENTARIO
             // =====================================
 
             const productoDB = await sql.query`
 
                 SELECT
-                    id,
-                    nombre,
-                    precio
+                    p.id,
+                    p.nombre,
+                    p.precio,
+                    i.stock
 
-                FROM Productos
+                FROM Productos p
 
-                WHERE id = ${producto.producto_id}
+                INNER JOIN Inventario i
+                ON p.id = i.producto_id
+
+                WHERE p.id = ${producto.producto_id}
             `;
 
 
@@ -67,6 +72,24 @@ const crearPedido = async (req, res) => {
             // =====================================
 
             const productoReal = productoDB.recordset[0];
+
+
+            // =====================================
+            // VALIDAR STOCK
+            // =====================================
+
+            if (producto.cantidad > productoReal.stock) {
+
+                return res.status(400).json({
+                    mensaje: `Stock insuficiente para ${productoReal.nombre}`
+                });
+
+            }
+
+
+            // =====================================
+            // CALCULAR SUBTOTAL
+            // =====================================
 
             const subtotal =
                 productoReal.precio * producto.cantidad;
@@ -132,10 +155,14 @@ const crearPedido = async (req, res) => {
 
 
         // =====================================
-        // CREAR DETALLES
+        // CREAR DETALLES + ACTUALIZAR INVENTARIO
         // =====================================
 
         for (const producto of productosProcesados) {
+
+            // =====================================
+            // CREAR DETALLE PEDIDO
+            // =====================================
 
             await sql.query`
 
@@ -156,6 +183,20 @@ const crearPedido = async (req, res) => {
                     ${producto.cantidad},
                     ${producto.subtotal}
                 )
+            `;
+
+
+            // =====================================
+            // ACTUALIZAR INVENTARIO
+            // =====================================
+
+            await sql.query`
+
+                UPDATE Inventario
+
+                SET stock = stock - ${producto.cantidad}
+
+                WHERE producto_id = ${producto.producto_id}
             `;
 
         }
@@ -188,6 +229,145 @@ const crearPedido = async (req, res) => {
 
 };
 
+const cancelarPedido = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;// ID DEL PEDIDO A CANCELAR
+
+        const { id: usuarioId } = req.usuario;// ID DEL USUARIO QUE HACE LA SOLICITUD
+
+
+        // =====================================
+        // BUSCAR PEDIDO
+        // =====================================
+
+        const pedidoDB = await sql.query`
+
+            SELECT
+                id,
+                usuario_id,
+                estado
+
+            FROM Pedidos
+
+            WHERE id = ${id}
+        `;
+
+
+        // =====================================
+        // VALIDAR EXISTENCIA
+        // =====================================
+
+        if (pedidoDB.recordset.length === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Pedido no encontrado'
+            });
+
+        }
+
+
+        const pedido = pedidoDB.recordset[0];
+
+
+        // =====================================
+        // VALIDAR DUEÑO DEL PEDIDO
+        // =====================================
+
+        if (pedido.usuario_id !== usuarioId) {
+
+            return res.status(403).json({
+                mensaje: 'No puedes cancelar este pedido'
+            });
+
+        }
+
+
+        // =====================================
+        // VALIDAR YA CANCELADO
+        // =====================================
+
+        if (pedido.estado === 'Cancelado') {
+
+            return res.status(400).json({
+                mensaje: 'El pedido ya está cancelado'
+            });
+
+        }
+
+
+        // =====================================
+        // OBTENER DETALLES DEL PEDIDO
+        // =====================================
+
+        const detallesDB = await sql.query`
+
+            SELECT
+                producto_id,
+                cantidad
+
+            FROM DetallePedido
+
+            WHERE pedido_id = ${id}
+        `;
+
+
+        const detalles = detallesDB.recordset;
+
+
+        // =====================================
+        // DEVOLVER STOCK
+        // =====================================
+
+        for (const detalle of detalles) {
+
+            await sql.query`
+
+                UPDATE Inventario
+
+                SET stock = stock + ${detalle.cantidad}
+
+                WHERE producto_id = ${detalle.producto_id}
+            `;
+
+        }
+
+
+        // =====================================
+        // ACTUALIZAR ESTADO
+        // =====================================
+
+        await sql.query`
+
+            UPDATE Pedidos
+
+            SET estado = 'Cancelado'
+
+            WHERE id = ${id}
+        `;
+
+
+        // =====================================
+        // RESPUESTA
+        // =====================================
+
+        res.json({
+            mensaje: 'Pedido cancelado correctamente'
+        });
+
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: error.message
+        });
+
+    }
+
+};
 const actualizarEstadoPedido = async (req, res) => {
 
     try {
@@ -205,7 +385,6 @@ const actualizarEstadoPedido = async (req, res) => {
             'Pendiente',
             'Enviado',
             'Entregado',
-            'Cancelado'
         ];
 
 
@@ -343,11 +522,15 @@ const verPedidosCliente = async (req, res) => {
         });
     }
 };
+
+
+
 module.exports = {
     crearPedido,
     actualizarEstadoPedido,
     verPedidosAdmin,
-    verPedidosCliente
+    verPedidosCliente,
+    cancelarPedido
 };
 
 

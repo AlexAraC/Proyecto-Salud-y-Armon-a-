@@ -70,7 +70,7 @@ const crearProducto = async (req, res) => {
                 nombre,
                 descripcion,
                 precio,
-                categoria_id
+                categoria_id,
             )
 
             OUTPUT INSERTED.id
@@ -80,7 +80,7 @@ const crearProducto = async (req, res) => {
                 ${nombre},
                 ${descripcion},
                 ${precio},
-                ${categoria_id}
+                ${categoria_id},
             )
         `;
 

@@ -1,53 +1,135 @@
 require('dotenv').config();
 
-// Importamos el framework Express para crear el servidor web
+
+// =====================================
+// IMPORTAR EXPRESS
+// =====================================
+
 const express = require('express');
 
-// Se genera la aplicación Express
-process.on('uncaughtException', (err) => {
-    console.log('ERROR NO CAPTURADO');
-    console.log(err);
-});
 
-process.on('unhandledRejection', (err) => {
-    console.log('PROMESA RECHAZADA');
-    console.log(err);
-});
+// =====================================
+// CREAR APP EXPRESS
+// =====================================
 
 const app = express();
 
-//------------------------------------------------------------------
 
+// =====================================
+// MANEJO DE ERRORES GLOBALES
+// =====================================
+
+process.on('uncaughtException', (err) => {
+
+    console.log('ERROR NO CAPTURADO');
+
+    console.log(err);
+
+});
+
+process.on('unhandledRejection', (err) => {
+
+    console.log('PROMESA RECHAZADA');
+
+    console.log(err);
+
+});
+
+
+// =====================================
+// MIDDLEWARES
+// =====================================
+
+// Permite recibir JSON desde Postman o frontend
 app.use(express.json());
 
-// Middleware para parsear el cuerpo de las solicitudes como JSON
 
-// Importamos la función conectarDB desde el archivo de configuración de la base de datos
+// =====================================
+// CONEXIÓN DB
+// =====================================
+
 const { conectarDB } = require('./config/db');
 
-//------------------------------------------------------------------
 
-// Importamos las rutas desde el archivo de rutas correspondiente
-const productosRoutes = require('./routes/productos.routes');
-const categoriasRoutes = require('./routes/categorias.routes');
-const usuariosRoutes = require('./routes/usuarios.routes');
-const authRoutes = require('./routes/auth.routes');
-const pedidoRoutes = require('./routes/pedido.route'); 
+// =====================================
+// IMPORTAR RUTAS
+// =====================================
 
-//------------------------------------------------------------------
+// Productos
+const productosRoutes =
+    require('./routes/productos.routes');
 
+// Categorías
+const categoriasRoutes =
+    require('./routes/categorias.routes');
+
+// Usuarios
+const usuariosRoutes =
+    require('./routes/usuarios.routes');
+
+// Login / Auth
+const authRoutes =
+    require('./routes/auth.routes');
+
+// Pedidos
+const pedidosRoutes =
+    require('./routes/pedido.route');
+
+// Inventario
+const inventarioRoutes =
+    require('./routes/inventario.route');
+
+// Carrito
+const carritoRoutes =
+    require('./routes/carrito.route');
+
+// Información CEO
+const informacionCeoRoutes =
+    require('./routes/informacionCeo.route');
+
+// Información Institucional
+const informacionInstitucionalRoutes =
+    require('./routes/informacionInstitucional.route');
+
+
+// =====================================
+// USAR RUTAS
+// =====================================
+
+// Productos
 app.use('/productos', productosRoutes);
 
-// Middleware para usar las rutas de productos en la aplicación Express
+// Categorías
 app.use('/categorias', categoriasRoutes);
 
-// Middleware para usar las rutas de categorías en la aplicación Express
+// Usuarios
 app.use('/usuarios', usuariosRoutes);
 
-// Middleware para usar las rutas de usuarios en la aplicación Express
+// Auth
 app.use('/auth', authRoutes);
 
-app.use('/pedidos', pedidoRoutes);
+// Pedidos
+app.use('/pedidos', pedidosRoutes);
+
+// Inventario
+app.use('/inventario', inventarioRoutes);
+
+// Carrito
+app.use('/carrito', carritoRoutes);
+
+// Información CEO
+app.use('/informacion-ceo', informacionCeoRoutes);
+
+// Información Institucional
+app.use(
+    '/informacion-institucional',
+    informacionInstitucionalRoutes
+);
+
+
+// =====================================
+// CONECTAR DB
+// =====================================
 
 console.log('Antes de conectar DB');
 
@@ -55,7 +137,13 @@ conectarDB();
 
 console.log('Después de conectar DB');
 
-// Iniciamos el servidor en el puerto 3000 y mostramos un mensaje en la consola cuando esté listo
+
+// =====================================
+// LEVANTAR SERVIDOR
+// =====================================
+
 app.listen(3000, () => {
+
     console.log('Servidor en puerto 3000');
+
 });

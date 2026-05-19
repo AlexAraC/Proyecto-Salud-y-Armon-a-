@@ -116,9 +116,19 @@ CREATE TABLE informacionCeo (
 
     nombre VARCHAR(100),
 
-    descripcion VARCHAR(500),
-
     correo VARCHAR(150) UNIQUE,
 
     telefono VARCHAR(20)
 );
+CREATE TABLE informacionInstitucional (
+    id INT PRIMARY KEY IDENTITY(1,1),
+
+    slogan VARCHAR(200),
+
+    descripcion VARCHAR(1000),
+
+    telefono VARCHAR(20),
+
+    correo VARCHAR(150) UNIQUE
+
+)
