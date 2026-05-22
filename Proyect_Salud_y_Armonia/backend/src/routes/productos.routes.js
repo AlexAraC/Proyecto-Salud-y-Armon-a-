@@ -3,26 +3,49 @@ const express = require('express');
 const router = express.Router();
 
 const {
+
     obtenerProductos,
     crearProducto,
     actualizarProducto,
-    eliminarProducto
+    eliminarProducto,
+
+    marcarProductoDestacado,
+    desmarcarProductoDestacado,
+    obtenerProductosMarcados,
+    
+
 } = require('../controllers/productos.controller');
 
 const {
+
     verificarToken,
     verificarAdmin
+
 } = require('../middlewares/auth.middleware');
 
-// =====================================
-// GET
-// =====================================
-
-router.get('/', obtenerProductos);
-
 
 // =====================================
-// POST
+// OBTENER TODOS LOS PRODUCTOS
+// =====================================
+
+router.get(
+    '/',
+    obtenerProductos
+);
+
+
+// =====================================
+// OBTENER PRODUCTOS DESTACADOS
+// =====================================
+
+router.get(
+    '/destacados',
+    obtenerProductosMarcados
+);
+
+
+// =====================================
+// CREAR PRODUCTO
 // =====================================
 
 router.post(
@@ -32,8 +55,33 @@ router.post(
     crearProducto
 );
 
+
 // =====================================
-// PUT
+// MARCAR PRODUCTO COMO DESTACADO
+// =====================================
+
+router.put(
+    '/:id/destacar',
+    verificarToken,
+    verificarAdmin,
+    marcarProductoDestacado
+);
+
+
+// =====================================
+// QUITAR PRODUCTO DESTACADO
+// =====================================
+
+router.put(
+    '/:id/quitar-destacado',
+    verificarToken,
+    verificarAdmin,
+    desmarcarProductoDestacado
+);
+
+
+// =====================================
+// ACTUALIZAR PRODUCTO
 // =====================================
 
 router.put(
@@ -45,7 +93,7 @@ router.put(
 
 
 // =====================================
-// DELETE
+// ELIMINAR PRODUCTO
 // =====================================
 
 router.delete(

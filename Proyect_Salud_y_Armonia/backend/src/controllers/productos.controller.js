@@ -9,12 +9,30 @@ const obtenerProductos = async (req, res) => {
 
     try {
 
-        const productos = await sql.query(`
+        // =====================================
+        // OBTENER FILTROS
+        // =====================================
+
+        const {
+            nombre,
+            descripcion,
+            precioMin,
+            precioMax
+        } = req.query;
+
+
+        // =====================================
+        // QUERY BASE
+        // =====================================
+
+        let query = `
+
             SELECT
                 Productos.id,
                 Productos.nombre,
                 Productos.descripcion,
                 Productos.precio,
+                Productos.destacado,
 
                 Categorias.nombre AS categoria,
 
@@ -27,22 +45,97 @@ const obtenerProductos = async (req, res) => {
 
             INNER JOIN Inventario
             ON Productos.id = Inventario.producto_id
-        `);
 
-        res.json(productos.recordset);
+            WHERE 1 = 1
+        `;
+
+
+        // =====================================
+        // FILTRO NOMBRE
+        // =====================================
+
+        if (nombre) {
+
+            query += `
+                AND Productos.nombre
+                LIKE '%${nombre}%'
+            `;
+
+        }
+
+
+        // =====================================
+        // FILTRO DESCRIPCIÓN
+        // =====================================
+
+        if (descripcion) {
+
+            query += `
+                AND Productos.descripcion
+                LIKE '%${descripcion}%'
+            `;
+
+        }
+
+
+        // =====================================
+        // PRECIO MÍNIMO
+        // =====================================
+
+        if (precioMin) {
+
+            query += `
+                AND Productos.precio >= ${precioMin}
+            `;
+
+        }
+
+
+        // =====================================
+        // PRECIO MÁXIMO
+        // =====================================
+
+        if (precioMax) {
+
+            query += `
+                AND Productos.precio <= ${precioMax}
+            `;
+
+        }
+
+
+        // =====================================
+        // EJECUTAR QUERY
+        // =====================================
+
+        const productos = await sql.query(query);
+
+
+        // =====================================
+        // RESPUESTA
+        // =====================================
+
+        res.json({
+
+            mensaje: 'Productos obtenidos correctamente',
+
+            productos: productos.recordset
+
+        });
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: 'Error obteniendo productos'
+
         });
 
     }
 
 };
-
 
 // =====================================
 // CREAR PRODUCTO
@@ -212,9 +305,11 @@ const eliminarProducto = async (req, res) => {
         // =====================================
 
         await sql.query(`
+
             DELETE FROM Productos
 
             WHERE id = ${id}
+
         `);
 
         res.json({
@@ -226,17 +321,120 @@ const eliminarProducto = async (req, res) => {
         console.log(error);
 
         res.status(500).json({
+
             mensaje: 'Error eliminando producto'
+            
         });
 
     }
 
 };
 
+const marcarProductoDestacado = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        await sql.query`
+
+            UPDATE Productos
+
+            SET destacado = 1
+
+            WHERE id = ${id}
+        `;
+
+        res.json({
+            mensaje: 'Producto marcado como destacado'
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: error.message
+        });
+
+    }
+
+};
+
+const desmarcarProductoDestacado = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+
+        await sql.query`
+
+            UPDATE Productos
+
+            SET destacado = 0
+
+            WHERE id = ${id}
+        `;
+
+
+        res.json({
+
+            mensaje: 'Producto desmarcado como destacado'
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
+const obtenerProductosMarcados = async (req, res) => {
+
+    try { 
+
+        const destacados = await sql.query`
+        SELECT * FROM Productos
+
+        WHERE destacado = 1
+        
+        `
+        res.json({
+            mensaje: 'Productos destacados cargados correctamente',
+            Productos: destacados.recordset
+        })
+
+    } catch (error){
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: error.message
+        })
+
+
+
+    }
+
+}
+
+
+
 
 module.exports = {
     obtenerProductos,
     crearProducto,
     actualizarProducto,
-    eliminarProducto
+    eliminarProducto,
+    marcarProductoDestacado,
+    desmarcarProductoDestacado,
+    obtenerProductosMarcados
 };

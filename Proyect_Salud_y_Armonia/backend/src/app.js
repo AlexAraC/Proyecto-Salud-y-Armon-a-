@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const cors = require('cors');
 
 // =====================================
 // IMPORTAR EXPRESS
@@ -91,10 +91,16 @@ const informacionCeoRoutes =
 const informacionInstitucionalRoutes =
     require('./routes/informacionInstitucional.route');
 
+// Comentarios
+const comentariosRoutes =
+    require('./routes/comentario.route');
+
 
 // =====================================
 // USAR RUTAS
 // =====================================
+
+app.use(cors());
 
 // Productos
 app.use('/productos', productosRoutes);
@@ -125,6 +131,9 @@ app.use(
     '/informacion-institucional',
     informacionInstitucionalRoutes
 );
+
+// Comentarios
+app.use('/comentarios', comentariosRoutes);
 
 
 // =====================================

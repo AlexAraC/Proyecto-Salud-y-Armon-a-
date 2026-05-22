@@ -132,3 +132,28 @@ CREATE TABLE informacionInstitucional (
     correo VARCHAR(150) UNIQUE
 
 )
+
+CREATE TABLE Comentario (
+
+    id INT PRIMARY KEY IDENTITY(1,1),
+
+    tipo VARCHAR(20) NOT NULL
+    CHECK (tipo IN ('comentario', 'reporte')),
+
+    contenido VARCHAR(MAX) NOT NULL,
+
+    fecha DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+ALTER TABLE Productos
+
+ADD destacado BIT DEFAULT 0;
+
+ALTER TABLE Usuarios
+
+ADD codigo_recuperacion VARCHAR(10),
+    expiracion_codigo DATETIME;
+
+
+SELECT * FROM Productos
+SELECT * FROM Inventario

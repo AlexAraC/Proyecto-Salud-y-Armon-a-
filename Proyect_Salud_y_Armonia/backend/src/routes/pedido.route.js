@@ -7,7 +7,8 @@ const {//Aqui se piden las funciones del controlador de pedidos
     actualizarEstadoPedido,
     verPedidosAdmin,
     verPedidosCliente,
-    cancelarPedido
+    cancelarPedido,
+    obtenerEstadisticasPedidos
 } = require('../controllers/pedido.controller');
 
 const {
@@ -49,4 +50,11 @@ router.put(
     verificarUser,
     cancelarPedido
 );
+
+router.get(
+    '/Estadisticas',
+    verificarToken,
+    verificarUser,
+    obtenerEstadisticasPedidos
+)
 module.exports = router;

@@ -525,12 +525,103 @@ const verPedidosCliente = async (req, res) => {
 
 
 
+
+
+
+const obtenerEstadisticasPedidos = async (req, res) => {
+
+    try {
+
+        // =====================================
+        // PEDIDOS ÚLTIMOS 6 MESES
+        // =====================================
+
+        const pedidosPorMes = await sql.query`
+
+            SELECT
+
+                YEAR(fecha) AS año,
+
+                MONTH(fecha) AS mes,
+
+                COUNT(*) AS cantidad_pedidos
+
+            FROM Pedidos
+
+            WHERE fecha >= DATEADD(MONTH, -6, GETDATE())
+
+            GROUP BY
+                YEAR(fecha),
+                MONTH(fecha)
+
+            ORDER BY
+                año,
+                mes
+        `;
+
+
+        // =====================================
+        // TOP 5 PRODUCTOS MÁS VENDIDOS
+        // =====================================
+
+        const productosMasVendidos = await sql.query`
+
+            SELECT TOP 5
+
+                Productos.id,
+
+                Productos.nombre,
+
+                SUM(DetallePedido.cantidad)
+                AS total_vendido
+
+            FROM DetallePedido
+
+            INNER JOIN Productos
+            ON DetallePedido.producto_id = Productos.id
+
+            GROUP BY
+                Productos.id,
+                Productos.nombre
+
+            ORDER BY total_vendido DESC
+        `;
+
+
+        // =====================================
+        // RESPUESTA
+        // =====================================
+
+        res.json({
+
+            mensaje: 'Estadísticas obtenidas correctamente',
+
+            pedidosPorMes:
+                pedidosPorMes.recordset,
+
+            productosMasVendidos:
+                productosMasVendidos.recordset
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
 module.exports = {
     crearPedido,
     actualizarEstadoPedido,
     verPedidosAdmin,
     verPedidosCliente,
-    cancelarPedido
+    cancelarPedido, 
+    obtenerEstadisticasPedidos
 };
-
-
