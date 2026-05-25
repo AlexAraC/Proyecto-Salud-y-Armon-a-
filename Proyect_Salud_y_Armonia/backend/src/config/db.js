@@ -1,11 +1,13 @@
 const sql = require('mssql');
+
 require('dotenv').config();
+
+
 if (!process.env.DB_SERVER) {
     throw new Error('DB_SERVER no definido');
 }
-console.log(process.env.DB_SERVER);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_DATABASE);
+
+
 const config = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,

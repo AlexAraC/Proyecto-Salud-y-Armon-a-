@@ -3,16 +3,13 @@ const express = require('express');
 const router = express.Router();
 
 const {
-
     obtenerProductos,
     crearProducto,
     actualizarProducto,
     eliminarProducto,
-
     marcarProductoDestacado,
     desmarcarProductoDestacado,
     obtenerProductosMarcados,
-    
 
 } = require('../controllers/productos.controller');
 

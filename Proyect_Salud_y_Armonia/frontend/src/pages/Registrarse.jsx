@@ -1,20 +1,25 @@
 import { useState } from 'react';
+
 import { crearUsuario } from '../services/usuariosApi';
 
 function Register() {
+
+    // =====================================
+    // ESTADO DEL FORMULARIO
+    // =====================================
 
     const [formulario, setFormulario] = useState({
 
         nombre: '',
         correo: '',
         contraseña: '',
-        rol: 'cliente',
-        direccion: ''
+        direccion: '',
+        rol: 'cliente'
 
     });
 
     // =====================================
-    // CAMBIOS EN INPUTS
+    // ACTUALIZAR INPUTS
     // =====================================
 
     const handleChange = (e) => {
@@ -32,26 +37,30 @@ function Register() {
     // =====================================
     // ENVIAR FORMULARIO
     // =====================================
+
     const handleSubmit = async (e) => {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    try {
+        try {
 
-        await crearUsuario(formulario);
+            await crearUsuario(formulario);
 
-        alert('Usuario creado');
+            alert('Usuario creado');
 
-    } catch (error) {
+        } catch (error) {
 
-        alert('el registro fallo')
+            console.log(error);
 
-        console.log(error);
+            alert('Error al registrar');
 
-    }
+        }
 
     };
 
+    // =====================================
+    // RENDER
+    // =====================================
 
     return (
 
@@ -65,7 +74,7 @@ function Register() {
                     type="text"
                     name="nombre"
                     placeholder="Nombre"
-                    onChange={handleChange}
+                    onChange={handleChange}//onchange es == detectar cambio
                 />
 
                 <br />
@@ -81,7 +90,7 @@ function Register() {
 
                 <input
                     type="password"
-                    name="password"
+                    name="contraseña"
                     placeholder="Contraseña"
                     onChange={handleChange}
                 />
@@ -99,7 +108,7 @@ function Register() {
 
                 <button type="submit">
 
-                    Crear Usuario
+                    Registrarse
 
                 </button>
 

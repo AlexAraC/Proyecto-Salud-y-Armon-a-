@@ -140,11 +140,8 @@ app.use('/comentarios', comentariosRoutes);
 // CONECTAR DB
 // =====================================
 
-console.log('Antes de conectar DB');
 
 conectarDB();
-
-console.log('Después de conectar DB');
 
 
 // =====================================

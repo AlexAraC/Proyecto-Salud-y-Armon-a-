@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import axios from 'axios';
 
-function Register() {
+import { loginUsuario } from '../services/authApi';
+
+function Login() {
+
+    // =====================================
+    // ESTADO
+    // =====================================
 
     const [formulario, setFormulario] = useState({
 
-        nombre: '',
         correo: '',
-        password: '',
-        rol: 'cliente',
-        direccion: ''
+        contraseña: ''
 
     });
 
     // =====================================
-    // CAMBIOS EN INPUTS
+    // HANDLE CHANGE
     // =====================================
 
     const handleChange = (e) => {
@@ -30,7 +32,7 @@ function Register() {
     };
 
     // =====================================
-    // ENVIAR FORMULARIO
+    // HANDLE SUBMIT
     // =====================================
 
     const handleSubmit = async (e) => {
@@ -39,44 +41,39 @@ function Register() {
 
         try {
 
-            const respuesta = await axios.post(
-
-                'http://localhost:3000/api/usuarios',
-
+            const respuesta = await loginUsuario(
                 formulario
-
             );
 
-            console.log(respuesta.data);
+            localStorage.setItem(
+                'token',
 
-            alert('Usuario creado');
+                respuesta.data.token
+            );
+
+            alert('Login correcto');
 
         } catch (error) {
 
             console.log(error);
 
-            alert('Error');
+            alert('Login incorrecto');
 
         }
 
     };
 
+    // =====================================
+    // RENDER
+    // =====================================
+
     return (
 
         <div>
 
-            <h1>Registro</h1>
+            <h1>Login</h1>
 
             <form onSubmit={handleSubmit}>
-
-                <input
-                    type="text"
-                    name="nombre"
-                    placeholder="Nombre"
-                    onChange={handleChange}
-                />
-
-                <br />
 
                 <input
                     type="email"
@@ -89,17 +86,8 @@ function Register() {
 
                 <input
                     type="password"
-                    name="password"
+                    name="contraseña"
                     placeholder="Contraseña"
-                    onChange={handleChange}
-                />
-
-                <br />
-
-                <input
-                    type="text"
-                    name="direccion"
-                    placeholder="Dirección"
                     onChange={handleChange}
                 />
 
@@ -107,7 +95,7 @@ function Register() {
 
                 <button type="submit">
 
-                    Crear Usuario
+                    Iniciar sesión
 
                 </button>
 
@@ -119,4 +107,4 @@ function Register() {
 
 }
 
-export default Register;
+export default Login;
