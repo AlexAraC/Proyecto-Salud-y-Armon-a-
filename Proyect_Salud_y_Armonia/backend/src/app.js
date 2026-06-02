@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const cors = require('cors');
 
 // =====================================
@@ -95,11 +96,27 @@ const informacionInstitucionalRoutes =
 const comentariosRoutes =
     require('./routes/comentario.route');
 
+// Estadisticas 
+const estadisticasRoute = 
+    require('./routes/estadisticas.routes')
+
+
 
 // =====================================
 // USAR RUTAS
 // =====================================
 
+app.use(
+
+    '/uploads',
+
+    express.static(
+
+        path.join(__dirname, 'uploads')
+
+    )
+
+);
 app.use(cors());
 
 // Productos
@@ -134,6 +151,10 @@ app.use(
 
 // Comentarios
 app.use('/comentarios', comentariosRoutes);
+
+//estadisticas
+
+app.use('/estadisticas', estadisticasRoute);
 
 
 // =====================================

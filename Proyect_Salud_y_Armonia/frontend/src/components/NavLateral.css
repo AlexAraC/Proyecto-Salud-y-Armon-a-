@@ -1,0 +1,188 @@
+/* ===================================== */
+/* MENU LATERAL */
+/* ===================================== */
+
+.menu-lateral {
+
+    width: 260px;
+
+    padding: 30px 20px;
+
+    box-sizing: border-box;
+
+    border-radius: 20px;
+
+    background: transparent;
+
+    flex-shrink: 0;
+
+}
+
+/* ===================================== */
+/* TITULO */
+/* ===================================== */
+
+.menu-titulo {
+
+    color: #3A312B;
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+}
+
+
+/* ===================================== */
+/* OPCIONES */
+/* ===================================== */
+
+.menu-opciones {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+}
+
+
+/* ===================================== */
+/* ITEM */
+/* ===================================== */
+
+.menu-item {
+
+    text-decoration: none;
+
+    color: #3A312B;
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    border: 1px solid #3A312B;
+
+    box-shadow: rgba(58, 49, 43, 0.55);
+
+    transition: all 0.3s ease;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+}
+
+
+/* ===================================== */
+/* HOVER */
+/* ===================================== */
+
+.menu-item:hover {
+
+    background-color: #3A312B;
+
+    color: #EFE7DC;
+
+    transform: translateX(5px);
+
+}
+
+@media (max-width: 900px) {
+
+    .menu-lateral {
+
+        width: 100%;
+
+        padding: 18px;
+
+        border-radius: 0;
+
+    }
+
+    .menu-titulo {
+
+        margin-bottom: 14px;
+
+        text-align: left;
+
+        font-size: 22px;
+
+    }
+
+    .menu-opciones {
+
+        flex-direction: row;
+
+        gap: 10px;
+
+        overflow-x: auto;
+
+        padding-bottom: 8px;
+
+        scrollbar-width: thin;
+
+    }
+
+    .menu-item {
+
+        flex: 0 0 auto;
+
+        min-width: 150px;
+
+        max-width: 190px;
+
+        padding: 12px 14px;
+
+        border-radius: 10px;
+
+        font-size: 15px;
+
+        text-align: center;
+
+        white-space: normal;
+
+        line-height: 1.25;
+
+    }
+
+    .menu-item:hover {
+
+        transform: translateY(-2px);
+
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .menu-lateral {
+
+        padding: 14px 12px;
+
+    }
+
+    .menu-titulo {
+
+        font-size: 20px;
+
+    }
+
+    .menu-item {
+
+        min-width: 136px;
+
+        max-width: 160px;
+
+        padding: 10px 12px;
+
+        font-size: 14px;
+
+    }
+
+}

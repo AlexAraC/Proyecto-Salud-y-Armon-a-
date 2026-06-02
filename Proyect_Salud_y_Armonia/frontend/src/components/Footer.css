@@ -1,0 +1,105 @@
+/* ===================================== */
+/* FOOTER */
+/* ===================================== */
+
+.footer {
+
+    background-color: #3A312B;
+
+    color: #A3B18A;
+
+    margin-top: 50px;
+
+    padding-top: 40px;
+
+}
+
+
+/* ===================================== */
+/* CONTENEDOR */
+/* ===================================== */
+
+.footer-contenedor {
+
+    width: 90%;
+
+    margin: auto;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 40px;
+
+    flex-wrap: wrap;
+
+    padding-bottom: 30px;
+
+}
+
+
+/* ===================================== */
+/* SECCIONES */
+/* ===================================== */
+
+.footer-seccion {
+
+    flex: 1;
+
+    min-width: 220px;
+
+}
+
+
+.footer-seccion h3 {
+
+    margin-bottom: 15px;
+
+    color: #d8c3a5;
+
+}
+
+
+.footer-seccion p {
+
+    margin: 8px 0;
+
+    line-height: 1.6;
+
+}
+
+
+/* ===================================== */
+/* COPYRIGHT */
+/* ===================================== */
+
+.footer-copy {
+
+    text-align: center;
+
+    padding: 18px;
+
+    border-top: 1px solid rgba(255,255,255,0.15);
+
+    font-size: 14px;
+
+}
+
+
+/* ===================================== */
+/* RESPONSIVE */
+/* ===================================== */
+
+@media (max-width: 768px) {
+
+    .footer-contenedor {
+
+        flex-direction: column;
+
+        text-align: center;
+
+        gap: 20px;
+
+    }
+
+}

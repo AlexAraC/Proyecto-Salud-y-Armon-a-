@@ -1,142 +1,5 @@
 const { sql } = require('../config/db');
 
-
-// =====================================
-// OBTENER PRODUCTOS
-// =====================================
-
-const obtenerProductos = async (req, res) => {
-
-    try {
-
-        // =====================================
-        // OBTENER FILTROS
-        // =====================================
-
-        const {
-            nombre,
-            descripcion,
-            precioMin,
-            precioMax
-        } = req.query;
-
-
-        // =====================================
-        // QUERY BASE
-        // =====================================
-
-        let query = `
-
-            SELECT
-                Productos.id,
-                Productos.nombre,
-                Productos.descripcion,
-                Productos.precio,
-                Productos.destacado,
-
-                Categorias.nombre AS categoria,
-
-                Inventario.stock
-
-            FROM Productos
-
-            INNER JOIN Categorias
-            ON Productos.categoria_id = Categorias.id
-
-            INNER JOIN Inventario
-            ON Productos.id = Inventario.producto_id
-
-            WHERE 1 = 1
-        `;
-
-
-        // =====================================
-        // FILTRO NOMBRE
-        // =====================================
-
-        if (nombre) {
-
-            query += `
-                AND Productos.nombre
-                LIKE '%${nombre}%'
-            `;
-
-        }
-
-
-        // =====================================
-        // FILTRO DESCRIPCIÓN
-        // =====================================
-
-        if (descripcion) {
-
-            query += `
-                AND Productos.descripcion
-                LIKE '%${descripcion}%'
-            `;
-
-        }
-
-
-        // =====================================
-        // PRECIO MÍNIMO
-        // =====================================
-
-        if (precioMin) {
-
-            query += `
-                AND Productos.precio >= ${precioMin}
-            `;
-
-        }
-
-
-        // =====================================
-        // PRECIO MÁXIMO
-        // =====================================
-
-        if (precioMax) {
-
-            query += `
-                AND Productos.precio <= ${precioMax}
-            `;
-
-        }
-
-
-        // =====================================
-        // EJECUTAR QUERY
-        // =====================================
-
-        const productos = await sql.query(query);
-
-
-        // =====================================
-        // RESPUESTA
-        // =====================================
-
-        res.json({
-
-            mensaje: 'Productos obtenidos correctamente',
-
-            productos: productos.recordset
-
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error obteniendo productos'
-
-        });
-
-    }
-
-};
-
 // =====================================
 // CREAR PRODUCTO
 // =====================================
@@ -146,24 +9,40 @@ const crearProducto = async (req, res) => {
     try {
 
         const {
+
             nombre,
             descripcion,
             precio,
             categoria_id,
             stock
+
         } = req.body;
 
+
         // =====================================
-        // CREAR PRODUCTO
+        // IMAGEN
+        // =====================================
+
+        const imagen = req.file
+
+            ? `/uploads/${req.file.filename}`
+
+            : null;
+
+
+        // =====================================
+        // INSERTAR PRODUCTO
         // =====================================
 
         const producto = await sql.query`
+
             INSERT INTO Productos
             (
                 nombre,
                 descripcion,
                 precio,
                 categoria_id,
+                imagen
             )
 
             OUTPUT INSERTED.id
@@ -174,19 +53,25 @@ const crearProducto = async (req, res) => {
                 ${descripcion},
                 ${precio},
                 ${categoria_id},
+                ${imagen}
             )
         `;
 
 
-        const productoId = producto.recordset[0].id;
+        // =====================================
+        // ID PRODUCTO
+        // =====================================
 
-        console.log(productoId);
+        const producto_id =
+            producto.recordset[0].id;
+
 
         // =====================================
-        // CREAR INVENTARIO
+        // INVENTARIO
         // =====================================
 
         await sql.query`
+
             INSERT INTO Inventario
             (
                 producto_id,
@@ -195,13 +80,16 @@ const crearProducto = async (req, res) => {
 
             VALUES
             (
-                ${productoId},
+                ${producto_id},
                 ${stock}
             )
         `;
 
+
         res.json({
+
             mensaje: 'Producto creado'
+
         });
 
     } catch (error) {
@@ -209,7 +97,120 @@ const crearProducto = async (req, res) => {
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
+        });
+
+    }
+
+};
+
+
+// =====================================
+// OBTENER PRODUCTOS
+// =====================================
+
+const obtenerProductos = async (req, res) => {
+
+    try {
+
+        const productos = await sql.query`
+
+            SELECT
+
+                Productos.id,
+                Productos.nombre,
+                Productos.descripcion,
+                Productos.precio,
+                Productos.imagen,
+
+                Categorias.nombre AS categoria,
+
+                Inventario.stock
+
+            FROM Productos
+
+            INNER JOIN Categorias
+
+                ON Productos.categoria_id = Categorias.id
+
+            INNER JOIN Inventario
+
+                ON Productos.id = Inventario.producto_id
+        `;
+
+
+        res.json(
+            productos.recordset
+        );
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
+
+
+// =====================================
+// OBTENER PRODUCTO POR ID
+// =====================================
+
+const obtenerProductoPorId = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+
+        const producto = await sql.query`
+
+            SELECT
+
+                Productos.id,
+                Productos.nombre,
+                Productos.descripcion,
+                Productos.precio,
+                Productos.imagen,
+
+                Categorias.nombre AS categoria,
+
+                Inventario.stock
+
+            FROM Productos
+
+            INNER JOIN Categorias
+
+                ON Productos.categoria_id = Categorias.id
+
+            INNER JOIN Inventario
+
+                ON Productos.id = Inventario.producto_id
+
+            WHERE Productos.id = ${id}
+        `;
+
+
+        res.json(
+            producto.recordset[0]
+        );
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
         });
 
     }
@@ -228,43 +229,84 @@ const actualizarProducto = async (req, res) => {
         const { id } = req.params;
 
         const {
+
             nombre,
             descripcion,
             precio,
             categoria_id,
             stock
+
         } = req.body;
+
+
+        // =====================================
+        // PRODUCTO ACTUAL
+        // =====================================
+
+        const productoActual = await sql.query`
+
+            SELECT imagen
+
+            FROM Productos
+
+            WHERE id = ${id}
+        `;
+
+
+        // =====================================
+        // IMAGEN
+        // =====================================
+
+        let imagen =
+            productoActual.recordset[0].imagen;
+
+
+        if (req.file) {
+
+            imagen =
+                `/uploads/${req.file.filename}`;
+
+        }
+
 
         // =====================================
         // ACTUALIZAR PRODUCTO
         // =====================================
 
-        await sql.query(`
+        await sql.query`
+
             UPDATE Productos
 
             SET
-                nombre = '${nombre}',
-                descripcion = '${descripcion}',
+
+                nombre = ${nombre},
+                descripcion = ${descripcion},
                 precio = ${precio},
-                categoria_id = ${categoria_id}
+                categoria_id = ${categoria_id},
+                imagen = ${imagen}
 
             WHERE id = ${id}
-        `);
+        `;
+
 
         // =====================================
         // ACTUALIZAR INVENTARIO
         // =====================================
 
-        await sql.query(`
+        await sql.query`
+
             UPDATE Inventario
 
             SET stock = ${stock}
 
             WHERE producto_id = ${id}
-        `);
+        `;
+
 
         res.json({
+
             mensaje: 'Producto actualizado'
+
         });
 
     } catch (error) {
@@ -272,7 +314,9 @@ const actualizarProducto = async (req, res) => {
         console.log(error);
 
         res.status(500).json({
-            mensaje: 'Error actualizando producto'
+
+            mensaje: error.message
+
         });
 
     }
@@ -290,97 +334,34 @@ const eliminarProducto = async (req, res) => {
 
         const { id } = req.params;
 
+
         // =====================================
         // ELIMINAR INVENTARIO
         // =====================================
 
-        await sql.query(`
+        await sql.query`
+
             DELETE FROM Inventario
 
             WHERE producto_id = ${id}
-        `);
+        `;
+
 
         // =====================================
         // ELIMINAR PRODUCTO
         // =====================================
 
-        await sql.query(`
+        await sql.query`
 
             DELETE FROM Productos
 
             WHERE id = ${id}
+        `;
 
-        `);
 
         res.json({
+
             mensaje: 'Producto eliminado'
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error eliminando producto'
-            
-        });
-
-    }
-
-};
-
-const marcarProductoDestacado = async (req, res) => {
-
-    try {
-
-        const { id } = req.params;
-
-        await sql.query`
-
-            UPDATE Productos
-
-            SET destacado = 1
-
-            WHERE id = ${id}
-        `;
-
-        res.json({
-            mensaje: 'Producto marcado como destacado'
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        res.status(500).json({
-            mensaje: error.message
-        });
-
-    }
-
-};
-
-const desmarcarProductoDestacado = async (req, res) => {
-
-    try {
-
-        const { id } = req.params;
-
-
-        await sql.query`
-
-            UPDATE Productos
-
-            SET destacado = 0
-
-            WHERE id = ${id}
-        `;
-
-
-        res.json({
-
-            mensaje: 'Producto desmarcado como destacado'
 
         });
 
@@ -397,44 +378,14 @@ const desmarcarProductoDestacado = async (req, res) => {
     }
 
 };
-const obtenerProductosMarcados = async (req, res) => {
-
-    try { 
-
-        const destacados = await sql.query`
-        SELECT * FROM Productos
-
-        WHERE destacado = 1
-        
-        `
-        res.json({
-            mensaje: 'Productos destacados cargados correctamente',
-            Productos: destacados.recordset
-        })
-
-    } catch (error){
-
-        console.log(error);
-
-        res.status(500).json({
-            mensaje: error.message
-        })
-
-
-
-    }
-
-}
-
-
 
 
 module.exports = {
-    obtenerProductos,
+
     crearProducto,
+    obtenerProductos,
+    obtenerProductoPorId,
     actualizarProducto,
-    eliminarProducto,
-    marcarProductoDestacado,
-    desmarcarProductoDestacado,
-    obtenerProductosMarcados
+    eliminarProducto
+
 };

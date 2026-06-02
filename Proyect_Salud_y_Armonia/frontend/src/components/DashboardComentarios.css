@@ -1,0 +1,324 @@
+.dashboard-comentarios {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 22px;
+
+    width: 100%;
+
+}
+
+.comentarios-resumen {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 22px 24px;
+
+    background: rgba(255,255,255,0.65);
+
+    backdrop-filter: blur(6px);
+
+    border: 2px solid rgba(58,49,43,0.15);
+
+    border-radius: 12px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+}
+
+.comentarios-resumen p,
+.comentarios-etiqueta {
+
+    margin: 0 0 6px;
+
+    color: #6B4F3A;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+}
+
+.comentarios-resumen h2,
+.comentarios-card h2 {
+
+    margin: 0;
+
+    color: #3A312B;
+
+}
+
+.comentarios-resumen-metricas {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+.comentarios-resumen-metricas span,
+.comentarios-contador {
+
+    padding: 8px 12px;
+
+    color: #3A312B;
+
+    background: #EFE7DC;
+
+    border: 1px solid rgba(58,49,43,0.2);
+
+    border-radius: 8px;
+
+    font-weight: 700;
+
+}
+
+.comentarios-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 22px;
+
+}
+
+.comentarios-card {
+
+    min-width: 0;
+
+    padding: 22px;
+
+    background: rgba(255,255,255,0.65);
+
+    backdrop-filter: blur(6px);
+
+    border: 2px solid rgba(58,49,43,0.15);
+
+    border-radius: 12px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+}
+
+.comentarios-card-header,
+.comentario-item-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+}
+
+.comentarios-lista {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-top: 18px;
+
+    max-height: 430px;
+
+    overflow-y: auto;
+
+    padding-right: 4px;
+
+}
+
+.comentario-item {
+
+    padding: 14px;
+
+    background: rgba(239,231,220,0.72);
+
+    border: 1px solid rgba(58,49,43,0.15);
+
+    border-radius: 8px;
+
+}
+
+.comentario-item-header strong {
+
+    color: #3A312B;
+
+}
+
+.comentario-item-header span {
+
+    color: #6B4F3A;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+.comentario-item p,
+.comentarios-vacio {
+
+    margin: 10px 0 0;
+
+    color: #3A312B;
+
+    line-height: 1.5;
+
+}
+
+.comentarios-vacio {
+
+    margin: 0;
+
+    padding: 18px;
+
+    text-align: center;
+
+    background: rgba(239,231,220,0.72);
+
+    border-radius: 8px;
+
+}
+
+.comentarios-estado {
+
+    padding: 24px;
+
+    color: #3A312B;
+
+    text-align: center;
+
+    background: rgba(255,255,255,0.65);
+
+    border: 2px solid rgba(58,49,43,0.15);
+
+    border-radius: 12px;
+
+}
+
+.comentarios-error {
+
+    color: #8A2E24;
+
+}
+
+@media (max-width: 900px) {
+
+    .comentarios-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .comentarios-resumen {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+    .comentarios-card,
+    .comentarios-resumen,
+    .comentarios-estado {
+
+        border-radius: 12px;
+
+    }
+
+    .comentarios-lista {
+
+        max-height: none;
+
+        overflow-y: visible;
+
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .dashboard-comentarios {
+
+        gap: 16px;
+
+    }
+
+    .comentarios-resumen,
+    .comentarios-card {
+
+        padding: 16px 12px;
+
+    }
+
+    .comentarios-resumen h2,
+    .comentarios-card h2 {
+
+        font-size: 20px;
+
+        line-height: 1.25;
+
+    }
+
+    .comentarios-resumen-metricas {
+
+        width: 100%;
+
+    }
+
+    .comentarios-resumen-metricas span {
+
+        flex: 1 1 130px;
+
+        text-align: center;
+
+    }
+
+    .comentarios-card-header,
+    .comentario-item-header {
+
+        align-items: flex-start;
+
+    }
+
+    .comentario-item-header {
+
+        flex-direction: column;
+
+        gap: 4px;
+
+    }
+
+    .comentario-item {
+
+        padding: 12px;
+
+    }
+
+    .comentario-item p,
+    .comentarios-vacio {
+
+        font-size: 15px;
+
+        overflow-wrap: anywhere;
+
+    }
+
+}

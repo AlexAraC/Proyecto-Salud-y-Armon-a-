@@ -5,7 +5,8 @@ const router = express.Router();
 const {
     obtenerComentarios,
     crearComentario,
-    eliminarComentario
+    eliminarComentario,
+    separarComentariosPorTipo
 } = require('../controllers/comentario.controller');
 const e = require('express');
 
@@ -25,5 +26,10 @@ router.delete('/:id', eliminarComentario)
 //======================================
 
 router.post('/', crearComentario)
+
+//=====================================
+// SEPARAR COMENTARIOS POR TIPO
+//=====================================
+router.get('/comunicacion_cliente', separarComentariosPorTipo)
 
 module.exports = router;

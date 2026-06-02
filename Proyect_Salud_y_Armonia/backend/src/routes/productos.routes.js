@@ -2,27 +2,26 @@ const express = require('express');
 
 const router = express.Router();
 
+const upload = require('../middlewares/upload');
+
 const {
-    obtenerProductos,
+
     crearProducto,
+    obtenerProductos,
+    obtenerProductoPorId,
     actualizarProducto,
-    eliminarProducto,
-    marcarProductoDestacado,
-    desmarcarProductoDestacado,
-    obtenerProductosMarcados,
+    eliminarProducto
 
 } = require('../controllers/productos.controller');
 
 const {
+    verificarAdmin,
+    verificarToken
 
-    verificarToken,
-    verificarAdmin
-
-} = require('../middlewares/auth.middleware');
-
+} = require('../middlewares/auth.middleware')
 
 // =====================================
-// OBTENER TODOS LOS PRODUCTOS
+// OBTENER TODOS
 // =====================================
 
 router.get(
@@ -32,12 +31,12 @@ router.get(
 
 
 // =====================================
-// OBTENER PRODUCTOS DESTACADOS
+// OBTENER POR ID
 // =====================================
 
 router.get(
-    '/destacados',
-    obtenerProductosMarcados
+    '/:id',
+    obtenerProductoPorId
 );
 
 
@@ -46,34 +45,18 @@ router.get(
 // =====================================
 
 router.post(
+
     '/',
-    verificarToken,
+
     verificarAdmin,
+
+    verificarToken,
+
+
+    upload.single('imagen'),
+
     crearProducto
-);
 
-
-// =====================================
-// MARCAR PRODUCTO COMO DESTACADO
-// =====================================
-
-router.put(
-    '/:id/destacar',
-    verificarToken,
-    verificarAdmin,
-    marcarProductoDestacado
-);
-
-
-// =====================================
-// QUITAR PRODUCTO DESTACADO
-// =====================================
-
-router.put(
-    '/:id/quitar-destacado',
-    verificarToken,
-    verificarAdmin,
-    desmarcarProductoDestacado
 );
 
 
@@ -82,10 +65,18 @@ router.put(
 // =====================================
 
 router.put(
+
     '/:id',
-    verificarToken,
+
     verificarAdmin,
+
+    verificarToken,
+
+
+    upload.single('imagen'),
+
     actualizarProducto
+
 );
 
 
@@ -95,8 +86,11 @@ router.put(
 
 router.delete(
     '/:id',
-    verificarToken,
+    
     verificarAdmin,
+
+    verificarToken,
+
     eliminarProducto
 );
 

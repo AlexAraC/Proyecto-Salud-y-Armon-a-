@@ -1,0 +1,262 @@
+/* ===================================== */
+/* NAVBAR */
+/* ===================================== */
+
+.navbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 13px 37px;
+
+    background-color: #A3B18A;
+
+    width: 70%;
+
+    margin: 20px auto;
+
+    margin-top: 15px;
+
+    border-radius: 20px;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+
+}
+
+
+/* ===================================== */
+/* LOGO */
+/* ===================================== */
+
+.navbar-logo-img {
+
+    width: 200px;
+
+    height: auto;
+
+    display: block;
+
+}
+
+
+/* ===================================== */
+/* LINKS */
+/* ===================================== */
+
+.navbar-links {
+
+    display: flex;
+
+    gap: 25px;
+
+    align-items: center;
+
+}
+
+
+/* ===================================== */
+/* LINKS INDIVIDUALES */
+/* ===================================== */
+
+.navbar-links a {
+
+    color: #3A312B;
+
+    text-decoration: none;
+
+    font-size: 18px;
+
+    font-weight: 500;
+
+    position: relative;
+
+    padding: 8px 14px;
+
+    border-radius: 10px;
+
+    transition:
+        background-color 0.7s ease,
+        color 0.8s ease,
+        transform 0.3s ease;
+
+}
+
+
+/* ===================================== */
+/* HOVER LINKS */
+/* ===================================== */
+
+.navbar-links a:hover {
+
+    background-color: #3A312B;
+
+    color: #A3B18A;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ===================================== */
+/* BOTON CERRAR SESION */
+/* ===================================== */
+
+.cerrar-sesion-btn {
+
+    background: transparent;
+
+    border: none;
+
+    color: #3A312B;
+
+    font-size: 18px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    padding: 8px 14px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    transition:
+        background-color 0.7s ease,
+        color 0.8s ease,
+        transform 0.3s ease;
+
+}
+
+
+/* ===================================== */
+/* HOVER CERRAR SESION */
+/* ===================================== */
+
+.cerrar-sesion-btn:hover {
+
+    background-color: #3A312B;
+
+    color: #A3B18A;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ===================================== */
+/* BOTÓN HAMBURGUESA */
+/* ===================================== */
+
+.hamburguesa {
+
+    display: none;
+
+    font-size: 32px;
+
+    cursor: pointer;
+
+    color: #3A312B;
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+
+}
+
+
+/* ===================================== */
+/* HOVER HAMBURGUESA */
+/* ===================================== */
+
+.hamburguesa:hover {
+
+    transform: scale(1.1);
+
+}
+
+
+/* ===================================== */
+/* HAMBURGUESA ACTIVA */
+/* ===================================== */
+
+.hamburguesa.activo {
+
+    transform: rotate(90deg);
+
+}
+
+
+/* ===================================== */
+/* RESPONSIVE */
+/* ===================================== */
+
+@media (max-width: 768px) {
+
+    .navbar {
+
+        width: 95%;
+
+        padding: 12px 18px;
+
+        flex-wrap: wrap;
+
+        justify-content: space-between;
+
+        position: relative;
+
+    }
+
+    .navbar-logo-img {
+
+        width: 150px;
+
+    }
+
+    .hamburguesa {
+
+        display: block;
+
+    }
+
+    .navbar-links {
+
+        display: flex;
+
+        flex-direction: column;
+
+        width: 100%;
+
+        gap: 15px;
+
+        overflow: hidden;
+
+        max-height: 0;
+
+        opacity: 0;
+
+        transform: translateY(-10px);
+
+        transition:
+            max-height 0.4s ease,
+            opacity 0.3s ease,
+            transform 0.3s ease;
+
+    }
+
+    .navbar-links.activo {
+
+        max-height: 300px;
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+        margin-top: 15px;
+
+    }
+
+}

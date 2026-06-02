@@ -150,8 +150,75 @@ const eliminarComentario = async (req, res) => {
 
 };
 
+// =====================================
+// SEPARAR COMENTARIOS POR TIPO
+// =====================================
+
+const separarComentariosPorTipo = async (req, res) => {
+
+    try {
+
+        const comentarios = await sql.query`
+
+            SELECT
+                id,
+                tipo,
+                contenido,
+                fecha
+
+            FROM Comentario
+
+            WHERE tipo = 'comentario'
+
+            ORDER BY fecha DESC
+        `;
+
+        const reportes = await sql.query`
+
+            SELECT
+                id,
+                tipo,
+                contenido,
+                fecha
+
+            FROM Comentario
+
+            WHERE tipo = 'reporte'
+
+            ORDER BY fecha DESC
+        `;
+
+        res.json({
+
+            mensaje: 'Comentarios obtenidos correctamente',
+
+            comentarios: comentarios.recordset,
+
+            reportes: reportes.recordset
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Error al separar comentarios:',
+            error
+        );
+
+        res.status(500).json({
+
+            error: 'Error al obtener comentarios'
+
+        });
+
+    }
+
+};
+
+
 module.exports = {
     obtenerComentarios,
     crearComentario,
-    eliminarComentario
+    eliminarComentario,
+    separarComentariosPorTipo
 };

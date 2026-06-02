@@ -157,3 +157,7 @@ ADD codigo_recuperacion VARCHAR(10),
 
 SELECT * FROM Productos
 SELECT * FROM Inventario
+
+
+ALTER TABLE Productos
+ADD imagen VARCHAR(255);

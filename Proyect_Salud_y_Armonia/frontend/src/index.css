@@ -1,0 +1,265 @@
+/* ===================================== */
+/* GOOGLE FONTS */
+/* ===================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap');
+
+
+/* ===================================== */
+/* VARIABLES GLOBALES */
+/* ===================================== */
+
+:root {
+
+    --color-crema: #EFE7DC;
+
+    --color-arena: #D9C7B0;
+
+    --color-verde: #A3B18A;
+
+    --color-terracota: #B86F5C;
+
+    --color-cafe: #3A312B;
+
+}
+
+
+/* ===================================== */
+/* RESET */
+/* ===================================== */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ===================================== */
+/* BODY */
+/* ===================================== */
+body {
+
+    background-image: url('./assets/background.png');
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+
+    color: var(--color-cafe);
+
+    font-family: 'Open Sans', sans-serif;
+
+    min-height: 100vh;
+
+}
+
+
+/* ===================================== */
+/* TITULOS */
+/* ===================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+
+    font-family: 'Montserrat', sans-serif;
+
+    color: var(--color-cafe);
+
+}
+
+
+/* ===================================== */
+/* LINKS */
+/* ===================================== */
+
+a {
+
+    text-decoration: none;
+
+    color: inherit;
+
+}
+
+
+/* ===================================== */
+/* BOTONES */
+/* ===================================== */
+
+button {
+
+    border: none;
+
+    outline: none;
+
+    cursor: pointer;
+
+    font-family: 'Open Sans', sans-serif;
+
+    transition: 0.3s;
+
+}
+
+
+/* ===================================== */
+/* INPUTS */
+/* ===================================== */
+
+input,
+textarea,
+select {
+
+    border: 1px solid var(--color-arena);
+
+    border-radius: 12px;
+
+    padding: 12px;
+
+    font-size: 16px;
+
+    font-family: 'Open Sans', sans-serif;
+
+    outline: none;
+
+    transition: 0.3s;
+
+}
+
+
+/* ===================================== */
+/* INPUT FOCUS */
+/* ===================================== */
+
+input:focus,
+textarea:focus,
+select:focus {
+
+    border-color: var(--color-verde);
+
+}
+
+
+/* ===================================== */
+/* SCROLL SUAVE */
+/* ===================================== */
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+/* ===================================== */
+/* IMAGENES */
+/* ===================================== */
+
+img {
+
+    max-width: 100%;
+
+    display: block;
+
+}
+
+
+/* ===================================== */
+/* CONTENEDOR GENERAL */
+/* ===================================== */
+
+.container {
+
+    width: 90%;
+
+    max-width: 1200px;
+
+    margin: auto;
+
+}
+
+
+/* ===================================== */
+/* CARDS GENERALES */
+/* ===================================== */
+
+.card {
+
+    background-color: white;
+
+    border-radius: 20px;
+
+    padding: 20px;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    transition: 0.3s;
+
+}
+
+
+.card:hover {
+
+    transform: translateY(-5px);
+
+}
+
+
+/* ===================================== */
+/* BOTON PRINCIPAL */
+/* ===================================== */
+
+.btn-principal {
+
+    background-color: var(--color-verde);
+
+    color: white;
+
+    padding: 12px 24px;
+
+    border-radius: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.btn-principal:hover {
+
+    background-color: var(--color-terracota);
+
+}
+html,
+body,
+#root {
+
+    width: 100%;
+
+    min-height: 100vh;
+
+}
+
+/* ===================================== */
+/* RESPONSIVE */
+/* ===================================== */
+
+@media (max-width: 768px) {
+
+    body {
+
+        font-size: 15px;
+
+    }
+
+}

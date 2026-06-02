@@ -261,7 +261,7 @@ const enviarCodigoRecuperacion = async (req, res) => {
 
         res.json({
 
-            mensaje: 'Código enviado correctamente'
+            mensaje: 'Código enviado al gmail proporcionado correctamente'
 
         });
 
