@@ -1,61 +1,62 @@
 import './NavLateral.css';
 
-import { Link } from 'react-router-dom';
-
-function MenuLateral() {
+function MenuLateral({ seccionActiva, cambiarSeccion }) {
 
     return (
 
         <aside className="menu-lateral">
 
             <h2 className="menu-titulo">
-                Administración
+                Administracion
             </h2>
+
             <nav className="menu-opciones">
 
-                <Link
-                    to="/Menu Princpal"
-                    className="menu-item">
-                   Administracion General
-                </Link>
-
-                <Link
-                    to="/gestionar-categorias"
-                    className="menu-item"
+                <button
+                    type="button"
+                    className={`menu-item ${seccionActiva === 'general' ? 'activo' : ''}`}
+                    onClick={() => cambiarSeccion('general')}
                 >
-                    Gestionar Categorías
-                </Link>
+                    Administracion General
+                </button>
 
-                <Link
-                    to="/gestionar-productos"
+                <button
+                    type="button"
+                    className={`menu-item ${seccionActiva === 'categorias' ? 'activo' : ''}`}
+                    onClick={() => cambiarSeccion('categorias')}
+                >
+                    Gestionar Categorias
+                </button>
+
+                <button
+                    type="button"
                     className="menu-item"
                 >
                     Gestionar Productos
-                </Link>
+                </button>
 
-                <Link
-                    to="/gestionar-homepage"
+                <button
+                    type="button"
                     className="menu-item"
                 >
                     Gestionar HomePage
-                </Link>
+                </button>
 
-                <Link
-                    to="/gestionar-pedidos"
+                <button
+                    type="button"
                     className="menu-item"
                 >
                     Gestionar Pedidos
-                </Link>
+                </button>
 
-                <Link
-                    to="/gestionar-clientes"
+                <button
+                    type="button"
                     className="menu-item"
                 >
                     Gestionar Clientes
-                </Link>
+                </button>
 
             </nav>
-                        
 
         </aside>
 

@@ -6,6 +6,8 @@ import DashboardGraficos from '../../components/DashboardGraficos';
 
 import DashboardComentarios from '../../components/DashboardComentarios';
 
+import DashboardCategorias from '../../components/DashboardCategorias';
+
 import { obtenerEstadisticas } from '../../services/estadisticasService';
 
 import './MenuPrincipal.css';
@@ -13,6 +15,8 @@ import './MenuPrincipal.css';
 function MenuPrincipal() {
 
     const [estadisticas, setEstadisticas] = useState(null);
+
+    const [seccionActiva, setSeccionActiva] = useState('general');
 
     useEffect(() => {
 
@@ -44,30 +48,50 @@ function MenuPrincipal() {
 
         <div className="panel-admin">
 
-            <MenuLateral />
+            <MenuLateral
+                seccionActiva={seccionActiva}
+                cambiarSeccion={setSeccionActiva}
+            />
 
             <div className="contenido-admin">
 
-                <h1>Administración General</h1>
-
-
                 {
-                    estadisticas && (
+                    seccionActiva === 'general' && (
 
-                        <DashboardGraficos
+                        <>
 
-                            ventas={estadisticas.ventas}
+                            <h1>Administracion General</h1>
 
-                            productos={estadisticas.productos}
+                            {
+                                estadisticas && (
 
-                        />
+                                    <DashboardGraficos
+
+                                        ventas={estadisticas.ventas}
+
+                                        productos={estadisticas.productos}
+
+                                    />
+
+                                )
+                            }
+
+                            <h1>Comentarios y reportes</h1>
+
+                            <DashboardComentarios />
+
+                        </>
 
                     )
                 }
 
-                <h1>Comentarios y reportes</h1>
+                {
+                    seccionActiva === 'categorias' && (
 
-                <DashboardComentarios />
+                        <DashboardCategorias />
+
+                    )
+                }
 
             </div>
 

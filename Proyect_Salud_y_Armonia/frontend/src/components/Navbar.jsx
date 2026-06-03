@@ -6,11 +6,37 @@ import { useState } from 'react';
 
 import logo from '../assets/logo.png';
 
+const obtenerRolDesdeToken = (token) => {
+
+    if (!token) {
+        return null;
+    }
+
+    try {
+
+        const payload = JSON.parse(
+            atob(token.split('.')[1])
+        );
+
+        return payload.rol;
+
+    } catch (error) {
+
+        console.error(error);
+
+        return null;
+
+    }
+
+};
+
 function Navbar() {
 
     const [menuAbierto, setMenuAbierto] = useState(false);
 
     const token = localStorage.getItem('token');
+
+    const esAdmin = obtenerRolDesdeToken(token) === 'admin';
 
     const cerrarSesion = () => {
 
@@ -53,6 +79,20 @@ function Navbar() {
                 <Link to="/catalogo">Catálogo</Link>
 
                 <Link to="/acerca">Acerca de nosotros</Link>
+
+                {
+
+                    esAdmin && (
+
+                        <Link to="/administracion">
+
+                            Panel administrativo
+
+                        </Link>
+
+                    )
+
+                }
 
                 {
 
