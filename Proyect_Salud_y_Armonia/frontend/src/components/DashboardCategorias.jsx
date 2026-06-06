@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+
 import {
     actualizarCategoria,
     eliminarCategoria,
-    obtenerCategorias
+    obtenerCategorias,
+    crearCategoria
 } from '../services/categoriasApi';
 
 import './DashboardCategorias.css';
@@ -12,7 +14,12 @@ function DashboardCategorias() {
     const [categorias, setCategorias] = useState([]);
     const [categoriaAEliminar, setCategoriaAEliminar] = useState(null);
     const [categoriaAEditar, setCategoriaAEditar] = useState(null);
+
     const [nombreEditado, setNombreEditado] = useState('');
+    const [nombreNuevaCategoria, setNombreNuevaCategoria] = useState('');
+
+    const [modalAgregarAbierto, setModalAgregarAbierto] = useState(false);
+
     const [error, setError] = useState('');
     const [guardando, setGuardando] = useState(false);
 
@@ -37,6 +44,14 @@ function DashboardCategorias() {
 
     }, []);
 
+    const abrirModalAgregar = () => {
+
+        setModalAgregarAbierto(true);
+        setNombreNuevaCategoria('');
+        setError('');
+
+    };
+
     const abrirModalEditar = (categoria) => {
 
         console.log('Categoria seleccionada:', categoria);
@@ -58,9 +73,49 @@ function DashboardCategorias() {
 
         setCategoriaAEliminar(null);
         setCategoriaAEditar(null);
+        setModalAgregarAbierto(false);
+
         setNombreEditado('');
+        setNombreNuevaCategoria('');
+
         setError('');
         setGuardando(false);
+
+    };
+
+    const guardarCategoria = async (evento) => {
+
+        evento.preventDefault();
+
+        const nombreLimpio = nombreNuevaCategoria.trim();
+
+        if (!nombreLimpio) {
+            setError('El nombre no puede estar vacio.');
+            return;
+        }
+
+        try {
+
+            setGuardando(true);
+
+            await crearCategoria({
+                nombre: nombreLimpio
+            });
+
+            const categoriasActualizadas =
+                await obtenerCategorias();
+
+            setCategorias(categoriasActualizadas);
+
+            cerrarModales();
+
+        } catch (errorCrear) {
+
+            console.error(errorCrear);
+            setError('No se pudo crear la categoria.');
+            setGuardando(false);
+
+        }
 
     };
 
@@ -71,12 +126,15 @@ function DashboardCategorias() {
         try {
 
             setGuardando(true);
+
             await eliminarCategoria(categoriaAEliminar.id);
+
             setCategorias((categoriasActuales) =>
                 categoriasActuales.filter(
                     (categoria) => categoria.id !== categoriaAEliminar.id
                 )
             );
+
             cerrarModales();
 
         } catch (errorEliminar) {
@@ -107,18 +165,27 @@ function DashboardCategorias() {
         try {
 
             setGuardando(true);
+
             const categoriaActualizada = await actualizarCategoria(
                 categoriaAEditar.id,
-                { ...categoriaAEditar, nombre: nombreLimpio }
+                {
+                    ...categoriaAEditar,
+                    nombre: nombreLimpio
+                }
             );
 
             setCategorias((categoriasActuales) =>
                 categoriasActuales.map((categoria) =>
                     categoria.id === categoriaAEditar.id
-                        ? { ...categoria, ...categoriaActualizada, nombre: nombreLimpio }
+                        ? {
+                            ...categoria,
+                            ...categoriaActualizada,
+                            nombre: nombreLimpio
+                        }
                         : categoria
                 )
             );
+
             cerrarModales();
 
         } catch (errorEditar) {
@@ -136,18 +203,25 @@ function DashboardCategorias() {
         <div className="dashboard-categorias">
 
             <div className="categorias-header">
+
                 <h2>Categorias</h2>
+
                 <button
                     type="button"
                     className="boton-agregar-categoria"
                     aria-label="Agregar categoria"
+                    onClick={abrirModalAgregar}
                 >
                     <span className="boton-agregar-icono">+</span>
-                    <span className="boton-agregar-texto">Agregar categoria</span>
+                    <span className="boton-agregar-texto">
+                        Agregar categoria
+                    </span>
                 </button>
+
             </div>
 
             <div className="categorias-tabla-contenedor">
+
                 <table className="tabla-categorias">
 
                     <thead>
@@ -161,40 +235,80 @@ function DashboardCategorias() {
                     <tbody>
 
                         {categorias.map((categoria) => (
+
                             <tr key={categoria.id}>
+
                                 <td>{categoria.id}</td>
+
                                 <td>{categoria.nombre}</td>
+
                                 <td>
+
                                     <button
                                         type="button"
-                                        onClick={() => abrirModalEditar(categoria)}
+                                        onClick={() =>
+                                            abrirModalEditar(categoria)
+                                        }
                                     >
                                         Editar
                                     </button>
+
                                     <button
                                         type="button"
-                                        onClick={() => abrirModalEliminar(categoria)}
+                                        onClick={() =>
+                                            abrirModalEliminar(categoria)
+                                        }
                                     >
                                         Eliminar
                                     </button>
+
                                 </td>
+
                             </tr>
+
                         ))}
 
                     </tbody>
 
                 </table>
+
             </div>
 
-            {categoriaAEliminar && (
+            {modalAgregarAbierto && (
+
                 <div className="modal-fondo">
-                    <div className="modal-categorias">
-                        <h3>Eliminar categoria</h3>
-                        <p>
-                            Estas seguro de que deseas eliminar "{categoriaAEliminar.nombre}"?
-                        </p>
-                        {error && <p className="mensaje-error">{error}</p>}
+
+                    <form
+                        className="modal-categorias"
+                        onSubmit={guardarCategoria}
+                    >
+
+                        <h3>Agregar categoria</h3>
+
+                        <label htmlFor="nueva-categoria">
+                            Nombre
+                        </label>
+
+                        <input
+                            id="nueva-categoria"
+                            type="text"
+                            value={nombreNuevaCategoria}
+                            onChange={(evento) =>
+                                setNombreNuevaCategoria(
+                                    evento.target.value
+                                )
+                            }
+                            autoFocus
+                        />
+
+                        {error && (
+                            <p className="mensaje-error">
+                                {error}
+                            </p>
+                        )}
+
                         <div className="modal-acciones">
+
                             <button
                                 type="button"
                                 onClick={cerrarModales}
@@ -202,33 +316,107 @@ function DashboardCategorias() {
                             >
                                 Cancelar
                             </button>
+
+                            <button
+                                type="submit"
+                                disabled={guardando}
+                            >
+                                {guardando
+                                    ? 'Guardando...'
+                                    : 'Agregar'}
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            )}
+
+            {categoriaAEliminar && (
+
+                <div className="modal-fondo">
+
+                    <div className="modal-categorias">
+
+                        <h3>Eliminar categoria</h3>
+
+                        <p>
+                            Estas seguro de que deseas eliminar "
+                            {categoriaAEliminar.nombre}"?
+                        </p>
+
+                        {error && (
+                            <p className="mensaje-error">
+                                {error}
+                            </p>
+                        )}
+
+                        <div className="modal-acciones">
+
+                            <button
+                                type="button"
+                                onClick={cerrarModales}
+                                disabled={guardando}
+                            >
+                                Cancelar
+                            </button>
+
                             <button
                                 type="button"
                                 onClick={confirmarEliminar}
                                 disabled={guardando}
                                 className="boton-peligro"
                             >
-                                {guardando ? 'Eliminando...' : 'Eliminar'}
+                                {guardando
+                                    ? 'Eliminando...'
+                                    : 'Eliminar'}
                             </button>
+
                         </div>
+
                     </div>
+
                 </div>
+
             )}
 
             {categoriaAEditar && (
+
                 <div className="modal-fondo">
-                    <form className="modal-categorias" onSubmit={guardarEdicion}>
+
+                    <form
+                        className="modal-categorias"
+                        onSubmit={guardarEdicion}
+                    >
+
                         <h3>Editar categoria</h3>
-                        <label htmlFor="nombre-categoria">Nombre</label>
+
+                        <label htmlFor="nombre-categoria">
+                            Nombre
+                        </label>
+
                         <input
                             id="nombre-categoria"
                             type="text"
                             value={nombreEditado}
-                            onChange={(evento) => setNombreEditado(evento.target.value)}
+                            onChange={(evento) =>
+                                setNombreEditado(
+                                    evento.target.value
+                                )
+                            }
                             autoFocus
                         />
-                        {error && <p className="mensaje-error">{error}</p>}
+
+                        {error && (
+                            <p className="mensaje-error">
+                                {error}
+                            </p>
+                        )}
+
                         <div className="modal-acciones">
+
                             <button
                                 type="button"
                                 onClick={cerrarModales}
@@ -236,12 +424,22 @@ function DashboardCategorias() {
                             >
                                 Cancelar
                             </button>
-                            <button type="submit" disabled={guardando}>
-                                {guardando ? 'Guardando...' : 'Guardar'}
+
+                            <button
+                                type="submit"
+                                disabled={guardando}
+                            >
+                                {guardando
+                                    ? 'Guardando...'
+                                    : 'Guardar'}
                             </button>
+
                         </div>
+
                     </form>
+
                 </div>
+
             )}
 
         </div>

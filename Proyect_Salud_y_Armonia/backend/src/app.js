@@ -106,13 +106,55 @@ const estadisticasRoute =
 // USAR RUTAS
 // =====================================
 
+// DEBUG
+app.use('/uploads', (req, res, next) => {
+
+    console.log(
+        'Archivo solicitado:',
+        req.url
+    );
+
+    next();
+
+});
+
 app.use(
 
     '/uploads',
 
     express.static(
 
-        path.join(__dirname, 'uploads')
+        path.resolve(
+            __dirname,
+            '../uploads'
+        )
+
+    )
+
+);
+
+console.log(
+
+    'Ruta uploads:',
+
+    path.resolve(
+        __dirname,
+        '../uploads'
+    )
+
+);
+
+app.use(cors());
+
+
+
+app.use(
+
+    '/uploads',
+
+    express.static(
+
+        path.join(__dirname, '../uploads')
 
     )
 

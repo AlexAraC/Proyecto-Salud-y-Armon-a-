@@ -1,0 +1,459 @@
+/* =====================================
+   CARD PRODUCTO
+===================================== */
+
+.card-producto {
+
+    background: rgba(255,255,255,0.65) !important;
+
+    backdrop-filter: blur(6px);
+
+    border: 1px solid rgba(58,49,43,0.15);
+
+    border-radius: 12px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+.card-producto:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 12px 24px rgba(0,0,0,0.10);
+
+}
+
+.producto-imagen {
+
+    width: 100%;
+
+    height: 220px;
+
+    object-fit: cover;
+
+}
+
+.card-producto h3 {
+
+    margin: 15px 15px 8px;
+
+    color: #3A312B;
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+}
+
+.card-producto p {
+
+    margin: 4px 15px;
+
+    color: #6B4F3A;
+
+    line-height: 1.5;
+
+}
+
+/* =====================================
+   BOTONES CARD
+===================================== */
+
+.card-producto button {
+
+    margin: 10px 15px;
+
+    padding: 10px 14px;
+
+    border: 1px solid rgba(58,49,43,0.18);
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font: inherit;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+
+}
+
+.card-producto button:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+
+}
+
+.boton-detalles {
+
+    background: rgba(239,231,220,0.72);
+    color: #3A312B !important;
+    
+
+}
+
+.boton-detalles:hover {
+
+    background: rgba(206, 198, 189, 0.72);
+
+}
+
+.boton-carrito {
+
+    background: #A3B18A !important;
+    color: #3A312B !important;
+
+    margin-bottom: 15px;
+
+}
+
+.boton-carrito:hover {
+
+    background: #8A9A5B !important;
+
+}
+
+/* =====================================
+   MODAL FONDO
+===================================== */
+
+.modal-fondo {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(58,49,43,0.45);
+
+    animation: fadeIn 0.2s ease;
+
+}
+
+/* =====================================
+   MODAL
+===================================== */
+
+.modal-producto {
+
+    width: min(750px, 95%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 24px;
+
+    color: #3A312B;
+
+    background: rgba(255,255,255,0.92);
+
+    backdrop-filter: blur(6px);
+
+    border: 1px solid rgba(58,49,43,0.15);
+
+    border-radius: 12px;
+
+    box-shadow: 0 18px 40px rgba(0,0,0,0.16);
+
+    animation: modalOpen 0.25s ease;
+
+}
+
+.modal-producto img {
+
+    width: 100%;
+
+    max-height: 350px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+
+}
+
+.modal-producto h2 {
+
+    margin: 0 0 15px;
+
+    color: #3A312B;
+
+}
+
+.modal-producto p {
+
+    margin-bottom: 10px;
+
+    color: #6B4F3A;
+
+    line-height: 1.5;
+
+}
+
+.modal-producto label {
+
+    display: block;
+
+    margin-top: 18px;
+
+    margin-bottom: 8px;
+
+    color: #6B4F3A;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+}
+
+.modal-producto input {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    border: 1px solid rgba(58,49,43,0.24);
+
+    border-radius: 8px;
+
+    color: #3A312B;
+
+    background: rgba(239,231,220,0.72);
+
+    font: inherit;
+
+    font-weight: 600;
+
+}
+
+.modal-producto input:focus {
+
+    outline: 2px solid rgba(163,177,138,0.55);
+
+    border-color: #8A9A5B;
+
+}
+
+/* =====================================
+   BOTONES MODAL
+===================================== */
+
+.modal-acciones {
+
+    display: flex;
+
+    align-items: stretch;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+}
+
+.boton-agregar,
+.boton-cerrar {
+
+    flex: 1;
+
+    min-height: 42px;
+
+    border: 1px solid rgba(58,49,43,0.18);
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font: inherit;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+
+}
+
+.boton-agregar:hover,
+.boton-cerrar:hover,
+.boton-reportar:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+
+}
+
+
+.boton-agregar:hover {
+
+    background: rgba(206, 198, 189, 0.72) !important;
+
+}
+
+.boton-cerrar {
+
+     background: #8da06e !important;
+
+    color: white;
+
+}
+
+.boton-cerrar:hover {
+
+    background: #8A9A5B !important;
+
+}
+
+/* =====================================
+   BOTON REPORTAR
+===================================== */
+
+.boton-reportar {
+
+    width: 42px;
+
+    min-width: 42px;
+
+    padding: 0;
+
+    border: 1px solid rgba(58,49,43,0.18);
+
+    border-radius: 8px;
+
+    background: #D56A6A !important;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+
+}
+
+.boton-reportar:hover {
+
+    background: #C25858 !important;
+
+}
+
+/* =====================================
+   ANIMACIONES
+===================================== */
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+@keyframes modalOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(20px)
+            scale(0.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 768px) {
+
+    .producto-imagen {
+
+        height: 180px;
+
+    }
+
+    .modal-producto {
+
+        width: 95%;
+
+        padding: 18px 14px;
+
+    }
+
+    .modal-acciones {
+
+        flex-direction: column;
+
+    }
+
+    .boton-reportar {
+
+        width: 100%;
+
+        min-width: 100%;
+
+        height: 42px;
+
+    }
+
+}

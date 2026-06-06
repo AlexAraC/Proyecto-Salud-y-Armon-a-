@@ -14,7 +14,11 @@ function MenuLateral({ seccionActiva, cambiarSeccion }) {
 
                 <button
                     type="button"
-                    className={`menu-item ${seccionActiva === 'general' ? 'activo' : ''}`}
+                    className={`menu-item ${
+                        seccionActiva === 'general'
+                            ? 'activo'
+                            : ''
+                    }`}
                     onClick={() => cambiarSeccion('general')}
                 >
                     Administracion General
@@ -22,7 +26,11 @@ function MenuLateral({ seccionActiva, cambiarSeccion }) {
 
                 <button
                     type="button"
-                    className={`menu-item ${seccionActiva === 'categorias' ? 'activo' : ''}`}
+                    className={`menu-item ${
+                        seccionActiva === 'categorias'
+                            ? 'activo'
+                            : ''
+                    }`}
                     onClick={() => cambiarSeccion('categorias')}
                 >
                     Gestionar Categorias
@@ -30,28 +38,48 @@ function MenuLateral({ seccionActiva, cambiarSeccion }) {
 
                 <button
                     type="button"
-                    className="menu-item"
+                    className={`menu-item ${
+                        seccionActiva === 'productos'
+                            ? 'activo'
+                            : ''
+                    }`}
+                    onClick={() => cambiarSeccion('productos')}
                 >
                     Gestionar Productos
                 </button>
 
                 <button
                     type="button"
-                    className="menu-item"
+                    className={`menu-item ${
+                        seccionActiva === 'homepage'
+                            ? 'activo'
+                            : ''
+                    }`}
+                    onClick={() => cambiarSeccion('homepage')}
                 >
                     Gestionar HomePage
                 </button>
 
                 <button
                     type="button"
-                    className="menu-item"
+                    className={`menu-item ${
+                        seccionActiva === 'pedidos'
+                            ? 'activo'
+                            : ''
+                    }`}
+                    onClick={() => cambiarSeccion('pedidos')}
                 >
                     Gestionar Pedidos
                 </button>
 
                 <button
                     type="button"
-                    className="menu-item"
+                    className={`menu-item ${
+                        seccionActiva === 'clientes'
+                            ? 'activo'
+                            : ''
+                    }`}
+                    onClick={() => cambiarSeccion('clientes')}
                 >
                     Gestionar Clientes
                 </button>

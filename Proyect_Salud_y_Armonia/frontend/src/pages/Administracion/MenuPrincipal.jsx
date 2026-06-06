@@ -10,6 +10,8 @@ import DashboardCategorias from '../../components/DashboardCategorias';
 
 import { obtenerEstadisticas } from '../../services/estadisticasService';
 
+import DashboardProductos from '../../components/DashboardProductos';
+
 import './MenuPrincipal.css';
 
 function MenuPrincipal() {
@@ -52,6 +54,7 @@ function MenuPrincipal() {
                 seccionActiva={seccionActiva}
                 cambiarSeccion={setSeccionActiva}
             />
+            
 
             <div className="contenido-admin">
 
@@ -92,6 +95,13 @@ function MenuPrincipal() {
 
                     )
                 }
+                {
+                    seccionActiva === 'productos' && (
+
+                        <DashboardProductos/>
+                    )
+                }
+
 
             </div>
 
