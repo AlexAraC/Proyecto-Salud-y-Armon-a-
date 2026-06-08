@@ -15,8 +15,9 @@ const {
 } = require('../controllers/productos.controller');
 
 const {
-    verificarAdmin,
-    verificarToken
+    
+    verificarToken,
+    verificarAdmin
 
 } = require('../middlewares/auth.middleware')
 
@@ -48,9 +49,9 @@ router.post(
 
     '/',
 
-    verificarAdmin,
-
     verificarToken,
+
+    verificarAdmin,
 
 
     upload.single('imagen'),
@@ -68,9 +69,9 @@ router.put(
 
     '/:id',
 
-    verificarAdmin,
-
     verificarToken,
+    
+    verificarAdmin,
 
 
     upload.single('imagen'),
@@ -87,9 +88,9 @@ router.put(
 router.delete(
     '/:id',
     
-    verificarAdmin,
-
     verificarToken,
+
+    verificarAdmin,
 
     eliminarProducto
 );

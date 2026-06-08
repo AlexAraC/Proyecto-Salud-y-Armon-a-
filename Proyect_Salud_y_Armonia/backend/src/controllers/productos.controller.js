@@ -107,10 +107,6 @@ const crearProducto = async (req, res) => {
 };
 
 
-// =====================================
-// OBTENER PRODUCTOS
-// =====================================
-
 const obtenerProductos = async (req, res) => {
 
     try {
@@ -125,6 +121,8 @@ const obtenerProductos = async (req, res) => {
                 Productos.precio,
                 Productos.imagen,
 
+                Productos.categoria_id,
+
                 Categorias.nombre AS categoria,
 
                 Inventario.stock
@@ -138,8 +136,9 @@ const obtenerProductos = async (req, res) => {
             INNER JOIN Inventario
 
                 ON Productos.id = Inventario.producto_id
-        `;
 
+            WHERE Productos.activo = 1
+        `;
 
         res.json(
             productos.recordset
@@ -160,16 +159,11 @@ const obtenerProductos = async (req, res) => {
 };
 
 
-// =====================================
-// OBTENER PRODUCTO POR ID
-// =====================================
-
 const obtenerProductoPorId = async (req, res) => {
 
     try {
 
         const { id } = req.params;
-
 
         const producto = await sql.query`
 
@@ -180,6 +174,8 @@ const obtenerProductoPorId = async (req, res) => {
                 Productos.descripcion,
                 Productos.precio,
                 Productos.imagen,
+
+                Productos.categoria_id,
 
                 Categorias.nombre AS categoria,
 
@@ -196,8 +192,9 @@ const obtenerProductoPorId = async (req, res) => {
                 ON Productos.id = Inventario.producto_id
 
             WHERE Productos.id = ${id}
-        `;
 
+            AND Productos.activo = 1
+        `;
 
         res.json(
             producto.recordset[0]
@@ -216,7 +213,6 @@ const obtenerProductoPorId = async (req, res) => {
     }
 
 };
-
 
 // =====================================
 // ACTUALIZAR PRODUCTO
@@ -327,41 +323,25 @@ const actualizarProducto = async (req, res) => {
 // =====================================
 // ELIMINAR PRODUCTO
 // =====================================
-
 const eliminarProducto = async (req, res) => {
 
     try {
 
         const { id } = req.params;
 
-
-        // =====================================
-        // ELIMINAR INVENTARIO
-        // =====================================
-
         await sql.query`
 
-            DELETE FROM Inventario
+            UPDATE Productos
 
-            WHERE producto_id = ${id}
-        `;
-
-
-        // =====================================
-        // ELIMINAR PRODUCTO
-        // =====================================
-
-        await sql.query`
-
-            DELETE FROM Productos
+            SET activo = 0
 
             WHERE id = ${id}
-        `;
 
+        `;
 
         res.json({
 
-            mensaje: 'Producto eliminado'
+            mensaje: 'Producto desactivado'
 
         });
 

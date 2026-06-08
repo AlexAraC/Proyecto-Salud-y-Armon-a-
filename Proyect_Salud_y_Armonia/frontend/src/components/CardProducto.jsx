@@ -2,13 +2,69 @@ import { useState } from 'react';
 
 import './CardProducto.css';
 
-function CardProducto({ producto }) {
+function CardProducto({
 
-    const [modalAbierto, setModalAbierto] =
+    producto,
+
+    tipo,
+
+    onEliminar,
+
+    onEditar
+
+}) {
+
+    const [modalAbierto,
+        setModalAbierto] =
         useState(false);
 
-    const [cantidad, setCantidad] =
+    const [modalEditarAbierto,
+        setModalEditarAbierto] =
+        useState(false);
+
+    const [cantidad,
+        setCantidad] =
         useState(1);
+
+    const [formulario,
+        setFormulario] =
+        useState({
+
+            nombre:
+                producto.nombre,
+
+            descripcion:
+                producto.descripcion,
+
+            precio:
+                producto.precio,
+
+            stock:
+                producto.stock,
+
+            categoria_id:
+                producto.categoria_id,
+
+            imagen: null
+
+        });
+
+    const guardarCambios =
+        async () => {
+
+            await onEditar(
+
+                producto.id,
+
+                formulario
+
+            );
+
+            setModalEditarAbierto(
+                false
+            );
+
+        };
 
     return (
 
@@ -43,11 +99,45 @@ function CardProducto({ producto }) {
                     Ver detalles
                 </button>
 
-                <button
-                    className="boton-carrito"
-                >
-                    Agregar al carrito
-                </button>
+                {tipo === "catalogo" && (
+
+                    <button
+                        className="boton-carrito"
+                    >
+                        Agregar al carrito
+                    </button>
+
+                )}
+
+                {tipo === "admin" && (
+
+                    <>
+
+                        <button
+                            className="boton-editar"
+                            onClick={() =>
+                                setModalEditarAbierto(
+                                    true
+                                )
+                            }
+                        >
+                            Editar
+                        </button>
+
+                        <button
+                            className="boton-eliminar"
+                            onClick={() =>
+                                onEliminar(
+                                    producto.id
+                                )
+                            }
+                        >
+                            Eliminar
+                        </button>
+
+                    </>
+
+                )}
 
             </div>
 
@@ -71,57 +161,240 @@ function CardProducto({ producto }) {
                         </p>
 
                         <p>
-                            Categoria: {producto.categoria}
+                            Categoria:
+                            {' '}
+                            {producto.categoria}
                         </p>
 
                         <p>
-                            Precio: ₡{producto.precio}
+                            Precio:
+                            {' '}
+                            ₡{producto.precio}
                         </p>
 
                         <p>
-                            Disponibles: {producto.stock}
+                            Disponibles:
+                            {' '}
+                            {producto.stock}
                         </p>
 
-                        <label>
-                            Cantidad
-                        </label>
+                        {tipo === "catalogo" && (
+
+                            <>
+
+                                <label>
+                                    Cantidad
+                                </label>
+
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max={
+                                        producto.stock
+                                    }
+                                    value={cantidad}
+                                    onChange={(e) =>
+                                        setCantidad(
+                                            Number(
+                                                e.target.value
+                                            )
+                                        )
+                                    }
+                                />
+
+                            </>
+
+                        )}
+
+                        <div
+                            className="modal-acciones"
+                        >
+
+                            {tipo === "catalogo" && (
+
+                                <>
+
+                                    <button
+                                        className="boton-agregar"
+                                    >
+                                        Agregar al carrito
+                                    </button>
+
+                                    <button
+                                        className="boton-reportar"
+                                        title="Reportar error"
+                                    >
+                                        ⚠
+                                    </button>
+
+                                </>
+
+                            )}
+
+                            {tipo === "admin" && (
+
+                                <>
+
+                                    <button
+                                        className="boton-editar"
+                                        onClick={() =>
+                                            setModalEditarAbierto(
+                                                true
+                                            )
+                                        }
+                                    >
+                                        Editar
+                                    </button>
+
+                                    <button
+                                        className="boton-eliminar"
+                                        onClick={() =>
+                                            onEliminar(
+                                                producto.id
+                                            )
+                                        }
+                                    >
+                                        Eliminar
+                                    </button>
+
+                                </>
+
+                            )}
+
+                            <button
+                                className="boton-cerrar"
+                                onClick={() =>
+                                    setModalAbierto(
+                                        false
+                                    )
+                                }
+                            >
+                                Cerrar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+            {modalEditarAbierto && (
+
+                <div className="modal-fondo">
+
+                    <div className="modal-producto">
+
+                        <h2>
+                            Editar Producto
+                        </h2>
 
                         <input
-                            type="number"
-                            min="1"
-                            max={producto.stock}
-                            value={cantidad}
+                            type="text"
+                            value={
+                                formulario.nombre
+                            }
                             onChange={(e) =>
-                                setCantidad(
-                                    Number(
+                                setFormulario({
+
+                                    ...formulario,
+
+                                    nombre:
                                         e.target.value
-                                    )
-                                )
+
+                                })
                             }
                         />
 
-                        <div className="modal-acciones">
+                        <textarea
+                            value={
+                                formulario.descripcion
+                            }
+                            onChange={(e) =>
+                                setFormulario({
+
+                                    ...formulario,
+
+                                    descripcion:
+                                        e.target.value
+
+                                })
+                            }
+                        />
+
+                        <input
+                            type="number"
+                            value={
+                                formulario.precio
+                            }
+                            onChange={(e) =>
+                                setFormulario({
+
+                                    ...formulario,
+
+                                    precio:
+                                        e.target.value
+
+                                })
+                            }
+                        />
+
+                        <input
+                            type="number"
+                            value={
+                                formulario.stock
+                            }
+                            onChange={(e) =>
+                                setFormulario({
+
+                                    ...formulario,
+
+                                    stock:
+                                        e.target.value
+
+                                })
+                            }
+                        />
+
+                        <input
+                            type="file"
+                            onChange={(e) =>
+                                setFormulario({
+
+                                    ...formulario,
+
+                                    imagen:
+                                        e.target
+                                            .files[0]
+
+                                })
+                            }
+                        />
+
+                        <div
+                            className="modal-acciones"
+                        >
 
                             <button
                                 className="boton-agregar"
+                                onClick={
+                                    guardarCambios
+                                }
                             >
-                                Agregar al carrito
+                                Guardar
                             </button>
 
                             <button
                                 className="boton-cerrar"
                                 onClick={() =>
-                                    setModalAbierto(false)
+                                    setModalEditarAbierto(
+                                        false
+                                    )
                                 }
                             >
-                                Cerrar
+                                Cancelar
                             </button>
-                            <button
-                                className="boton-reportar"
-                                title="Reportar error"
-                                >
-                                ⚠
-                             </button>
 
                         </div>
 

@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 
 import CardProducto from './CardProducto';
 
-import { obtenerProductos }
+import ModalCrearProducto
+from './ModalCrearProducto';
+
+import {
+    obtenerProductos,
+    eliminarProducto,
+    actualizarProducto
+}
 from '../services/productosApi';
 
 import './DashboardProductos.css';
@@ -11,30 +18,118 @@ function DashboardProductos() {
 
     const [productos, setProductos] =
         useState([]);
+    const [
+    modalCrearAbierto,
+    setModalCrearAbierto
+] = useState(false);
+
+    const cargarProductos =
+        async () => {
+
+            try {
+
+                const datos =
+                    await obtenerProductos();
+
+                setProductos(datos);
+                console.log(
+                    'Productos cargados:',
+                    datos
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
 
     useEffect(() => {
-
-        const cargarProductos =
-            async () => {
-
-                try {
-
-                    const datos =
-                        await obtenerProductos();
-
-                    setProductos(datos);
-
-                } catch (error) {
-
-                    console.error(error);
-
-                }
-
-            };
 
         cargarProductos();
 
     }, []);
+
+        const handleEliminar =
+            async (id) => {
+
+                console.log(
+                    'Eliminar producto:',
+                    id
+                );
+
+                const confirmar =
+                    window.confirm(
+                        '¿Desea eliminar este producto?'
+                    );
+
+                if (!confirmar) return;
+
+                try {
+
+                    await eliminarProducto(id);
+
+                    console.log(
+                        'Eliminado correctamente'
+                    );
+
+                    await cargarProductos();
+
+                }catch (error) {
+
+                    console.log(
+                        'ERROR COMPLETO:',
+                        error
+                    );
+
+                    console.log(
+                        'ERROR RESPONSE:',
+                        error.response
+                    );
+
+                    console.log(
+                        'ERROR DATA:',
+                        error.response?.data
+                    );
+
+                }
+
+            };
+            
+
+            const handleEditar =
+                async (
+                    id,
+                    datosActualizados
+                ) => {
+
+                    console.log(
+                        'Editar:',
+                        id,
+                        datosActualizados
+                    );
+
+                    try {
+
+                        await actualizarProducto(
+                            id,
+                            datosActualizados
+                        );
+
+                        console.log(
+                            'Actualizado correctamente'
+                        );
+
+                        await cargarProductos();
+
+                    } catch (error) {
+
+                        console.error(error);
+
+                    }
+
+                };
 
     const productosPorCategoria =
         productos.reduce(
@@ -66,9 +161,30 @@ function DashboardProductos() {
 
         <div className="dashboard-productos">
 
-            <h1>
-                Productos
-            </h1>
+            <div className="encabezado-productos">
+
+                <h1>
+                    Productos
+                </h1>
+
+                <button
+                    className="boton-agregar-producto"
+                    onClick={() =>
+                        setModalCrearAbierto(true)
+                    }
+                >
+
+                    <span className="boton-agregar-icono">
+                        +
+                    </span>
+
+                    <span className="boton-agregar-texto">
+                        Agregar producto
+                    </span>
+
+                </button>
+
+            </div>
 
             {
 
@@ -109,6 +225,16 @@ function DashboardProductos() {
                                                     producto
                                                 }
 
+                                                tipo="admin"
+
+                                                onEliminar={
+                                                    handleEliminar
+                                                }
+
+                                                onEditar={
+                                                    handleEditar
+                                                }
+
                                             />
 
                                         )
@@ -125,6 +251,17 @@ function DashboardProductos() {
 
                 )
 
+            }
+            {modalCrearAbierto && (
+                <ModalCrearProducto
+                onCerrar={() =>
+                setModalCrearAbierto(false)
+                }
+                 onProductoCreado={
+                cargarProductos
+                }
+                />
+            )
             }
 
         </div>

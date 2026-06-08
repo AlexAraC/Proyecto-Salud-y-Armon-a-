@@ -10,7 +10,7 @@ const verCategorias = async (req, res) => {
     try {
 
         const categorias = await sql.query(`
-            SELECT * FROM Categorias
+            SELECT * FROM Categorias WHERE activo = 1
         `);
 
         res.json(categorias.recordset);
@@ -109,9 +109,9 @@ const eliminarCategoria = async (req, res) => {
         const { id } = req.params;
 
         await sql.query(`
-            DELETE FROM Categorias
-
-            WHERE id = ${id}
+           UPDATE Categorias 
+           SET activo = 0
+           WHERE id = ${id}
         `);
 
         res.json({

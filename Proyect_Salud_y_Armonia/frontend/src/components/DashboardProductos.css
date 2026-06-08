@@ -4,6 +4,117 @@
 
 }
 
+/* ===========================
+   ENCABEZADO
+=========================== */
+
+.encabezado-productos {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+}
+
+/* ===========================
+   BOTÓN AGREGAR
+=========================== */
+
+.boton-agregar-producto {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    width: 48px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    background: #6f8c4e;
+
+    color: white;
+
+    font-weight: 600;
+
+    transition:
+        width 0.3s ease,
+        background 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+.boton-agregar-producto:hover,
+.boton-agregar-producto:focus-visible {
+
+    width: 180px;
+
+    background: #8A9A5B;
+
+    box-shadow:
+        0 6px 14px rgba(0,0,0,0.08);
+
+    transform: translateY(-1px);
+
+}
+
+.boton-agregar-icono {
+
+    flex: 0 0 auto;
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    line-height: 1;
+
+}
+
+.boton-agregar-texto {
+
+    max-width: 0;
+
+    opacity: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    transition:
+        max-width 0.3s ease,
+        opacity 0.2s ease;
+
+}
+
+.boton-agregar-producto:hover .boton-agregar-texto,
+.boton-agregar-producto:focus-visible .boton-agregar-texto {
+
+    max-width: 130px;
+
+    opacity: 1;
+
+}
+
+/* ===========================
+   CATEGORÍAS
+=========================== */
+
 .categoria-bloque {
 
     margin-bottom: 40px;
@@ -15,6 +126,10 @@
     margin-bottom: 20px;
 
 }
+
+/* ===========================
+   GRID PRODUCTOS
+=========================== */
 
 .grid-productos {
 

@@ -115,6 +115,21 @@
 
 }
 
+.boton-editar {
+    background-color: rgb(250, 207, 128);
+}
+.boton-editar:hover {
+    background-color: rgb(255, 201, 100);
+}
+.boton-eliminar{
+    background-color: rgb(197, 79, 79);
+}
+.boton-eliminar:hover{
+    background-color: rgb(192, 47, 47);
+}
+
+
+
 .boton-carrito {
 
     background: #A3B18A !important;
