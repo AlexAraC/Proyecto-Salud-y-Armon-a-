@@ -1,8 +1,127 @@
 const { sql } = require('../config/db');
 
-// =====================================
-// CREAR PRODUCTO
-// =====================================
+const obtenerProductosDestacados = async (req, res) => {
+
+    try {
+
+        const productos = await sql.query`
+
+            SELECT
+
+                Productos.id,
+                Productos.nombre,
+                Productos.descripcion,
+                Productos.precio,
+                Productos.imagen,
+                Productos.categoria_id,
+                Productos.destacado,
+
+                Categorias.nombre AS categoria,
+
+                Inventario.stock
+
+            FROM Productos
+
+            INNER JOIN Categorias
+                ON Productos.categoria_id = Categorias.id
+
+            INNER JOIN Inventario
+                ON Productos.id = Inventario.producto_id
+
+            WHERE Productos.destacado = 1
+            AND Productos.activo = 1
+
+        `;
+
+        res.json(productos.recordset);
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
+
+const agregarDestacado = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        await sql.query`
+
+            UPDATE Productos
+
+            SET destacado = 1
+
+            WHERE id = ${id}
+
+        `;
+
+        res.json({
+
+            mensaje: 'Producto agregado a destacados'
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
+
+
+
+const quitarDestacado = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        await sql.query`
+
+            UPDATE Productos
+
+            SET destacado = 0
+
+            WHERE id = ${id}
+
+        `;
+
+        res.json({
+
+            mensaje: 'Producto eliminado de destacados'
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
 
 const crearProducto = async (req, res) => {
 
@@ -19,10 +138,7 @@ const crearProducto = async (req, res) => {
         } = req.body;
 
 
-        // =====================================
-        // IMAGEN
-        // =====================================
-
+   
         const imagen = req.file
 
             ? `/uploads/${req.file.filename}`
@@ -30,9 +146,7 @@ const crearProducto = async (req, res) => {
             : null;
 
 
-        // =====================================
-        // INSERTAR PRODUCTO
-        // =====================================
+ 
 
         const producto = await sql.query`
 
@@ -58,17 +172,10 @@ const crearProducto = async (req, res) => {
         `;
 
 
-        // =====================================
-        // ID PRODUCTO
-        // =====================================
 
         const producto_id =
             producto.recordset[0].id;
 
-
-        // =====================================
-        // INVENTARIO
-        // =====================================
 
         await sql.query`
 
@@ -120,6 +227,7 @@ const obtenerProductos = async (req, res) => {
                 Productos.descripcion,
                 Productos.precio,
                 Productos.imagen,
+                Productos.destacado,
 
                 Productos.categoria_id,
 
@@ -174,6 +282,7 @@ const obtenerProductoPorId = async (req, res) => {
                 Productos.descripcion,
                 Productos.precio,
                 Productos.imagen,
+                Productos.destacado,
 
                 Productos.categoria_id,
 
@@ -214,9 +323,7 @@ const obtenerProductoPorId = async (req, res) => {
 
 };
 
-// =====================================
-// ACTUALIZAR PRODUCTO
-// =====================================
+
 
 const actualizarProducto = async (req, res) => {
 
@@ -366,6 +473,9 @@ module.exports = {
     obtenerProductos,
     obtenerProductoPorId,
     actualizarProducto,
-    eliminarProducto
+    eliminarProducto,
+    obtenerProductosDestacados,
+    agregarDestacado,
+    quitarDestacado
 
 };

@@ -4,21 +4,21 @@
 
 .navbar {
 
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
 
     padding: 13px 37px;
-
     background-color: #A3B18A;
 
     width: 70%;
-
-    margin: 20px auto;
-
-    margin-top: 15px;
+    margin: 0;
 
     border-radius: 20px;
 

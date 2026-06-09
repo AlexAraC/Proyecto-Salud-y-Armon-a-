@@ -5,14 +5,20 @@ import CardProducto from './CardProducto';
 import ModalCrearProducto
 from './ModalCrearProducto';
 
-import {
-    obtenerProductos,
-    eliminarProducto,
-    actualizarProducto
-}
-from '../services/productosApi';
+
 
 import './DashboardProductos.css';
+
+
+import {
+
+    obtenerProductos,
+    eliminarProducto,
+    actualizarProducto,
+    agregarDestacado,
+    quitarDestacado
+
+} from '../services/productosApi';
 
 function DashboardProductos() {
 
@@ -157,6 +163,39 @@ function DashboardProductos() {
 
         );
 
+        const handleAgregarDestacado = async (id) => {
+
+            try {
+
+                await agregarDestacado(id);
+
+                await cargarProductos();
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
+
+        const handleQuitarDestacado = async (id) => {
+
+            try {
+
+                await quitarDestacado(id);
+
+                await cargarProductos();
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        };
+
     return (
 
         <div className="dashboard-productos">
@@ -234,6 +273,9 @@ function DashboardProductos() {
                                                 onEditar={
                                                     handleEditar
                                                 }
+                                                onAgregarDestacado={handleAgregarDestacado}
+
+                                                onQuitarDestacado={handleQuitarDestacado}
 
                                             />
 

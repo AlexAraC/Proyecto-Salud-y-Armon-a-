@@ -10,14 +10,26 @@ CREATE TABLE Usuarios (
 
     rol VARCHAR(50),
 
-    direccion VARCHAR(MAX)
+    direccion VARCHAR(MAX),
+
+    codigo_recuperacion VARCHAR(10),
+
+    expiracion_codigo DATETIME
+
 );
+
+
 CREATE TABLE Categorias (
 
     id INT PRIMARY KEY IDENTITY(1,1),
 
-    nombre VARCHAR(100)
+    nombre VARCHAR(100),
+
+    activo BIT DEFAULT 1
+
 );
+
+
 CREATE TABLE Productos (
 
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -30,9 +42,18 @@ CREATE TABLE Productos (
 
     categoria_id INT,
 
+    imagen VARCHAR(255),
+
+    destacado BIT DEFAULT 0,
+
+    activo BIT DEFAULT 1,
+
     FOREIGN KEY (categoria_id)
     REFERENCES Categorias(id)
+
 );
+
+
 CREATE TABLE Inventario (
 
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -43,7 +64,10 @@ CREATE TABLE Inventario (
 
     FOREIGN KEY (producto_id)
     REFERENCES Productos(id)
+
 );
+
+
 CREATE TABLE Carrito (
 
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -56,7 +80,10 @@ CREATE TABLE Carrito (
 
     FOREIGN KEY (usuario_id)
     REFERENCES Usuarios(id)
+
 );
+
+
 CREATE TABLE CarritoDetalle (
 
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -72,7 +99,10 @@ CREATE TABLE CarritoDetalle (
 
     FOREIGN KEY (producto_id)
     REFERENCES Productos(id)
+
 );
+
+
 CREATE TABLE Pedidos (
 
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -89,7 +119,10 @@ CREATE TABLE Pedidos (
 
     FOREIGN KEY (usuario_id)
     REFERENCES Usuarios(id)
+
 );
+
+
 CREATE TABLE DetallePedido (
 
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -109,7 +142,10 @@ CREATE TABLE DetallePedido (
 
     FOREIGN KEY (producto_id)
     REFERENCES Productos(id)
+
 );
+
+
 CREATE TABLE informacionCeo (
 
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -119,8 +155,12 @@ CREATE TABLE informacionCeo (
     correo VARCHAR(150) UNIQUE,
 
     telefono VARCHAR(20)
+
 );
+
+
 CREATE TABLE informacionInstitucional (
+
     id INT PRIMARY KEY IDENTITY(1,1),
 
     slogan VARCHAR(200),
@@ -131,7 +171,8 @@ CREATE TABLE informacionInstitucional (
 
     correo VARCHAR(150) UNIQUE
 
-)
+);
+
 
 CREATE TABLE Comentario (
 
@@ -143,21 +184,5 @@ CREATE TABLE Comentario (
     contenido VARCHAR(MAX) NOT NULL,
 
     fecha DATETIME NOT NULL DEFAULT GETDATE()
+
 );
-
-ALTER TABLE Productos
-
-ADD destacado BIT DEFAULT 0;
-
-ALTER TABLE Usuarios
-
-ADD codigo_recuperacion VARCHAR(10),
-    expiracion_codigo DATETIME;
-
-
-SELECT * FROM Productos
-SELECT * FROM Inventario
-
-
-ALTER TABLE Productos
-ADD imagen VARCHAR(255);

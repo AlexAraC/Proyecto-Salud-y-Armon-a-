@@ -10,7 +10,11 @@ function CardProducto({
 
     onEliminar,
 
-    onEditar
+    onEditar,
+
+    onAgregarDestacado,
+
+    onQuitarDestacado
 
 }) {
 
@@ -135,6 +139,34 @@ function CardProducto({
                             Eliminar
                         </button>
 
+                   
+                        <button
+                            className={`boton-destacado ${
+                                producto.destacado
+                                    ? "activo"
+                                    : ""
+                            }`}
+                            onClick={() =>
+                                producto.destacado
+                                    ? onQuitarDestacado(producto.id)
+                                    : onAgregarDestacado(producto.id)
+                            }
+                        >
+
+                            <span
+                                className="texto-boton"
+                                key={producto.destacado}
+                            >
+                                {
+                                    producto.destacado
+                                        ? "⭐ Quitar de destacados"
+                                        : "✨ Agregar a destacados"
+                                }
+                            </span>
+
+                        </button>
+                        
+
                     </>
 
                 )}
@@ -257,6 +289,34 @@ function CardProducto({
                                         Eliminar
                                     </button>
 
+                                    {producto.destacado ? (
+
+                                        <button
+                                            className="boton-destacado"
+                                            onClick={() =>
+                                                onQuitarDestacado(
+                                                    producto.id
+                                                )
+                                            }
+                                        >
+                                            Quitar de destacados
+                                        </button>
+
+                                    ) : (
+
+                                        <button
+                                            className="boton-destacado"
+                                            onClick={() =>
+                                                onAgregarDestacado(
+                                                    producto.id
+                                                )
+                                            }
+                                        >
+                                            Agregar a destacados
+                                        </button>
+
+                                    )}
+
                                 </>
 
                             )}
@@ -365,8 +425,7 @@ function CardProducto({
                                     ...formulario,
 
                                     imagen:
-                                        e.target
-                                            .files[0]
+                                        e.target.files[0]
 
                                 })
                             }

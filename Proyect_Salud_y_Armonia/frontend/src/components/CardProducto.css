@@ -4,7 +4,7 @@
 
 .card-producto {
 
-    background: rgba(255,255,255,0.65) !important;
+    background: rgba(255,255,255,0.55) !important;
 
     backdrop-filter: blur(6px);
 
@@ -128,7 +128,68 @@
     background-color: rgb(192, 47, 47);
 }
 
+.boton-destacado {
 
+    position: relative;
+
+    overflow: hidden;
+
+    background: #d8f1ff;
+
+    color: #4b6470;
+
+    border: 1px solid #b8e6ff !important;
+
+    transition:
+        background .5s ease,
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+.boton-destacado:hover {
+
+    background: #c6ebff;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 18px rgba(0,0,0,.1);
+
+}
+
+.boton-destacado.activo {
+
+    background: #bde7ff;
+
+}
+
+.texto-boton {
+
+    display: inline-block;
+
+    animation: aparecerTexto .5s ease;
+
+}
+
+@keyframes aparecerTexto {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(8px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
 
 .boton-carrito {
 
@@ -385,6 +446,7 @@
 
 }
 
+
 .boton-reportar:hover {
 
     background: #C25858 !important;
@@ -468,6 +530,215 @@
         min-width: 100%;
 
         height: 42px;
+
+    }
+
+}
+
+/* =====================================
+   MODAL FONDO
+===================================== */
+
+.modal-fondo {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(58,49,43,0.45);
+
+    animation: fondoFade .3s ease;
+
+}
+
+
+/* =====================================
+   MODAL
+===================================== */
+
+.modal-producto {
+
+    width: min(750px, 95%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 24px;
+
+    color: #3A312B;
+
+    background: rgba(255,255,255,0.92);
+
+    backdrop-filter: blur(6px);
+
+    border: 1px solid rgba(58,49,43,0.15);
+
+    border-radius: 12px;
+
+    box-shadow: 0 18px 40px rgba(0,0,0,0.16);
+
+    transform-origin: center;
+
+    animation: modalEntrada .5s cubic-bezier(.22,1,.36,1);
+
+}
+
+
+/* =====================================
+   IMAGEN DEL MODAL
+===================================== */
+
+.modal-producto img {
+
+    width: 100%;
+
+    max-height: 350px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+
+    animation: imagenEntrada .7s ease;
+
+}
+
+
+/* =====================================
+   BOTONES DEL MODAL
+===================================== */
+
+.modal-acciones {
+
+    display: flex;
+
+    align-items: stretch;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+    animation: botonesEntrada .8s ease;
+
+}
+
+
+/* =====================================
+   ANIMACIÓN FONDO
+===================================== */
+
+@keyframes fondoFade {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* =====================================
+   ANIMACIÓN MODAL
+===================================== */
+
+@keyframes modalEntrada {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+            translateY(70px)
+            scale(.85);
+
+    }
+
+    60% {
+
+        opacity: 1;
+
+        transform:
+            translateY(-8px)
+            scale(1.02);
+
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =====================================
+   ANIMACIÓN IMAGEN
+===================================== */
+
+@keyframes imagenEntrada {
+
+    from {
+
+        opacity: 0;
+
+        transform: scale(1.08);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: scale(1);
+
+    }
+
+}
+
+
+/* =====================================
+   ANIMACIÓN BOTONES
+===================================== */
+
+@keyframes botonesEntrada {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(20px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
 
     }
 

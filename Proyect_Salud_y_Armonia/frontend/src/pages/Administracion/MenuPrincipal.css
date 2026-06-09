@@ -10,6 +10,8 @@
 
 .contenido-admin {
 
+    margin-top: 70px;
+
     flex: 1;
 
     padding: 30px;
@@ -52,6 +54,8 @@
 @media (max-width: 520px) {
 
     .contenido-admin {
+
+        margin-top: 0px;
 
         padding: 18px 12px;
 

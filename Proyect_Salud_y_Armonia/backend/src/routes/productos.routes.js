@@ -10,7 +10,10 @@ const {
     obtenerProductos,
     obtenerProductoPorId,
     actualizarProducto,
-    eliminarProducto
+    eliminarProducto,
+    obtenerProductosDestacados,
+    agregarDestacado,
+    quitarDestacado
 
 } = require('../controllers/productos.controller');
 
@@ -30,6 +33,11 @@ router.get(
     obtenerProductos
 );
 
+router.get(
+    '/destacados',
+    obtenerProductosDestacados
+);
+
 
 // =====================================
 // OBTENER POR ID
@@ -40,6 +48,38 @@ router.get(
     obtenerProductoPorId
 );
 
+// =====================================
+// AGREGAR A DESTACADOS
+// =====================================
+
+router.put(
+
+    '/destacados/:id',
+
+    verificarToken,
+
+    verificarAdmin,
+
+    agregarDestacado
+
+);
+
+
+// =====================================
+// QUITAR DE DESTACADOS
+// =====================================
+
+router.delete(
+
+    '/destacados/:id',
+
+    verificarToken,
+
+    verificarAdmin,
+
+    quitarDestacado
+
+);
 
 // =====================================
 // CREAR PRODUCTO

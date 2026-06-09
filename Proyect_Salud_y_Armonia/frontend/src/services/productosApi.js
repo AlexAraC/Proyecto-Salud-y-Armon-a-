@@ -20,6 +20,15 @@ export const obtenerProductos = async () => {
 
 };
 
+export const obtenerDestacados = async () => {
+    const respuesta = await axios.get(
+        `${API_URL}/destacados`
+    );
+    return respuesta.data
+}
+
+
+
 // =====================================
 // OBTENER POR ID
 // =====================================
@@ -152,6 +161,43 @@ export const actualizarProducto = async (
             headers: {
                 Authorization:
                     `Bearer ${obtenerToken()}`
+            }
+        }
+
+    );
+
+    return respuesta.data;
+
+};
+
+export const agregarDestacado = async (id) => {
+
+    const respuesta = await axios.put(
+
+        `${API_URL}/destacados/${id}`,
+
+        {},
+
+        {
+            headers: {
+                Authorization: `Bearer ${obtenerToken()}`
+            }
+        }
+
+    );
+
+    return respuesta.data;
+
+};
+export const quitarDestacado = async (id) => {
+
+    const respuesta = await axios.delete(
+
+        `${API_URL}/destacados/${id}`,
+
+        {
+            headers: {
+                Authorization: `Bearer ${obtenerToken()}`
             }
         }
 

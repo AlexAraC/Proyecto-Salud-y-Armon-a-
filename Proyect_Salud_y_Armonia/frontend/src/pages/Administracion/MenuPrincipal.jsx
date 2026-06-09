@@ -12,6 +12,8 @@ import { obtenerEstadisticas } from '../../services/estadisticasService';
 
 import DashboardProductos from '../../components/DashboardProductos';
 
+import DashboardHomePage from '../../components/DashboardHomePage'
+
 import './MenuPrincipal.css';
 
 function MenuPrincipal() {
@@ -99,6 +101,11 @@ function MenuPrincipal() {
                     seccionActiva === 'productos' && (
 
                         <DashboardProductos/>
+                    )
+                }
+                {
+                    seccionActiva ==='homepage' && (
+                        <DashboardHomePage/>
                     )
                 }
 
