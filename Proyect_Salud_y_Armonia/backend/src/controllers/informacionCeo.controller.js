@@ -12,14 +12,16 @@ const obtenerInformacionCeo = async (req, res) => {
         const informacion = await sql.query`
 
             SELECT
+
                 id,
                 nombre,
                 correo,
-                telefono
+                telefono,
+                imagen,
+                slogan
 
             FROM informacionCeo
         `;
-
 
         res.json({
 
@@ -29,13 +31,14 @@ const obtenerInformacionCeo = async (req, res) => {
 
         });
 
-
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
@@ -52,11 +55,29 @@ const crearInformacionCeo = async (req, res) => {
     try {
 
         const {
+
             nombre,
             correo,
-            telefono
+            telefono,
+            slogan
+
         } = req.body;
 
+
+        // =====================================
+        // IMAGEN
+        // =====================================
+
+        const imagen = req.file
+
+            ? `/uploads/${req.file.filename}`
+
+            : null;
+
+
+        // =====================================
+        // INSERTAR
+        // =====================================
 
         await sql.query`
 
@@ -64,29 +85,36 @@ const crearInformacionCeo = async (req, res) => {
             (
                 nombre,
                 correo,
-                telefono
+                telefono,
+                imagen,
+                slogan
             )
 
             VALUES
             (
                 ${nombre},
                 ${correo},
-                ${telefono}
+                ${telefono},
+                ${imagen},
+                ${slogan}
             )
         `;
 
 
         res.json({
-            mensaje: 'Información creada correctamente'
-        });
 
+            mensaje: 'Información creada correctamente'
+
+        });
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
@@ -105,19 +133,22 @@ const actualizarInformacionCeo = async (req, res) => {
         const { id } = req.params;
 
         const {
+
             nombre,
             correo,
-            telefono
+            telefono,
+            slogan
+
         } = req.body;
 
 
         // =====================================
-        // VALIDAR EXISTENCIA
+        // INFORMACIÓN ACTUAL
         // =====================================
 
-        const informacionDB = await sql.query`
+        const informacionActual = await sql.query`
 
-            SELECT id
+            SELECT imagen
 
             FROM informacionCeo
 
@@ -125,11 +156,31 @@ const actualizarInformacionCeo = async (req, res) => {
         `;
 
 
-        if (informacionDB.recordset.length === 0) {
+        if (informacionActual.recordset.length === 0) {
 
             return res.status(404).json({
+
                 mensaje: 'Información no encontrada'
+
             });
+
+        }
+
+
+        // =====================================
+        // IMAGEN
+        // =====================================
+
+        let imagen =
+
+            informacionActual.recordset[0].imagen;
+
+
+        if (req.file) {
+
+            imagen =
+
+                `/uploads/${req.file.filename}`;
 
         }
 
@@ -143,25 +194,35 @@ const actualizarInformacionCeo = async (req, res) => {
             UPDATE informacionCeo
 
             SET
+
                 nombre = ${nombre},
+
                 correo = ${correo},
-                telefono = ${telefono}
+
+                telefono = ${telefono},
+
+                imagen = ${imagen},
+
+                slogan = ${slogan}
 
             WHERE id = ${id}
         `;
 
 
         res.json({
-            mensaje: 'Información actualizada correctamente'
-        });
 
+            mensaje: 'Información actualizada correctamente'
+
+        });
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
@@ -180,10 +241,6 @@ const eliminarInformacionCeo = async (req, res) => {
         const { id } = req.params;
 
 
-        // =====================================
-        // VALIDAR EXISTENCIA
-        // =====================================
-
         const informacionDB = await sql.query`
 
             SELECT id
@@ -197,15 +254,13 @@ const eliminarInformacionCeo = async (req, res) => {
         if (informacionDB.recordset.length === 0) {
 
             return res.status(404).json({
+
                 mensaje: 'Información no encontrada'
+
             });
 
         }
 
-
-        // =====================================
-        // ELIMINAR
-        // =====================================
 
         await sql.query`
 
@@ -216,26 +271,25 @@ const eliminarInformacionCeo = async (req, res) => {
 
 
         res.json({
-            mensaje: 'Información eliminada correctamente'
-        });
 
+            mensaje: 'Información eliminada correctamente'
+
+        });
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
 
 };
 
-
-// =====================================
-// EXPORTAR FUNCIONES
-// =====================================
 
 module.exports = {
 

@@ -1,6 +1,5 @@
 const { sql } = require('../config/db');
 
-
 // =====================================
 // OBTENER INFORMACIÓN INSTITUCIONAL
 // =====================================
@@ -16,11 +15,11 @@ const obtenerInformacionInstitucional = async (req, res) => {
                 slogan,
                 descripcion,
                 telefono,
-                correo
+                correo,
+                imagen
 
             FROM informacionInstitucional
         `;
-
 
         res.json({
 
@@ -30,13 +29,14 @@ const obtenerInformacionInstitucional = async (req, res) => {
 
         });
 
-
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
@@ -53,12 +53,29 @@ const crearInformacionInstitucional = async (req, res) => {
     try {
 
         const {
+
             slogan,
             descripcion,
             telefono,
             correo
+
         } = req.body;
 
+
+        // =====================================
+        // IMAGEN
+        // =====================================
+
+        const imagen = req.file
+
+            ? `/uploads/${req.file.filename}`
+
+            : null;
+
+
+        // =====================================
+        // INSERTAR
+        // =====================================
 
         await sql.query`
 
@@ -67,7 +84,8 @@ const crearInformacionInstitucional = async (req, res) => {
                 slogan,
                 descripcion,
                 telefono,
-                correo
+                correo,
+                imagen
             )
 
             VALUES
@@ -75,22 +93,26 @@ const crearInformacionInstitucional = async (req, res) => {
                 ${slogan},
                 ${descripcion},
                 ${telefono},
-                ${correo}
+                ${correo},
+                ${imagen}
             )
         `;
 
 
         res.json({
-            mensaje: 'Información institucional creada correctamente'
-        });
 
+            mensaje: 'Información institucional creada correctamente'
+
+        });
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
@@ -109,20 +131,22 @@ const actualizarInformacionInstitucional = async (req, res) => {
         const { id } = req.params;
 
         const {
+
             slogan,
             descripcion,
             telefono,
             correo
+
         } = req.body;
 
 
         // =====================================
-        // VALIDAR EXISTENCIA
+        // INFORMACIÓN ACTUAL
         // =====================================
 
-        const informacionDB = await sql.query`
+        const informacionActual = await sql.query`
 
-            SELECT id
+            SELECT imagen
 
             FROM informacionInstitucional
 
@@ -130,11 +154,31 @@ const actualizarInformacionInstitucional = async (req, res) => {
         `;
 
 
-        if (informacionDB.recordset.length === 0) {
+        if (informacionActual.recordset.length === 0) {
 
             return res.status(404).json({
+
                 mensaje: 'Información no encontrada'
+
             });
+
+        }
+
+
+        // =====================================
+        // IMAGEN
+        // =====================================
+
+        let imagen =
+
+            informacionActual.recordset[0].imagen;
+
+
+        if (req.file) {
+
+            imagen =
+
+                `/uploads/${req.file.filename}`;
 
         }
 
@@ -148,26 +192,35 @@ const actualizarInformacionInstitucional = async (req, res) => {
             UPDATE informacionInstitucional
 
             SET
+
                 slogan = ${slogan},
+
                 descripcion = ${descripcion},
+
                 telefono = ${telefono},
-                correo = ${correo}
+
+                correo = ${correo},
+
+                imagen = ${imagen}
 
             WHERE id = ${id}
         `;
 
 
         res.json({
-            mensaje: 'Información institucional actualizada correctamente'
-        });
 
+            mensaje: 'Información institucional actualizada correctamente'
+
+        });
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
@@ -186,10 +239,6 @@ const eliminarInformacionInstitucional = async (req, res) => {
         const { id } = req.params;
 
 
-        // =====================================
-        // VALIDAR EXISTENCIA
-        // =====================================
-
         const informacionDB = await sql.query`
 
             SELECT id
@@ -203,15 +252,13 @@ const eliminarInformacionInstitucional = async (req, res) => {
         if (informacionDB.recordset.length === 0) {
 
             return res.status(404).json({
+
                 mensaje: 'Información no encontrada'
+
             });
 
         }
 
-
-        // =====================================
-        // ELIMINAR
-        // =====================================
 
         await sql.query`
 
@@ -222,26 +269,25 @@ const eliminarInformacionInstitucional = async (req, res) => {
 
 
         res.json({
-            mensaje: 'Información institucional eliminada correctamente'
-        });
 
+            mensaje: 'Información institucional eliminada correctamente'
+
+        });
 
     } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
 
 };
 
-
-// =====================================
-// EXPORTAR FUNCIONES
-// =====================================
 
 module.exports = {
 

@@ -133,18 +133,8 @@ app.use(
 
 );
 
-console.log(
 
-    'Ruta uploads:',
 
-    path.resolve(
-        __dirname,
-        '../uploads'
-    )
-
-);
-
-app.use(cors());
 
 
 

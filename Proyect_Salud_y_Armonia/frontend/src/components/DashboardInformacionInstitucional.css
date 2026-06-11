@@ -1,0 +1,206 @@
+/* =====================================
+   CONTENEDOR PRINCIPAL
+===================================== */
+
+.dashboard-institucional {
+
+    background: rgba(255,255,255,0.65);
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    margin-top: 20px;
+
+    margin-bottom: 20px;
+
+    max-width: 1300px;
+
+    height: auto;
+
+}
+
+.dashboard-institucional h1 {
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* =====================================
+   CONTENIDO
+===================================== */
+
+.contenedor-institucional {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 40px;
+
+    padding-bottom: 20px;
+
+}
+
+
+/* =====================================
+   FOTO EMPRESA
+===================================== */
+
+.foto-empresa {
+
+    width: 420px;
+
+    max-width: 100%;
+
+    height: auto;
+
+    object-fit: cover;
+
+    border-radius: 20px;
+
+    margin-left: 50px;
+
+}
+
+
+/* =====================================
+   FORMULARIO
+===================================== */
+
+.formulario-institucional {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    flex: 1;
+
+}
+
+.formulario-institucional textarea {
+
+    min-height: 150px;
+
+    resize: vertical;
+
+}
+
+
+/* =====================================
+   BOTÓN
+===================================== */
+
+.boton-institucional {
+
+    background-color: #A3B18A !important;
+
+    color: white;
+
+    padding: 12px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    width: 200px;
+
+    transition: ease-in-out 0.5s;
+
+}
+
+.boton-institucional:hover {
+
+    background-color: #798661 !important;
+
+}
+
+
+/* =====================================
+   TABLETS
+===================================== */
+
+@media (max-width: 992px) {
+
+    .contenedor-institucional {
+
+        gap: 25px;
+
+    }
+
+    .foto-empresa {
+
+        width: 300px;
+
+        margin-left: 0;
+
+    }
+
+}
+
+
+/* =====================================
+   CELULARES
+===================================== */
+
+@media (max-width: 768px) {
+
+    .contenedor-institucional {
+
+        flex-direction: column;
+
+        align-items: center;
+
+        text-align: center;
+
+    }
+
+    .foto-empresa {
+
+        width: 250px;
+
+        margin-left: 0;
+
+    }
+
+    .formulario-institucional {
+
+        width: 100%;
+
+    }
+
+    .boton-institucional {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* =====================================
+   CELULARES PEQUEÑOS
+===================================== */
+
+@media (max-width: 480px) {
+
+    .dashboard-institucional {
+
+        padding: 15px;
+
+    }
+
+    .foto-empresa {
+
+        width: 180px;
+
+    }
+
+}

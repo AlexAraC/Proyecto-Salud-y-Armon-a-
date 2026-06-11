@@ -1,5 +1,8 @@
 const express = require('express');
 
+const upload =
+    require('../middlewares/upload');
+
 const router = express.Router();
 
 
@@ -47,6 +50,7 @@ router.post(
     '/',
     verificarToken,
     verificarAdmin,
+    upload.single('imagen'),
     crearInformacionInstitucional
 );
 
@@ -59,6 +63,7 @@ router.put(
     '/:id',
     verificarToken,
     verificarAdmin,
+    upload.single('imagen'),
     actualizarInformacionInstitucional
 );
 

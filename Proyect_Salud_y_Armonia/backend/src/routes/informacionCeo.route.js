@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 
 
+const upload =
+    require('../middlewares/upload');
+
 // =====================================
 // CONTROLADOR
 // =====================================
@@ -44,24 +47,36 @@ router.get(
 // =====================================
 
 router.post(
-    '/',
-    verificarToken,
-    verificarAdmin,
-    crearInformacionCeo
-);
 
+    '/',
+
+    verificarToken,
+
+    verificarAdmin,
+
+    upload.single('imagen'),
+
+    crearInformacionCeo
+
+);
 
 // =====================================
 // ACTUALIZAR INFORMACIÓN CEO
 // =====================================
 
 router.put(
-    '/:id',
-    verificarToken,
-    verificarAdmin,
-    actualizarInformacionCeo
-);
 
+    '/:id',
+
+    verificarToken,
+
+    verificarAdmin,
+
+    upload.single('imagen'),
+
+    actualizarInformacionCeo
+
+);
 
 // =====================================
 // ELIMINAR INFORMACIÓN CEO

@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react';
 
 import CardProducto from './CardProducto';
 
+import DashboardInformacionCeo
+from './DashboardInformacionCeo';
+
+import  DashboardInformacionInstitucional 
+from './DashboardInformacionInstitucional'
+
 import { obtenerDestacados }
 from '../services/productosApi';
 
@@ -38,20 +44,26 @@ function DashboardHomePage() {
 
     return (
 
-        <div className="dashboard-home-page">
 
-             <p className="descripcion-home">
+        <div className="dashboard-home-page">
+            <h1>Editor de la Pagina Principal</h1>
+
+            <p className="descripcion-home">
+
                 En esta sección podrás ver los productos que se mostrarán en la página principal. Estos productos serán los primeros en aparecer para los usuarios.
 
                 <br /><br />
 
                 Además, aquí podrás visualizar y administrar la información de la empresa, así como el perfil del propietario o propietaria. También tendrás la posibilidad de modificar estos datos según las necesidades de la compañía.
+
             </p>
 
             <h1>
+
                 Productos Destacados
+
             </h1>
-            
+
             <div className="grid-productos">
 
                 {
@@ -77,6 +89,18 @@ function DashboardHomePage() {
                 }
 
             </div>
+
+
+            {/* =====================================
+               INFORMACIÓN DEL CEO
+            ===================================== */}
+
+            <DashboardInformacionCeo 
+            tipo="admin"
+            />
+            <DashboardInformacionInstitucional
+                tipo="admin"
+            />
 
         </div>
 
