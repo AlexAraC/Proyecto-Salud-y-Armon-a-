@@ -1,0 +1,445 @@
+.dashboard-usuarios {
+
+    padding: 20px;
+
+}
+
+
+/* ===========================
+   ENCABEZADO
+=========================== */
+
+.encabezado-usuarios {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+    flex-wrap: wrap;
+
+}
+
+.encabezado-usuarios input,
+.encabezado-usuarios select {
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.65);
+
+    backdrop-filter: blur(6px);
+
+    font-size: 15px;
+
+    outline: none;
+
+}
+
+.encabezado-usuarios input {
+
+    flex: 1;
+
+}
+
+
+/* ===========================
+   TABLA
+=========================== */
+
+.tabla-usuarios {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    overflow: hidden;
+
+    background: rgba(255,255,255,.65);
+
+    backdrop-filter: blur(6px);
+
+    border-radius: 20px;
+
+    box-shadow:
+
+        0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.tabla-usuarios th {
+
+    background: #3A312B;
+
+    color: white;
+
+    padding: 18px;
+
+}
+
+.tabla-usuarios td {
+
+    text-align: center;
+
+    padding: 18px;
+
+    border-bottom:
+
+        1px solid rgba(0,0,0,.08);
+
+}
+
+.tabla-usuarios tr:hover {
+
+    background:
+
+        rgba(255,255,255,.3);
+
+}
+
+
+/* ===========================
+   ROLES
+=========================== */
+
+.rol {
+
+    padding: 8px 15px;
+
+    border-radius: 30px;
+
+    font-weight: 700;
+
+}
+
+.rol.admin {
+
+    background: #D4EDDA;
+
+    color: #155724;
+
+}
+
+.rol.usuario {
+
+    background: #D1ECF1;
+
+    color: #0C5460;
+
+}
+
+
+/* ===========================
+   BOTONES
+=========================== */
+
+.btn-pedidos,
+.btn-rol {
+
+    border: none;
+
+    padding: 10px 15px;
+
+    border-radius: 10px;
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    margin: 3px;
+
+}
+
+.btn-pedidos {
+
+    background: #3A312B;
+
+}
+
+.btn-rol {
+
+    background: #6f8c4e;
+
+}
+
+.btn-pedidos:hover,
+.btn-rol:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+
+        0 6px 14px rgba(0,0,0,.12);
+
+}
+
+
+/* ===========================
+   MODAL
+=========================== */
+
+.modal-fondo {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: rgba(0,0,0,.35);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 999;
+
+}
+
+.modal-pedidos {
+
+    width: 90%;
+
+    max-width: 700px;
+
+    max-height: 85vh;
+
+    overflow-y: auto;
+
+    padding: 30px;
+
+    border-radius: 25px;
+
+    background:
+
+        rgba(255,255,255,.75);
+
+    backdrop-filter: blur(10px);
+
+    box-shadow:
+
+        0 10px 30px rgba(0,0,0,.15);
+
+}
+
+.modal-pedidos h2 {
+
+    color: #3A312B;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* ===========================
+   PEDIDOS
+=========================== */
+
+.pedido-card {
+
+    background:
+
+        rgba(255,255,255,.5);
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+
+    border:
+
+        1px solid rgba(0,0,0,.08);
+
+}
+
+.pedido-card h3 {
+
+    color: #3A312B;
+
+    margin-bottom: 12px;
+
+}
+
+.pedido-card p {
+
+    margin-bottom: 8px;
+
+}
+
+
+/* ===========================
+   BOTÓN CERRAR
+=========================== */
+
+.btn-cerrar {
+
+    margin-top: 20px;
+
+    width: 100%;
+
+    border: none;
+
+    background: #3A312B;
+
+    color: white;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+.btn-cerrar:hover {
+
+    background: #51443c;
+
+}
+
+
+/* ===========================
+   RESPONSIVE TABLET
+=========================== */
+
+@media (max-width: 900px) {
+
+    .tabla-usuarios {
+
+        display: block;
+
+        overflow-x: auto;
+
+    }
+
+}
+
+
+/* ===========================
+   RESPONSIVE MÓVIL
+=========================== */
+
+@media (max-width: 768px) {
+
+    .tabla-usuarios,
+    .tabla-usuarios thead,
+    .tabla-usuarios tbody,
+    .tabla-usuarios tr,
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+
+        display: block;
+
+    }
+
+    .tabla-usuarios thead {
+
+        display: none;
+
+    }
+
+    .tabla-usuarios tr {
+
+        background:
+
+            rgba(255,255,255,.7);
+
+        border-radius: 20px;
+
+        padding: 15px;
+
+        margin-bottom: 20px;
+
+        box-shadow:
+
+            0 8px 20px rgba(0,0,0,.08);
+
+    }
+
+    .tabla-usuarios td {
+
+        border: none;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 12px 0;
+
+    }
+
+    .tabla-usuarios td::before {
+
+        font-weight: bold;
+
+        color: #3A312B;
+
+    }
+
+    .tabla-usuarios td:nth-child(1)::before {
+
+        content: "Nombre";
+
+    }
+
+    .tabla-usuarios td:nth-child(2)::before {
+
+        content: "Correo";
+
+    }
+
+    .tabla-usuarios td:nth-child(3)::before {
+
+        content: "Dirección";
+
+    }
+
+    .tabla-usuarios td:nth-child(4)::before {
+
+        content: "Rol";
+
+    }
+
+    .tabla-usuarios td:nth-child(5)::before {
+
+        content: "Acciones";
+
+    }
+
+    .tabla-usuarios td:last-child {
+
+        flex-direction: column;
+
+        gap: 10px;
+
+        align-items: stretch;
+
+    }
+
+    .btn-pedidos,
+    .btn-rol {
+
+        width: 100%;
+
+        margin: 0;
+
+    }
+
+}

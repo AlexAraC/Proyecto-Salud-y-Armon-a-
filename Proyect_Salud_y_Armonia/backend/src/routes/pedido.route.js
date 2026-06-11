@@ -2,13 +2,15 @@ const express = require('express');
 
 const router = express.Router();
 
-const {//Aqui se piden las funciones del controlador de pedidos
+const {
     crearPedido,
     actualizarEstadoPedido,
     verPedidosAdmin,
     verPedidosCliente,
     cancelarPedido,
-    obtenerEstadisticasPedidos
+    obtenerEstadisticasPedidos,
+    obtenerPedidoPorId,
+    obtenerPedidosPorUsuario
 } = require('../controllers/pedido.controller');
 
 const {
@@ -16,7 +18,6 @@ const {
     verificarAdmin,
     verificarUser
 } = require('../middlewares/auth.middleware');
-
 
 router.post(
     '/',
@@ -37,13 +38,14 @@ router.get(
     verificarToken,
     verificarAdmin,
     verPedidosAdmin
-);  
+);
+
 router.get(
     '/cliente',
     verificarToken,
     verificarUser,
     verPedidosCliente
-);   
+);
 router.put(
     '/:id/cancelar',
     verificarToken,
@@ -54,7 +56,21 @@ router.put(
 router.get(
     '/Estadisticas',
     verificarToken,
-    verificarUser,
+    verificarAdmin,
     obtenerEstadisticasPedidos
-)
+);
+
+router.get(
+    '/usuario/:id',
+    verificarToken,
+    verificarAdmin,
+    obtenerPedidosPorUsuario
+);
+
+router.get(
+    '/:id',
+    verificarToken,
+    obtenerPedidoPorId
+);
+
 module.exports = router;

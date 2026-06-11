@@ -9,10 +9,10 @@ const crearPedido = async (req, res) => {
 
     try {
 
+        const { id } = req.usuario;
+
         const {
-            usuario_id,
             metodo_pago,
-            estado = 'Pendiente',
             productos
         } = req.body;
 
@@ -368,6 +368,70 @@ const cancelarPedido = async (req, res) => {
     }
 
 };
+
+const obtenerPedidoPorId = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const pedidoDB = await sql.query`
+
+            SELECT
+                p.id,
+                p.usuario_id,
+                p.fecha,
+                p.estado,
+                p.total,
+                p.metodo_pago
+
+            FROM Pedidos p
+
+            WHERE p.id = ${id}
+        `;
+
+        if (pedidoDB.recordset.length === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Pedido no encontrado'
+            });
+
+        }
+
+        const productosDB = await sql.query`
+
+            SELECT
+                nombre_producto,
+                cantidad,
+                subtotal
+
+            FROM DetallePedido
+
+            WHERE pedido_id = ${id}
+        `;
+
+        res.json({
+
+            pedido:
+                pedidoDB.recordset[0],
+
+            productos:
+                productosDB.recordset
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: error.message
+        });
+
+    }
+
+};
+
 const actualizarEstadoPedido = async (req, res) => {
 
     try {
@@ -381,10 +445,11 @@ const actualizarEstadoPedido = async (req, res) => {
         // ESTADOS PERMITIDOS
         // =====================================
 
-        const estadosValidos = [
+      const estadosValidos = [
             'Pendiente',
             'Enviado',
             'Entregado',
+            'Cancelado'
         ];
 
 
@@ -462,18 +527,33 @@ const verPedidosAdmin = async (req, res) => {
 
     try {
 
-        const todosLosPedidos = await sql.query(`
+        const todosLosPedidos = await sql.query`
 
             SELECT
+
                 p.id,
-                p.usuario_id,
+
+                u.nombre AS usuario,
+
                 p.fecha,
+
                 p.estado,
+
                 p.total,
+
                 p.metodo_pago
 
             FROM Pedidos p
-        `);
+
+            LEFT JOIN Usuarios u
+
+                ON p.usuario_id = u.id
+
+            ORDER BY
+
+                p.fecha DESC
+
+        `;
 
 
         res.json({
@@ -484,43 +564,66 @@ const verPedidosAdmin = async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.log(error);
 
         res.status(500).json({
+
             mensaje: error.message
+
         });
 
     }
 
 };
 const verPedidosCliente = async (req, res) => {
+
     try {
+
         const { id } = req.usuario;
 
-        const pedidosCliente = await sql.query(`
+        const pedidosCliente = await sql.query`
+
             SELECT
                 p.id,
                 p.fecha,
                 p.estado,
                 p.total,
                 p.metodo_pago
+
             FROM Pedidos p
+
             WHERE p.usuario_id = ${id}
-        `);
+
+            ORDER BY p.fecha DESC
+
+        `;
 
         res.json({
+
             mensaje: 'Pedidos obtenidos correctamente',
+
             pedidos: pedidosCliente.recordset
+
         });
 
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            mensaje: error.message
-        });
     }
+
+    catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
 };
 
 
@@ -617,11 +720,61 @@ const obtenerEstadisticasPedidos = async (req, res) => {
     }
 
 };
+
+const obtenerPedidosPorUsuario = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const pedidos = await sql.query`
+
+            SELECT
+                p.id,
+                p.fecha,
+                p.estado,
+                p.total,
+                p.metodo_pago
+
+            FROM Pedidos p
+
+            WHERE p.usuario_id = ${id}
+
+            ORDER BY p.fecha DESC
+        `;
+
+        res.json({
+
+            mensaje: 'Pedidos obtenidos correctamente',
+
+            pedidos: pedidos.recordset
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+
+            mensaje: error.message
+
+        });
+
+    }
+
+};
+
+
 module.exports = {
     crearPedido,
     actualizarEstadoPedido,
     verPedidosAdmin,
     verPedidosCliente,
     cancelarPedido, 
-    obtenerEstadisticasPedidos
+    obtenerEstadisticasPedidos,
+    obtenerPedidoPorId,
+    obtenerPedidosPorUsuario
 };

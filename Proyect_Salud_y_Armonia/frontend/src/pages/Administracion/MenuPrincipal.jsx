@@ -14,6 +14,10 @@ import DashboardProductos from '../../components/DashboardProductos';
 
 import DashboardHomePage from '../../components/DashboardHomePage'
 
+import DashboardPedidos from '../../components/DashboardPedidos';
+
+import DashboardUsuarios from '../../components/DashboardUsuarios';
+
 import './MenuPrincipal.css';
 
 function MenuPrincipal() {
@@ -105,9 +109,23 @@ function MenuPrincipal() {
                 }
                 {
                     seccionActiva ==='homepage' && (
+
                         <DashboardHomePage/>
                     )
                 }
+                  {
+                    seccionActiva ==='pedidos' && (
+                        
+                        <DashboardPedidos/>
+                    )
+                }
+                  {
+                    seccionActiva ==='clientes' && (
+                        
+                        <DashboardUsuarios/>
+                    )
+                }
+
 
 
             </div>
