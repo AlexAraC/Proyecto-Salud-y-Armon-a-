@@ -14,7 +14,11 @@ CREATE TABLE Usuarios (
 
     codigo_recuperacion VARCHAR(10),
 
-    expiracion_codigo DATETIME
+    expiracion_codigo DATETIME,
+
+    verificado BIT DEFAULT 0,
+
+    token_verificacion VARCHAR(255)
 
 );
 
@@ -116,6 +120,10 @@ CREATE TABLE Pedidos (
     total DECIMAL(10,2),
 
     metodo_pago VARCHAR(100),
+
+    tipo_envio VARCHAR(50) DEFAULT 'Normal',
+
+    direccion_envio VARCHAR(MAX),
 
     FOREIGN KEY (usuario_id)
     REFERENCES Usuarios(id)

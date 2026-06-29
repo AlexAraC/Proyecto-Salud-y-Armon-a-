@@ -2,12 +2,15 @@ const express = require('express');
 
 const router = express.Router();
 
+
 const {
     obtenerUsuarios,
     crearUsuario,
     actualizarUsuario,
     eliminarUsuario,
-    cambiarRol
+    cambiarRol,
+    verificarAdministrador,
+    verificarCorreo
 } = require('../controllers/usuarios.controller');
 
 const {
@@ -24,6 +27,22 @@ router.get('/',
     verificarAdmin,
     obtenerUsuarios);
 
+
+router.get(
+    '/verificar-admin',
+    verificarToken,
+    verificarAdmin,
+    verificarAdministrador
+);
+
+// =====================================
+// VERIFICAR CORREO
+// =====================================
+
+router.get(
+    '/verificar/:token',
+    verificarCorreo
+);
 
 // =====================================
 // POST
@@ -55,8 +74,8 @@ router.put('/:id/rol',
 router.delete('/:id', 
     verificarToken,
     verificarUser,
-    eliminarUsuario,
-    cambiarRol
+    eliminarUsuario
+    
 );
 
 

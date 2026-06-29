@@ -144,3 +144,273 @@
     gap: 20px;
 
 }
+
+/* ===========================
+   DETALLE ADMIN PRODUCTO
+============================ */
+
+.detalle-admin-producto {
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: detalleAdminEntrada .45s cubic-bezier(.22,1,.36,1);
+}
+
+.detalle-admin-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    margin-bottom: 24px;
+    background: rgba(239,231,220,0.72);
+    color: #3A312B;
+    border: 1px solid rgba(58,49,43,0.18);
+    border-radius: 10px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    transition: 0.2s ease;
+    animation: detalleAdminFade .4s ease .1s both;
+}
+.detalle-admin-volver:hover {
+    background: rgba(206, 198, 189, 0.72);
+    transform: translateY(-1px);
+}
+
+.detalle-admin-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(58,49,43,0.15);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    animation: detalleAdminFade .5s ease .15s both;
+}
+
+.detalle-admin-imagen {
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(239,231,220,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: detalleAdminFade .5s ease .25s both;
+}
+.detalle-admin-imagen img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: contain;
+    display: block;
+}
+
+.detalle-admin-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation: detalleAdminFade .5s ease .3s both;
+}
+.detalle-admin-categoria {
+    display: inline-block;
+    background: rgba(163,177,138,0.15);
+    color: #6B4F3A;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    width: fit-content;
+}
+.detalle-admin-info h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #3A312B;
+    margin: 0;
+}
+.detalle-admin-precio {
+    font-size: 24px;
+    font-weight: 700;
+    color: #A3B18A;
+    margin: 0;
+}
+.detalle-admin-descripcion {
+    color: #6B4F3A;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+.detalle-admin-stock {
+    font-size: 14px;
+    color: #6B4F3A;
+    font-weight: 600;
+    margin: 0;
+}
+.detalle-admin-stock span {
+    color: #3A312B;
+}
+
+.detalle-admin-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(58,49,43,0.08);
+}
+.detalle-admin-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 20px;
+    border: 1px solid rgba(58,49,43,0.18);
+    border-radius: 10px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+.detalle-admin-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+.detalle-admin-btn-editar {
+    background: #f5c542;
+    color: #3A312B;
+    border-color: #e0b02e !important;
+}
+.detalle-admin-btn-editar:hover {
+    background: #e8b832 !important;
+}
+.detalle-admin-btn-eliminar {
+    background: #c55353;
+    color: white;
+    border-color: #b03e3e !important;
+}
+.detalle-admin-btn-eliminar:hover {
+    background: #b04444 !important;
+}
+.detalle-admin-btn-destacado {
+    background: #c8e6f0;
+    color: #2c5f73;
+    border-color: #a8d4e0 !important;
+}
+.detalle-admin-btn-destacado:hover {
+    background: #b4dce8 !important;
+}
+
+/* Edit form */
+.detalle-admin-editar {
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(58,49,43,0.15);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    max-width: 600px;
+    animation: detalleAdminFade .4s ease .1s both;
+}
+.detalle-admin-editar h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #3A312B;
+    margin: 0 0 20px;
+}
+.detalle-admin-editar input,
+.detalle-admin-editar textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(58,49,43,0.18);
+    border-radius: 10px;
+    font: inherit;
+    font-size: 14px;
+    background: rgba(255,255,255,0.7);
+    color: #3A312B;
+    outline: none;
+    box-sizing: border-box;
+}
+.detalle-admin-editar textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+.detalle-admin-editar input:focus,
+.detalle-admin-editar textarea:focus {
+    border-color: #A3B18A;
+    box-shadow: 0 0 0 3px rgba(163,177,138,0.2);
+}
+.detalle-admin-editar-acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.detalle-admin-btn-guardar {
+    flex: 1;
+    background: #6f8c4e;
+    color: white;
+    border-color: #5a7a3e !important;
+}
+.detalle-admin-btn-guardar:hover {
+    background: #5a7a3e !important;
+}
+.detalle-admin-btn-cancelar {
+    flex: 1;
+    background: rgba(239,231,220,0.72);
+    color: #3A312B;
+}
+.detalle-admin-btn-cancelar:hover {
+    background: rgba(206, 198, 189, 0.72) !important;
+}
+
+@media (max-width: 768px) {
+    .dashboard-productos {
+        padding: 15px;
+    }
+
+    .grid-productos {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .detalle-admin-grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 20px;
+    }
+    .detalle-admin-volver {
+        font-size: 13px;
+        padding: 8px 16px;
+    }
+    .detalle-admin-imagen img {
+        max-height: 280px;
+    }
+    .detalle-admin-acciones {
+        flex-direction: column;
+    }
+    .detalle-admin-btn {
+        min-width: auto;
+    }
+    .detalle-admin-editar {
+        padding: 20px;
+    }
+}
+
+/* ===========================
+   ANIMACIONES DETALLE ADMIN
+============================ */
+
+@keyframes detalleAdminEntrada {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes detalleAdminFade {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,6 +1,6 @@
 # Ignorar solo esa carpeta específica
 Documentacion/Cuestionarios y informacion preliminar/
-
+Proyect_Salud_y_Armonia/backend/.env
 # Archivos temporales (buena práctica)
 *.tmp
 *.log

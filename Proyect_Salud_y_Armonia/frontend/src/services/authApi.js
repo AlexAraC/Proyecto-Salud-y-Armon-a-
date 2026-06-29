@@ -49,7 +49,7 @@ export const cambiodePassword = async (datos) => {
 
 }
 
-export const logout = async (req, res) => {
+export const logout = async () => {
 
     return await axios.post(
 

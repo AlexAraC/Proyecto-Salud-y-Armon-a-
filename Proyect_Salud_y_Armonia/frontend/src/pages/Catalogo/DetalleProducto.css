@@ -1,0 +1,310 @@
+.detalle-contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 120px 30px 50px;
+}
+
+.detalle-card {
+    background: rgba(255, 255, 255, 0.58);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(58, 49, 43, 0.15);
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    padding: 48px;
+    width: 100%;
+    max-width: 1400px;
+}
+
+.detalle-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 48px;
+    align-items: start;
+}
+
+.detalle-imagen-contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.detalle-imagen-contenedor img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    border-radius: 24px;
+    border: 1px solid rgba(58, 49, 43, 0.15);
+}
+
+.detalle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.detalle-categoria {
+    display: inline-block;
+    background: rgba(163, 177, 138, 0.15);
+    color: #6B4F3A;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 24px;
+    width: fit-content;
+}
+
+.detalle-nombre {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #3A312B;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.detalle-precio {
+    font-size: 36px;
+    font-weight: 700;
+    color: #A3B18A;
+    margin: 6px 0;
+}
+
+.detalle-descripcion {
+    color: #6B4F3A;
+    font-size: 17px;
+    line-height: 1.8;
+    margin: 6px 0;
+}
+
+.detalle-stock {
+    font-size: 16px;
+    color: #6B4F3A;
+    font-weight: 600;
+}
+
+.detalle-stock span {
+    color: #3A312B;
+}
+
+.detalle-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 16px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(58, 49, 43, 0.08);
+}
+
+.detalle-cantidad label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6B4F3A;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detalle-cantidad input {
+    width: 100px;
+    padding: 14px 18px;
+    border: 1px solid var(--color-arena);
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.7);
+    outline: none;
+    color: #3A312B;
+    transition: 0.3s;
+}
+
+.detalle-cantidad input:focus {
+    border-color: var(--color-verde);
+    box-shadow: 0 0 0 3px rgba(163, 177, 138, 0.2);
+}
+
+.detalle-acciones {
+    display: flex;
+    gap: 14px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.detalle-btn-carrito {
+    flex: 1;
+    min-width: 200px;
+    padding: 18px 32px;
+    border: none;
+    border-radius: 14px;
+    background: var(--color-verde);
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.detalle-btn-carrito:hover {
+    background: var(--color-terracota);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(184, 111, 92, 0.35);
+}
+
+.detalle-btn-volver {
+    padding: 18px 32px;
+    border-radius: 14px;
+    background: rgba(239, 231, 220, 0.72);
+    color: #3A312B;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(58, 49, 43, 0.15);
+}
+
+.detalle-btn-volver:hover {
+    background: rgba(206, 198, 189, 0.72);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.detalle-btn-reportar {
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
+    padding: 0;
+    border: 1px solid rgba(58, 49, 43, 0.18);
+    border-radius: 14px;
+    background: #D56A6A;
+    color: white;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.detalle-btn-reportar:hover {
+    background: #C25858;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(197, 79, 79, 0.3);
+}
+
+.detalle-cargando {
+    text-align: center;
+    color: #6B4F3A;
+    font-size: 20px;
+    padding: 80px 0;
+}
+
+.detalle-error {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.detalle-error h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    color: #3A312B;
+    margin-bottom: 16px;
+}
+
+/* ===================================== */
+/* ANIMACIONES */
+/* ===================================== */
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+.anim-card {
+    animation: fadeInUp 0.5s ease both;
+}
+
+.anim-imagen {
+    animation: fadeInScale 0.6s ease both;
+}
+
+.anim-categoria {
+    animation: slideInRight 0.4s ease both;
+}
+
+.anim-nombre {
+    animation: slideInRight 0.4s ease both;
+}
+
+.anim-precio {
+    animation: slideInRight 0.4s ease both;
+}
+
+.anim-descripcion {
+    animation: slideInRight 0.4s ease both;
+}
+
+.anim-stock {
+    animation: slideInRight 0.4s ease both;
+}
+
+.anim-cantidad {
+    animation: slideInRight 0.4s ease both;
+}
+
+.anim-acciones {
+    animation: fadeInUp 0.5s ease both;
+}
+
+@media (max-width: 768px) {
+    .detalle-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .detalle-card {
+        padding: 28px;
+    }
+
+    .detalle-imagen-contenedor {
+        max-height: 350px;
+    }
+
+    .detalle-nombre {
+        font-size: 26px;
+    }
+
+    .detalle-precio {
+        font-size: 26px;
+    }
+
+    .detalle-acciones {
+        flex-direction: column;
+    }
+
+    .detalle-btn-reportar {
+        width: 100%;
+        min-width: 100%;
+        height: 52px;
+    }
+}

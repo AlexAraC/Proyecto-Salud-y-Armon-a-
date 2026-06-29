@@ -108,6 +108,20 @@ const eliminarCategoria = async (req, res) => {
 
         const { id } = req.params;
 
+        const productosConCategoria = await sql.query`
+            SELECT COUNT(*) AS total
+            FROM Productos
+            WHERE categoria_id = ${id}
+        `;
+
+        if (productosConCategoria.recordset[0].total > 0) {
+
+            return res.status(400).json({
+                mensaje: 'No se puede eliminar la categoría porque tiene productos asociados'
+            });
+
+        }
+
         await sql.query(`
            UPDATE Categorias 
            SET activo = 0

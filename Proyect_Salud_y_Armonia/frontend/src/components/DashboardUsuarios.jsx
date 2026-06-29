@@ -25,16 +25,6 @@ function DashboardUsuarios() {
 
     const [nombreUsuario, setNombreUsuario] = useState('');
 
-
-
-    useEffect(() => {
-
-        cargarUsuarios();
-
-    }, []);
-
-
-
     const cargarUsuarios = async () => {
 
         try {
@@ -52,6 +42,32 @@ function DashboardUsuarios() {
         }
 
     };
+
+
+
+    useEffect(() => {
+
+        const cargarUsuariosIniciales = async () => {
+
+            try {
+
+                const respuesta = await obtenerUsuarios();
+
+                setUsuarios(respuesta);
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+            }
+
+        };
+
+        void cargarUsuariosIniciales();
+
+    }, []);
 
 
 
@@ -283,6 +299,11 @@ function DashboardUsuarios() {
                             Correo
 
                         </th>
+                        <th>
+
+                            Teléfono
+
+                        </th>
 
                         <th>
 
@@ -338,6 +359,11 @@ function DashboardUsuarios() {
 
                                         }
 
+                                    </td>
+                                    <td>
+                                        {
+                                            usuario.telefono
+                                        }
                                     </td>
 
                                     <td>

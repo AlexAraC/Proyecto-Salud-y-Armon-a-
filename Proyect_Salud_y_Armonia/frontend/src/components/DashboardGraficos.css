@@ -21,13 +21,13 @@
 
     backdrop-filter: blur(6px);
 
-    border-radius: 20px;
+    border-radius: var(--radio-panel);
 
     padding: 25px;
 
-    border: 2px solid rgba(58,49,43,0.15);
+    border: var(--borde-panel);
 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    box-shadow: var(--sombra-panel);
 
 }
 .dashboard-card h2 {

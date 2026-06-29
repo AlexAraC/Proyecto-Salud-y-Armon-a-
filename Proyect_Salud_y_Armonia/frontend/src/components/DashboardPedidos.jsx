@@ -20,12 +20,9 @@ function DashboardPedidos() {
 
     const [detallePedido, setDetallePedido] = useState(null);
 
+    const [mostrarModalCliente, setMostrarModalCliente] = useState(false);
 
-    useEffect(() => {
-
-        cargarPedidos();
-
-    }, []);
+    const [clienteInfo, setClienteInfo] = useState(null);
 
 
     const cargarPedidos = async () => {
@@ -49,6 +46,33 @@ function DashboardPedidos() {
     };
 
 
+    useEffect(() => {
+
+        const cargarPedidosIniciales = async () => {
+
+            try {
+
+                const respuesta = await obtenerPedidosAdmin();
+
+                setPedidos(
+                    respuesta.pedidos
+                );
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+            }
+
+        };
+
+        void cargarPedidosIniciales();
+
+    }, []);
+
+
     const abrirDetalles = async (id) => {
 
         try {
@@ -66,6 +90,25 @@ function DashboardPedidos() {
             console.log(error);
 
         }
+
+    };
+
+
+    const abrirInfoCliente = (pedido) => {
+
+        setClienteInfo({
+
+            nombre: pedido.usuario,
+
+            correo: pedido.usuario_correo,
+
+            telefono: pedido.usuario_telefono,
+
+            direccion: pedido.usuario_direccion
+
+        });
+
+        setMostrarModalCliente(true);
 
     };
 
@@ -101,23 +144,13 @@ function DashboardPedidos() {
     };
 
 
-    const pedidosFiltrados =
-
-        filtro === 'Todos'
-
-            ?
-
-            pedidos
-
-            :
-
-            pedidos.filter(
-
-                pedido =>
-
-                    pedido.estado === filtro
-
-            );
+    const pedidosFiltrados = [...(filtro === 'Todos' ? pedidos : pedidos.filter(
+        pedido => pedido.estado === filtro
+    ))].sort((a, b) => {
+        if (a.estado === 'Pendiente' && b.estado !== 'Pendiente') return -1;
+        if (a.estado !== 'Pendiente' && b.estado === 'Pendiente') return 1;
+        return 0;
+    });
 
 
     return (
@@ -189,7 +222,7 @@ function DashboardPedidos() {
 
             </div>
 
-
+        <div className="contenedor-tabla-pedidos">
             <table className="tabla-pedidos">
 
                 <thead>
@@ -230,7 +263,7 @@ function DashboardPedidos() {
 
                                     <td>
 
-                                        {pedido.nombre_usuario}
+                                        {pedido.usuario}
 
                                     </td>
 
@@ -295,6 +328,23 @@ function DashboardPedidos() {
                                         >
 
                                             Ver detalles
+
+                                        </button>
+
+                                        <button
+
+                                            className="btn-cliente"
+
+                                            onClick={() =>
+
+                                                abrirInfoCliente(
+
+                                                    pedido
+                                                )
+                                            }
+                                        >
+
+                                            Ver cliente
 
                                         </button>
 
@@ -435,6 +485,8 @@ function DashboardPedidos() {
                 </tbody>
 
             </table>
+        </div>
+        
 
 
             {
@@ -545,6 +597,7 @@ function DashboardPedidos() {
                                 producto => (
 
                                     <div
+                                      className="producto-detalle"
 
                                         key={producto.nombre_producto}
 
@@ -613,6 +666,107 @@ function DashboardPedidos() {
 
                             }
 
+                        >
+
+                            Cerrar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            }
+
+            {
+
+                mostrarModalCliente
+
+                &&
+
+                clienteInfo
+
+                &&
+
+                <div
+
+                    className="modal-fondo"
+
+                    onClick={() =>
+
+                        setMostrarModalCliente(false)
+                    }
+                >
+
+                    <div
+
+                        className="modal-detalles"
+
+                        onClick={
+
+                            e =>
+
+                                e.stopPropagation()
+                        }
+                    >
+
+                        <h2>
+
+                            Información del Cliente
+
+                        </h2>
+
+                        <p>
+
+                            <strong>Nombre:</strong>
+
+                            {' '}
+
+                            {clienteInfo.nombre}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Correo:</strong>
+
+                            {' '}
+
+                            {clienteInfo.correo || 'No registrado'}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Teléfono:</strong>
+
+                            {' '}
+
+                            {clienteInfo.telefono || 'No registrado'}
+
+                        </p>
+
+                        <p>
+
+                            <strong>Dirección:</strong>
+
+                            {' '}
+
+                            {clienteInfo.direccion || 'No registrada'}
+
+                        </p>
+
+                        <button
+
+                            className="btn-cerrar"
+
+                            onClick={() =>
+
+                                setMostrarModalCliente(
+
+                                    false
+                                )
+                            }
                         >
 
                             Cerrar

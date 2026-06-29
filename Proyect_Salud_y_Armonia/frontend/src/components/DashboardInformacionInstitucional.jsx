@@ -86,7 +86,57 @@ function DashboardInformacionInstitucional({ tipo }) {
 
     useEffect(() => {
 
-        cargarInformacion();
+        const cargarInformacionInicial = async () => {
+
+            try {
+
+                const respuesta =
+                    await obtenerInformacionInstitucional();
+
+                if (
+
+                    respuesta.informacion.length > 0
+
+                ) {
+
+                    const empresa =
+                        respuesta.informacion[0];
+
+                    setInformacion(
+                        empresa
+                    );
+
+                    setFormulario({
+
+                        slogan:
+                            empresa.slogan,
+
+                        descripcion:
+                            empresa.descripcion,
+
+                        telefono:
+                            empresa.telefono,
+
+                        correo:
+                            empresa.correo,
+
+                        imagen: null
+
+                    });
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+            }
+
+        };
+
+        void cargarInformacionInicial();
 
     }, []);
 

@@ -1,30 +1,21 @@
 import { useEffect, useState } from 'react';
-
 import CardProducto from './CardProducto';
-
-import DashboardInformacionCeo
-from './DashboardInformacionCeo';
-
-import  DashboardInformacionInstitucional 
-from './DashboardInformacionInstitucional'
-
-import { obtenerDestacados }
-from '../services/productosApi';
-
+import DashboardInformacionCeo from './DashboardInformacionCeo';
+import DashboardInformacionInstitucional from './DashboardInformacionInstitucional';
+import { obtenerDestacados } from '../services/productosApi';
 import './DashboardHomePage.css';
 
 function DashboardHomePage() {
 
-    const [productos, setProductos] =
-        useState([]);
+    const [productos, setProductos] = useState([]);
 
-    const cargarProductos =
-        async () => {
+    useEffect(() => {
+
+        const cargarProductos = async () => {
 
             try {
 
-                const datos =
-                    await obtenerDestacados();
+                const datos = await obtenerDestacados();
 
                 setProductos(datos);
 
@@ -36,19 +27,19 @@ function DashboardHomePage() {
 
         };
 
-    useEffect(() => {
-
-        cargarProductos();
+        void cargarProductos();
 
     }, []);
 
     return (
 
-
         <div className="dashboard-home-page">
-            <h1>Editor de la Pagina Principal</h1>
 
-            <p className="descripcion-home">
+            <h1 className="home-title fade-1">
+                Editor de la Página Principal
+            </h1>
+
+            <p className="descripcion-home fade-2">
 
                 En esta sección podrás ver los productos que se mostrarán en la página principal. Estos productos serán los primeros en aparecer para los usuarios.
 
@@ -58,49 +49,44 @@ function DashboardHomePage() {
 
             </p>
 
-            <h1>
-
+            <h1 className="home-title fade-3">
                 Productos Destacados
-
             </h1>
 
-            <div className="grid-productos">
+            <div className="grid-productos fade-4">
 
                 {
+                    productos.map((producto, index) => (
 
-                    productos.map(
-
-                        (producto) => (
-
+                        <div
+                            key={producto.id}
+                            className="producto-destacado-animado"
+                            style={{
+                                animationDelay: `${0.75 + (0.08 * index)}s`
+                            }}
+                        >
                             <CardProducto
-
-                                key={producto.id}
-
                                 producto={producto}
-
                                 tipo="gestionHome"
-
                             />
+                        </div>
 
-                        )
-
-                    )
-
+                    ))
                 }
 
             </div>
 
+            <div className="home-section fade-5">
+                <DashboardInformacionCeo
+                    tipo="admin"
+                />
+            </div>
 
-            {/* =====================================
-               INFORMACIÓN DEL CEO
-            ===================================== */}
-
-            <DashboardInformacionCeo 
-            tipo="admin"
-            />
-            <DashboardInformacionInstitucional
-                tipo="admin"
-            />
+            <div className="home-section fade-6">
+                <DashboardInformacionInstitucional
+                    tipo="admin"
+                />
+            </div>
 
         </div>
 

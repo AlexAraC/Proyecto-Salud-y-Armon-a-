@@ -743,7 +743,7 @@ const convertirCarritoAPedido = async (req, res) => {
         // OBTENER MÉTODO DE PAGO
         // =====================================
 
-        const { metodo_pago } = req.body;
+        const { metodo_pago, tipo_envio, direccion_envio } = req.body;
 
 
         // =====================================
@@ -857,7 +857,9 @@ const convertirCarritoAPedido = async (req, res) => {
                 usuario_id,
                 estado,
                 total,
-                metodo_pago
+                metodo_pago,
+                tipo_envio,
+                direccion_envio
             )
 
             OUTPUT INSERTED.id
@@ -867,7 +869,9 @@ const convertirCarritoAPedido = async (req, res) => {
                 ${usuario_id},
                 'Pendiente',
                 ${total},
-                ${metodo_pago}
+                ${metodo_pago},
+                ${tipo_envio || 'Normal'},
+                ${direccion_envio || null}
             )
         `;
 
@@ -933,6 +937,18 @@ const convertirCarritoAPedido = async (req, res) => {
             WHERE id = ${carritoId}
         `;
 
+
+        // =====================================
+        // ACTUALIZAR DIRECCION USUARIO
+        // =====================================
+
+        if (direccion_envio) {
+            await sql.query`
+                UPDATE Usuarios
+                SET direccion = ${direccion_envio}
+                WHERE id = ${usuario_id}
+            `;
+        }
 
         // =====================================
         // ELIMINAR DETALLES CARRITO

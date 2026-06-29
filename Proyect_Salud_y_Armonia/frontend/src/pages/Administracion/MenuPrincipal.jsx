@@ -1,22 +1,15 @@
 import { useEffect, useState } from 'react';
 
 import MenuLateral from '../../components/NavLateral';
-
 import DashboardGraficos from '../../components/DashboardGraficos';
-
 import DashboardComentarios from '../../components/DashboardComentarios';
-
 import DashboardCategorias from '../../components/DashboardCategorias';
+import DashboardProductos from '../../components/DashboardProductos';
+import DashboardHomePage from '../../components/DashboardHomePage';
+import DashboardPedidos from '../../components/DashboardPedidos';
+import DashboardUsuarios from '../../components/DashboardUsuarios';
 
 import { obtenerEstadisticas } from '../../services/estadisticasService';
-
-import DashboardProductos from '../../components/DashboardProductos';
-
-import DashboardHomePage from '../../components/DashboardHomePage'
-
-import DashboardPedidos from '../../components/DashboardPedidos';
-
-import DashboardUsuarios from '../../components/DashboardUsuarios';
 
 import './MenuPrincipal.css';
 
@@ -26,6 +19,8 @@ function MenuPrincipal() {
 
     const [seccionActiva, setSeccionActiva] = useState('general');
 
+    const [cargando, setCargando] = useState(true);
+
     useEffect(() => {
 
         const cargarDatos = async () => {
@@ -34,15 +29,31 @@ function MenuPrincipal() {
 
                 const datos = await obtenerEstadisticas();
 
-                console.log(datos);
-
                 setEstadisticas(datos);
+
+                setCargando(false);
 
             }
 
             catch (error) {
 
-                console.error(error);
+                setCargando(false);
+
+                if (error.response?.status === 403) {
+
+                    alert('No tienes permisos de administrador.');
+
+                    localStorage.removeItem('token');
+
+                    window.location.href = '/login';
+
+                }
+
+                else {
+
+                    alert('No se pudieron cargar las estadísticas.');
+
+                }
 
             }
 
@@ -52,6 +63,12 @@ function MenuPrincipal() {
 
     }, []);
 
+    if (cargando) {
+
+        return <h2>Cargando...</h2>;
+
+    }
+
     return (
 
         <div className="panel-admin">
@@ -60,7 +77,6 @@ function MenuPrincipal() {
                 seccionActiva={seccionActiva}
                 cambiarSeccion={setSeccionActiva}
             />
-            
 
             <div className="contenido-admin">
 
@@ -69,17 +85,14 @@ function MenuPrincipal() {
 
                         <>
 
-                            <h1>Administracion General</h1>
+                            <h1>Administración General</h1>
 
                             {
                                 estadisticas && (
 
                                     <DashboardGraficos
-
                                         ventas={estadisticas.ventas}
-
                                         productos={estadisticas.productos}
-
                                     />
 
                                 )
@@ -101,32 +114,38 @@ function MenuPrincipal() {
 
                     )
                 }
+
                 {
                     seccionActiva === 'productos' && (
 
-                        <DashboardProductos/>
+                        <DashboardProductos />
+
                     )
                 }
+
                 {
-                    seccionActiva ==='homepage' && (
+                    seccionActiva === 'homepage' && (
 
-                        <DashboardHomePage/>
-                    )
-                }
-                  {
-                    seccionActiva ==='pedidos' && (
-                        
-                        <DashboardPedidos/>
-                    )
-                }
-                  {
-                    seccionActiva ==='clientes' && (
-                        
-                        <DashboardUsuarios/>
+                        <DashboardHomePage />
+
                     )
                 }
 
+                {
+                    seccionActiva === 'pedidos' && (
 
+                        <DashboardPedidos />
+
+                    )
+                }
+
+                {
+                    seccionActiva === 'clientes' && (
+
+                        <DashboardUsuarios />
+
+                    )
+                }
 
             </div>
 

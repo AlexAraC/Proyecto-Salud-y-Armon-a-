@@ -140,7 +140,10 @@ function DashboardCategorias() {
         } catch (errorEliminar) {
 
             console.error(errorEliminar);
-            setError('No se pudo eliminar la categoria.');
+            setError(
+                errorEliminar.response?.data?.mensaje ||
+                'No se pudo eliminar la categoria.'
+            );
             setGuardando(false);
 
         }

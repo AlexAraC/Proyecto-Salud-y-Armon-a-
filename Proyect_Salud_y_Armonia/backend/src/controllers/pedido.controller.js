@@ -535,6 +535,12 @@ const verPedidosAdmin = async (req, res) => {
 
                 u.nombre AS usuario,
 
+                u.correo AS usuario_correo,
+
+                u.telefono AS usuario_telefono,
+
+                u.direccion AS usuario_direccion,
+
                 p.fecha,
 
                 p.estado,

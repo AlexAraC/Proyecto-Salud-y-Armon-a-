@@ -82,7 +82,54 @@ function DashboardInformacionCeo({tipo}) {
 
     useEffect(() => {
 
-        cargarInformacion();
+        const cargarInformacionInicial = async () => {
+
+            try {
+
+                const respuesta =
+                    await obtenerInformacionCeo();
+
+                if (
+
+                    respuesta.informacion.length > 0
+
+                ) {
+
+                    const ceo =
+                        respuesta.informacion[0];
+
+                    setInformacion(
+                        ceo
+                    );
+
+                    setFormulario({
+
+                        nombre:
+                            ceo.nombre,
+
+                        correo:
+                            ceo.correo,
+
+                        telefono:
+                            ceo.telefono,
+                        slogan:
+                            ceo.slogan,
+
+                        imagen: null
+
+                    });
+
+                }
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
+
+        };
+
+        void cargarInformacionInicial();
 
     }, []);
 

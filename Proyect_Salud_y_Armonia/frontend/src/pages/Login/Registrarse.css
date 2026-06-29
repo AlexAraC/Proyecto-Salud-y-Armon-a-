@@ -1,0 +1,134 @@
+.register-contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.register-card {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: var(--radio-panel);
+    border: var(--borde-panel);
+    box-shadow: var(--sombra-panel);
+    padding: 40px 35px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.register-logo {
+    width: 160px;
+    margin: 0 auto 20px;
+}
+
+.register-titulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-cafe);
+    margin-bottom: 8px;
+}
+
+.register-subtitulo {
+    font-size: 14px;
+    color: #6B4F3A;
+    margin-bottom: 28px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.register-input {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid var(--color-arena);
+    border-radius: var(--radio-panel);
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
+    background: rgba(255, 255, 255, 0.7);
+    outline: none;
+    transition: 0.3s;
+    color: var(--color-cafe);
+}
+
+.register-input:focus {
+    border-color: var(--color-verde);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(163, 177, 138, 0.2);
+}
+
+.register-input::placeholder {
+    color: #A69B8F;
+}
+
+.register-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radio-panel);
+    background-color: var(--color-verde);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 6px;
+}
+
+.register-btn:hover {
+    background-color: var(--color-terracota);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 111, 92, 0.3);
+}
+
+.register-enlaces {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.register-link {
+    color: #6B4F3A;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.register-link:hover {
+    color: var(--color-verde);
+}
+
+@media (max-width: 480px) {
+    .register-card {
+        padding: 30px 20px;
+    }
+
+    .register-titulo {
+        font-size: 20px;
+    }
+
+    .register-logo {
+        width: 130px;
+    }
+}

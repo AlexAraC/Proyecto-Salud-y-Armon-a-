@@ -3,23 +3,20 @@
 /* ===================================== */
 
 .menu-lateral {
-
-    margin-top: 30px;
-
-    margin-bottom: 0px;
-
-    width: 260px;
-
-    padding: 30px 20px;
-
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    padding: 100px 18px 24px;
     box-sizing: border-box;
-
-    border-radius: 20px;
-
-    background: transparent;
-
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(58, 49, 43, 0.08);
+    overflow-y: auto;
+    z-index: 1;
     flex-shrink: 0;
-
 }
 
 /* ===================================== */
@@ -27,69 +24,42 @@
 /* ===================================== */
 
 .menu-titulo {
-
     color: #3A312B;
-
     text-align: center;
-
     margin-bottom: 30px;
-
     font-size: 24px;
-
     font-weight: 700;
-
 }
-
 
 /* ===================================== */
 /* OPCIONES */
 /* ===================================== */
 
 .menu-opciones {
-
     display: flex;
-
     flex-direction: column;
-
     gap: 15px;
-
 }
-
 
 /* ===================================== */
 /* ITEM */
 /* ===================================== */
 
 .menu-item {
-
     text-decoration: none;
-
     color: #3A312B;
-
     background: transparent;
-
     padding: 14px 18px;
-
     border-radius: 12px;
-
     border: 1px solid #3A312B;
-
     box-shadow: rgba(58, 49, 43, 0.55);
-
     transition: all 0.3s ease;
-
     font-size: 17px;
-
     font-weight: 600;
-
     font-family: inherit;
-
     text-align: left;
-
     cursor: pointer;
-
 }
-
 
 /* ===================================== */
 /* HOVER */
@@ -97,105 +67,66 @@
 
 .menu-item:hover,
 .menu-item.activo {
-
     background-color: #3A312B;
-
     color: #EFE7DC;
-
     transform: translateX(5px);
-
 }
 
 @media (max-width: 900px) {
-
     .menu-lateral {
-
+        position: relative;
         width: 100%;
-
-        padding: 18px;
-
+        height: auto;
+        padding: 80px 18px 18px;
         border-radius: 0;
-
+        top: auto;
+        left: auto;
     }
 
     .menu-titulo {
-
         margin-bottom: 14px;
-
         text-align: left;
-
         font-size: 22px;
-
     }
 
     .menu-opciones {
-
         flex-direction: row;
-
         gap: 10px;
-
         overflow-x: auto;
-
         padding-bottom: 8px;
-
         scrollbar-width: thin;
-
     }
 
     .menu-item {
-
         flex: 0 0 auto;
-
         min-width: 150px;
-
         max-width: 190px;
-
         padding: 12px 14px;
-
         border-radius: 10px;
-
         font-size: 15px;
-
         text-align: center;
-
         white-space: normal;
-
         line-height: 1.25;
-
     }
 
     .menu-item:hover {
-
         transform: translateY(-2px);
-
     }
-
 }
 
 @media (max-width: 520px) {
-
     .menu-lateral {
-
-        padding: 14px 12px;
-
+        padding: 80px 12px 14px;
     }
 
     .menu-titulo {
-
         font-size: 20px;
-
     }
 
     .menu-item {
-
         min-width: 136px;
-
         max-width: 160px;
-
         padding: 10px 12px;
-
         font-size: 14px;
-
     }
-
 }

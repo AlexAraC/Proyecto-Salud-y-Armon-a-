@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 
 import './CardProducto.css';
 
@@ -14,7 +16,11 @@ function CardProducto({
 
     onAgregarDestacado,
 
-    onQuitarDestacado
+    onQuitarDestacado,
+
+    onAgregarCarrito,
+    onAgregarCarritoModal,
+    onVerDetalle
 
 }) {
 
@@ -25,6 +31,8 @@ function CardProducto({
     const [modalEditarAbierto,
         setModalEditarAbierto] =
         useState(false);
+
+    const navigate = useNavigate();
 
     const [cantidad,
         setCantidad] =
@@ -97,7 +105,11 @@ function CardProducto({
                 <button
                     className="boton-detalles"
                     onClick={() =>
-                        setModalAbierto(true)
+                        tipo === "catalogo"
+                            ? navigate(`/producto/${producto.id}`)
+                            : onVerDetalle
+                                ? onVerDetalle(producto)
+                                : setModalAbierto(true)
                     }
                 >
                     Ver detalles
@@ -107,6 +119,10 @@ function CardProducto({
 
                     <button
                         className="boton-carrito"
+                        onClick={() =>
+                            onAgregarCarrito &&
+                            onAgregarCarrito(producto.id, 1)
+                        }
                     >
                         Agregar al carrito
                     </button>
@@ -117,16 +133,16 @@ function CardProducto({
 
                     <>
 
-                        <button
-                            className="boton-editar"
-                            onClick={() =>
-                                setModalEditarAbierto(
-                                    true
-                                )
-                            }
-                        >
-                            Editar
-                        </button>
+                                    <button
+                                        className="boton-cerrar-modal"
+                                        onClick={() =>
+                                            setModalAbierto(
+                                                false
+                                            )
+                                        }
+                                    >
+                                        Cerrar
+                                    </button>
 
                         <button
                             className="boton-eliminar"
@@ -173,74 +189,77 @@ function CardProducto({
 
             </div>
 
-            {modalAbierto && (
+            {modalAbierto && createPortal((
 
                 <div className="modal-fondo">
 
                     <div className="modal-producto">
 
-                        <img
-                            src={`http://localhost:3000${producto.imagen}`}
-                            alt={producto.nombre}
-                        />
+                        <div className="modal-grid">
 
-                        <h2>
-                            {producto.nombre}
-                        </h2>
-
-                        <p>
-                            {producto.descripcion}
-                        </p>
-
-                        <p>
-                            Categoria:
-                            {' '}
-                            {producto.categoria}
-                        </p>
-
-                        <p>
-                            Precio:
-                            {' '}
-                            ₡{producto.precio}
-                        </p>
-
-                        <p>
-                            Disponibles:
-                            {' '}
-                            {producto.stock}
-                        </p>
-
-                        {tipo === "catalogo" && (
-
-                            <>
-
-                                <label>
-                                    Cantidad
-                                </label>
-
-                                <input
-                                    type="number"
-                                    min="1"
-                                    max={
-                                        producto.stock
-                                    }
-                                    value={cantidad}
-                                    onChange={(e) =>
-                                        setCantidad(
-                                            Number(
-                                                e.target.value
-                                            )
-                                        )
-                                    }
+                            <div className="modal-imagen-contenedor">
+                                <img
+                                    src={`http://localhost:3000${producto.imagen}`}
+                                    alt={producto.nombre}
                                 />
+                            </div>
 
-                            </>
+                            <div className="modal-info">
 
-                        )}
+                                <span className="modal-categoria-etiqueta">
+                                    {producto.categoria}
+                                </span>
 
-                        <div
-                            className="modal-acciones"
-                        >
+                                <h2>
+                                    {producto.nombre}
+                                </h2>
+
+                                <p className="modal-precio">
+                                    ₡{producto.precio}
+                                </p>
+
+                                <p className="modal-descripcion">
+                                    {producto.descripcion}
+                                </p>
+
+                                <p className="modal-stock">
+                                    Stock disponible: {' '}
+                                    <span>{producto.stock} unidades</span>
+                                </p>
+
+                                {tipo === "catalogo" && (
+
+                                    <div className="modal-cantidad">
+
+                                        <label>
+                                            Cantidad
+                                        </label>
+
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max={
+                                                producto.stock
+                                            }
+                                            value={cantidad}
+                                            onChange={(e) =>
+                                                setCantidad(
+                                                    Number(
+                                                        e.target.value
+                                                    )
+                                                )
+                                            }
+                                        />
+
+                                    </div>
+
+                                )}
+
+                            </div>
+
+                        </div>
+
+                        <div className="modal-acciones">
 
                             {tipo === "catalogo" && (
 
@@ -248,6 +267,15 @@ function CardProducto({
 
                                     <button
                                         className="boton-agregar"
+                                        onClick={() => {
+                                            const fn = onAgregarCarritoModal || onAgregarCarrito;
+                                            fn && fn(
+                                                producto.id,
+                                                cantidad
+                                            );
+                                            setModalAbierto(false);
+                                            setCantidad(1);
+                                        }}
                                     >
                                         Agregar al carrito
                                     </button>
@@ -257,6 +285,17 @@ function CardProducto({
                                         title="Reportar error"
                                     >
                                         ⚠
+                                    </button>
+
+                                    <button
+                                        className="boton-cerrar"
+                                        onClick={() =>
+                                            setModalAbierto(
+                                                false
+                                            )
+                                        }
+                                    >
+                                        Cerrar
                                     </button>
 
                                 </>
@@ -317,20 +356,20 @@ function CardProducto({
 
                                     )}
 
+                                    <button
+                                        className="boton-cerrar"
+                                        onClick={() =>
+                                            setModalAbierto(
+                                                false
+                                            )
+                                        }
+                                    >
+                                        Cerrar
+                                    </button>
+
                                 </>
 
                             )}
-
-                            <button
-                                className="boton-cerrar"
-                                onClick={() =>
-                                    setModalAbierto(
-                                        false
-                                    )
-                                }
-                            >
-                                Cerrar
-                            </button>
 
                         </div>
 
@@ -338,9 +377,9 @@ function CardProducto({
 
                 </div>
 
-            )}
+            ), document.body)}
 
-            {modalEditarAbierto && (
+            {modalEditarAbierto && createPortal((
 
                 <div className="modal-fondo">
 
@@ -461,7 +500,7 @@ function CardProducto({
 
                 </div>
 
-            )}
+            ), document.body)}
 
         </>
 

@@ -17,14 +17,26 @@ from './pages/Login/RecuperacionCodigo';
 import VerificacionCodigo
 from './pages/Login/VerificarCodigoUsuario';
 
+import DesplegarCatalogo 
+from './pages/Catalogo/CatalogoMain'
+
+import DetalleProducto 
+from './pages/Catalogo/DetalleProducto'
+
+import ConfirmarPedido 
+from './pages/Catalogo/ConfirmarPedido'
+
 import CambioDePassword 
 from './pages/Login/CambioDePassword';
 
+import VerificarCorreo 
+from './pages/Login/VerificarCorreo';
+
 import MenuPrincipal 
-from './pages/Administracion/Menuprincipal'
+from './pages/Administracion/MenuPrincipal'
 
 import Footer 
-from './components/footer';
+from './components/Footer';
 
 import Navbar 
 from './components/Navbar';
@@ -36,6 +48,8 @@ function App() {
         <BrowserRouter>
 
             <Navbar/>
+
+            <div className="contenido-principal">
 
             <Routes>
 
@@ -63,6 +77,10 @@ function App() {
                     path="/verificacion-codigo"
                     element={<VerificacionCodigo />}
                 />
+                <Route
+                    path="/verificar-correo"
+                    element={<VerificarCorreo />}
+                />
                  <Route
                     path="/cambio_de_password"
                     element={<CambioDePassword />}
@@ -71,9 +89,23 @@ function App() {
                     path="/administracion"
                     element={<MenuPrincipal />}
                 />
+                <Route
+                path='/catalogo'
+                element={<DesplegarCatalogo />}
+                />
+                <Route
+                path='/producto/:id'
+                element={<DetalleProducto />}
+                />
+                <Route
+                path='/confirmar-pedido'
+                element={<ConfirmarPedido />}
+                />
 
         
             </Routes>
+
+            </div>
            
 
             <Footer/>

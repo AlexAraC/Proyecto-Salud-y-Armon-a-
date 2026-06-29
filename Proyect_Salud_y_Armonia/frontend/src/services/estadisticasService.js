@@ -6,13 +6,20 @@ export const obtenerEstadisticas = async () => {
 
     try {
 
-        const respuesta = await axios.get(API_URL);
+        const token = localStorage.getItem('token');
+
+        const respuesta = await axios.get(
+            API_URL,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
 
         return respuesta.data;
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 

@@ -1,5 +1,7 @@
 const { sql } = require('../config/db');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const transporter = require('../config/mail');
 // =====================================
 // OBTENER USUARIOS
 // =====================================
@@ -15,8 +17,8 @@ const obtenerUsuarios = async (req, res) => {
                 correo,
                 contraseña,
                 rol,
-                direccion
-
+                direccion,
+                telefono
             FROM Usuarios
         `);
 
@@ -48,8 +50,37 @@ const crearUsuario = async (req, res) => {
             correo,
             contraseña,
             rol,
-            direccion
+            direccion,
+            telefono
         } = req.body;
+
+        // =====================================
+        // VALIDAR FORMATO DE CORREO
+        // =====================================
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(correo)) {
+            return res.status(400).json({
+                mensaje: 'El correo no tiene un formato válido'
+            });
+        }
+
+        // =====================================
+        // VALIDAR CORREO ÚNICO
+        // =====================================
+
+        const existe = await sql.query(`
+            SELECT id FROM Usuarios
+            WHERE correo = '${correo}'
+        `);
+
+        if (existe.recordset.length > 0) {
+
+            return res.status(400).json({
+                mensaje: 'El correo ya está registrado'
+            });
+
+        }
 
         // =====================================
         // HASHEAR CONTRASEÑA
@@ -63,6 +94,12 @@ const crearUsuario = async (req, res) => {
         );
 
         // =====================================
+        // GENERAR TOKEN DE VERIFICACIÓN
+        // =====================================
+
+        const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+
+        // =====================================
         // GUARDAR USUARIO
         // =====================================
 
@@ -73,7 +110,9 @@ const crearUsuario = async (req, res) => {
                 correo,
                 contraseña,
                 rol,
-                direccion
+                direccion,
+                telefono,
+                token_verificacion
             )
 
             VALUES
@@ -82,17 +121,49 @@ const crearUsuario = async (req, res) => {
                 '${correo}',
                 '${passwordHash}',
                 '${rol}',
-                '${direccion}'
+                '${direccion}',
+                '${telefono}',
+                '${tokenVerificacion}'
             )
         `);
 
+        // =====================================
+        // ENVIAR EMAIL DE VERIFICACIÓN
+        // =====================================
+
+        const urlVerificacion = `http://localhost:5173/verificar-correo?token=${tokenVerificacion}`;
+
+        try {
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: correo,
+                subject: 'Verifica tu correo - Salud y Armonía',
+                html: `
+                    <h1>¡Bienvenido a Salud y Armonía!</h1>
+                    <p>Gracias por registrarte. Para completar tu registro, haz clic en el siguiente enlace:</p>
+                    <a href="${urlVerificacion}" style="display:inline-block;padding:14px 28px;background:#6f8c4e;color:white;text-decoration:none;border-radius:8px;font-weight:700;margin:20px 0;">Verificar mi correo</a>
+                    <p>Si no creaste esta cuenta, ignora este mensaje.</p>
+                `
+            });
+        } catch (emailError) {
+            console.error('Error enviando email de verificación:', emailError);
+        }
+
         res.json({
-            mensaje: 'Usuario creado'
+            mensaje: 'Registro exitoso. Revisa tu correo para verificar tu cuenta.'
         });
 
     } catch (error) {
 
         console.log(error);
+
+        if (error.number === 2627) {
+
+            return res.status(400).json({
+                mensaje: 'El correo ya está registrado'
+            });
+
+        }
 
         res.status(500).json({
             mensaje: 'Error creando usuario'
@@ -101,6 +172,7 @@ const crearUsuario = async (req, res) => {
     }
 
 };
+
 
 // =====================================
 // ACTUALIZAR USUARIO
@@ -114,7 +186,6 @@ const actualizarUsuario = async (req, res) => {
 
         const usuarioTokenId = req.usuario.id;
 
-
         // =====================================
         // VALIDAR MISMO USUARIO
         // =====================================
@@ -127,32 +198,28 @@ const actualizarUsuario = async (req, res) => {
 
         }
 
-
         const {
             nombre,
             correo,
             contraseña,
-            direccion
+            direccion,
+            telefono
         } = req.body;
-
 
         // =====================================
         // ACTUALIZAR USUARIO
         // =====================================
 
         await sql.query`
-
             UPDATE Usuarios
-
             SET
                 nombre = ${nombre},
                 correo = ${correo},
                 contraseña = ${contraseña},
-                direccion = ${direccion}
-
+                direccion = ${direccion},
+                telefono = ${telefono}
             WHERE id = ${id}
         `;
-
 
         // =====================================
         // RESPUESTA
@@ -161,7 +228,6 @@ const actualizarUsuario = async (req, res) => {
         res.json({
             mensaje: 'Usuario actualizado'
         });
-
 
     } catch (error) {
 
@@ -180,6 +246,7 @@ const actualizarUsuario = async (req, res) => {
 // ELIMINAR USUARIO
 // =====================================
 
+
 const eliminarUsuario = async (req, res) => {
 
     try {
@@ -187,9 +254,7 @@ const eliminarUsuario = async (req, res) => {
         const { id } = req.params;
 
         const usuarioTokenId = req.usuario.id;
-
         const usuarioRol = req.usuario.rol;
-
 
         // =====================================
         // VALIDAR PERMISOS
@@ -206,6 +271,55 @@ const eliminarUsuario = async (req, res) => {
 
         }
 
+        // =====================================
+        // OBTENER USUARIO A ELIMINAR
+        // =====================================
+
+        const usuarioEliminar = await sql.query`
+
+            SELECT rol
+
+            FROM Usuarios
+
+            WHERE id = ${id}
+
+        `;
+
+        if (usuarioEliminar.recordset.length === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Usuario no encontrado'
+            });
+
+        }
+
+        const rolEliminar = usuarioEliminar.recordset[0].rol;
+
+        // =====================================
+        // CONTAR ADMINISTRADORES
+        // =====================================
+
+        if (rolEliminar === 'admin') {
+
+            const admins = await sql.query`
+
+                SELECT COUNT(*) AS total
+
+                FROM Usuarios
+
+                WHERE rol = 'admin'
+
+            `;
+
+            if (admins.recordset[0].total === 1) {
+
+                return res.status(400).json({
+                    mensaje: 'No se puede eliminar el último administrador del sistema'
+                });
+
+            }
+
+        }
 
         // =====================================
         // ELIMINAR USUARIO
@@ -216,8 +330,8 @@ const eliminarUsuario = async (req, res) => {
             DELETE FROM Usuarios
 
             WHERE id = ${id}
-        `;
 
+        `;
 
         // =====================================
         // RESPUESTA
@@ -226,7 +340,6 @@ const eliminarUsuario = async (req, res) => {
         res.json({
             mensaje: 'Usuario eliminado'
         });
-
 
     } catch (error) {
 
@@ -239,13 +352,15 @@ const eliminarUsuario = async (req, res) => {
     }
 
 };
+
 const cambiarRol = async (req, res) => {
 
     try {
 
         const { id } = req.params;
-
         const { rol } = req.body;
+
+        const idUsuarioActual = req.usuario.id;
 
 
         // =====================================
@@ -256,11 +371,6 @@ const cambiarRol = async (req, res) => {
             'admin',
             'usuario'
         ];
-
-
-        // =====================================
-        // VALIDAR ROL
-        // =====================================
 
         if (!rolesValidos.includes(rol)) {
 
@@ -277,19 +387,73 @@ const cambiarRol = async (req, res) => {
 
         const usuarioDB = await sql.query`
 
-            SELECT id
+            SELECT id, rol
 
             FROM Usuarios
 
             WHERE id = ${id}
-        `;
 
+        `;
 
         if (usuarioDB.recordset.length === 0) {
 
             return res.status(404).json({
                 mensaje: 'Usuario no encontrado'
             });
+
+        }
+
+
+        // =====================================
+        // OBTENER ROL ACTUAL
+        // =====================================
+
+        const rolActual = usuarioDB.recordset[0].rol;
+
+
+        // =====================================
+        // IMPEDIR QUITARSE EL PROPIO ROL
+        // =====================================
+
+        if (
+            parseInt(id) === idUsuarioActual &&
+            rolActual === 'admin' &&
+            rol === 'usuario'
+        ) {
+
+            return res.status(400).json({
+                mensaje: 'No puedes quitarte a ti mismo los permisos de administrador'
+            });
+
+        }
+
+
+        // =====================================
+        // ASEGURAR QUE SIEMPRE EXISTA UN ADMIN
+        // =====================================
+
+        if (
+            rolActual === 'admin' &&
+            rol === 'usuario'
+        ) {
+
+            const admins = await sql.query`
+
+                SELECT COUNT(*) AS total
+
+                FROM Usuarios
+
+                WHERE rol = 'admin'
+
+            `;
+
+            if (admins.recordset[0].total === 1) {
+
+                return res.status(400).json({
+                    mensaje: 'Debe existir al menos un administrador en el sistema'
+                });
+
+            }
 
         }
 
@@ -305,6 +469,7 @@ const cambiarRol = async (req, res) => {
             SET rol = ${rol}
 
             WHERE id = ${id}
+
         `;
 
 
@@ -315,7 +480,6 @@ const cambiarRol = async (req, res) => {
         res.json({
             mensaje: 'Rol del usuario actualizado'
         });
-
 
     } catch (error) {
 
@@ -328,10 +492,70 @@ const cambiarRol = async (req, res) => {
     }
 
 };
+const verificarAdministrador = async (req, res) => {
+
+    res.json({
+        admin: true
+    });
+
+};
+
+const verificarCorreo = async (req, res) => {
+
+    try {
+
+        const { token } = req.params;
+
+        const resultado = await sql.query`
+            SELECT id, verificado
+            FROM Usuarios
+            WHERE token_verificacion = ${token}
+        `;
+
+        if (resultado.recordset.length === 0) {
+            return res.status(400).json({
+                mensaje: 'Token de verificación inválido'
+            });
+        }
+
+        const usuario = resultado.recordset[0];
+
+        if (usuario.verificado) {
+            return res.json({
+                mensaje: 'El correo ya está verificado'
+            });
+        }
+
+        await sql.query`
+            UPDATE Usuarios
+            SET verificado = 1, token_verificacion = NULL
+            WHERE id = ${usuario.id}
+        `;
+
+        res.json({
+            mensaje: 'Correo verificado correctamente'
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: 'Error verificando correo'
+        });
+
+    }
+
+};
+
+
 module.exports = {
     obtenerUsuarios,
     crearUsuario,
     actualizarUsuario,
     eliminarUsuario,
-    cambiarRol
+    cambiarRol,
+    verificarAdministrador,
+    verificarCorreo
+
 };

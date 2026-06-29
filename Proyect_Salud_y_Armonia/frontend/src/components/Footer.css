@@ -4,13 +4,16 @@
 
 .footer {
 
-    background-color: #3A312B;
+    background-color: #d8c3a5;
 
-    color: #A3B18A;
+    color: #7C5E44;
 
     margin-top: 50px;
 
     padding-top: 40px;
+
+    position: relative;
+    z-index: 2;
 
 }
 
@@ -55,7 +58,7 @@
 
     margin-bottom: 15px;
 
-    color: #d8c3a5;
+    color: #3A312B;
 
 }
 

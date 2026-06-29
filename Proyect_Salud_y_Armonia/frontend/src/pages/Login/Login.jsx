@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loginUsuario } from '../../services/authApi';
+import './Login.css';
+import logo from '../../assets/logo.png';
 
 function Login() {
-
-    // =====================================
-    // ESTADO
-    // =====================================
 
     const [formulario, setFormulario] = useState({
 
@@ -14,10 +12,6 @@ function Login() {
         contraseña: ''
 
     });
-
-    // =====================================
-    // HANDLE CHANGE
-    // =====================================
 
     const handleChange = (e) => {
 
@@ -30,10 +24,6 @@ function Login() {
         });
 
     };
-
-    // =====================================
-    // HANDLE SUBMIT
-    // =====================================
 
     const handleSubmit = async (e) => {
 
@@ -59,53 +49,86 @@ function Login() {
 
             console.log(error);
 
-            alert('Login incorrecto');
+            alert(
+                error.response?.data?.mensaje ||
+                'Login incorrecto'
+            );
 
         }
 
     };
 
-    // =====================================
-    // RENDER
-    // =====================================
-
     return (
 
-        <div>
+        <div className="login-contenedor">
 
-            <h1>Login</h1>
+            <div className="login-card">
 
-            <form onSubmit={handleSubmit}>
-
-                <input
-                    type="email"
-                    name="correo"
-                    placeholder="Correo"
-                    onChange={handleChange}
+                <img
+                    src={logo}
+                    alt="Logo"
+                    className="login-logo"
                 />
 
-                <br />
+                <h1 className="login-titulo">
+                    Bienvenido
+                </h1>
 
-                <input
-                    type="password"
-                    name="contraseña"
-                    placeholder="Contraseña"
-                    onChange={handleChange}
-                />
+                <p className="login-subtitulo">
+                    Inicia sesión para continuar
+                </p>
 
-                <br />
+                <form
+                    className="login-form"
+                    onSubmit={handleSubmit}
+                >
 
-                <button type="submit">
+                    <input
+                        className="login-input"
+                        type="email"
+                        name="correo"
+                        placeholder="Correo electrónico"
+                        onChange={handleChange}
+                    />
 
-                    Iniciar sesión
+                    <input
+                        className="login-input"
+                        type="password"
+                        name="contraseña"
+                        placeholder="Contraseña"
+                        onChange={handleChange}
+                    />
 
-                </button>
-                <br />
-                <Link to="/register">Registrate</Link> 
-                <br />
-                <Link to="/recuperacion">¿Olvidaste tu contraseña?</Link>
+                    <button
+                        className="login-btn"
+                        type="submit"
+                    >
 
-            </form>
+                        Iniciar sesión
+
+                    </button>
+
+                </form>
+
+                <div className="login-enlaces">
+
+                    <Link
+                        className="login-link login-link-registro"
+                        to="/register"
+                    >
+                        Crear una cuenta
+                    </Link>
+
+                    <Link
+                        className="login-link"
+                        to="/recuperacion"
+                    >
+                        ¿Olvidaste tu contraseña?
+                    </Link>
+
+                </div>
+
+            </div>
 
         </div>
 

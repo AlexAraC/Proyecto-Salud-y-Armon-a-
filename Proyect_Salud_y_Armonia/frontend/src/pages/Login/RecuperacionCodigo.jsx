@@ -1,32 +1,18 @@
 import { useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
-
-import { enviarCodigo }
-
-from '../../services/authApi';
+import { Link, useNavigate } from 'react-router-dom';
+import { enviarCodigo } from '../../services/authApi';
+import './RecuperacionCodigo.css';
+import logo from '../../assets/logo.png';
 
 function RecuperacionCodigo() {
 
-    // =====================================
-    // NAVIGATE
-    // =====================================
-
     const navigate = useNavigate();
-
-    // =====================================
-    // ESTADO
-    // =====================================
 
     const [gmail, setGmail] = useState({
 
         correo: ''
 
     });
-
-    // =====================================
-    // HANDLE CHANGE
-    // =====================================
 
     const handleChange = (e) => {
 
@@ -40,27 +26,17 @@ function RecuperacionCodigo() {
 
     };
 
-    // =====================================
-    // HANDLE SUBMIT
-    // =====================================
-
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
         try {
 
-            const respuesta = await enviarCodigo(
-                gmail
-            );
+            const respuesta = await enviarCodigo(gmail);
 
             console.log(respuesta);
 
             alert('Código enviado');
-
-            // =========================
-            // REDIRECCIÓN
-            // =========================
 
             navigate('/verificacion-codigo');
 
@@ -74,34 +50,60 @@ function RecuperacionCodigo() {
 
     };
 
-    // =====================================
-    // RENDER
-    // =====================================
-
     return (
 
-        <div>
+        <div className="recuperacion-contenedor">
 
-            <h1>Zona de recuperación</h1>
+            <div className="recuperacion-card">
 
-            <form onSubmit={handleSubmit}>
-
-                <input
-                    type="email"
-                    name="correo"
-                    placeholder="Correo de recuperación"
-                    onChange={handleChange}
+                <img
+                    src={logo}
+                    alt="Logo"
+                    className="recuperacion-logo"
                 />
 
-                <br />
+                <h1 className="recuperacion-titulo">
+                    Recuperar Contraseña
+                </h1>
 
-                <button type="submit">
+                <p className="recuperacion-subtitulo">
+                    Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña
+                </p>
 
-                    Enviar
+                <form
+                    className="recuperacion-form"
+                    onSubmit={handleSubmit}
+                >
 
-                </button>
+                    <input
+                        className="recuperacion-input"
+                        type="email"
+                        name="correo"
+                        placeholder="Correo electrónico"
+                        onChange={handleChange}
+                    />
 
-            </form>
+                    <button
+                        className="recuperacion-btn"
+                        type="submit"
+                    >
+                        Enviar código
+                    </button>
+
+                </form>
+
+                <div className="recuperacion-enlaces">
+
+                    <Link
+                        className="recuperacion-link"
+                        to="/login"
+                    >
+                        Volver al inicio de sesión
+                    </Link>
+
+                </div>
+
+            </div>
 
         </div>
 

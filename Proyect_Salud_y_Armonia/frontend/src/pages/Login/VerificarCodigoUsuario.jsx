@@ -1,22 +1,12 @@
 import { useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
-
-import { verificarCodigoG }
-
-from '../../services/authApi';
+import { Link, useNavigate } from 'react-router-dom';
+import { verificarCodigoG } from '../../services/authApi';
+import './VerificarCodigoUsuario.css';
+import logo from '../../assets/logo.png';
 
 function VerificacionCodigo() {
 
-    // =====================================
-    // NAVIGATE
-    // =====================================
-
     const navigate = useNavigate();
-
-    // =====================================
-    // ESTADO
-    // =====================================
 
     const [formulario, setFormulario] = useState({
 
@@ -25,10 +15,6 @@ function VerificacionCodigo() {
         codigo: ''
 
     });
-
-    // =====================================
-    // HANDLE CHANGE
-    // =====================================
 
     const handleChange = (e) => {
 
@@ -42,50 +28,21 @@ function VerificacionCodigo() {
 
     };
 
-    // =====================================
-    // HANDLE SUBMIT
-    // =====================================
-
     const handleSubmit = async (e) => {
 
         e.preventDefault();
 
         try {
 
-            const respuesta =
-            await verificarCodigoG(
-
-                formulario
-
-            );
+            const respuesta = await verificarCodigoG(formulario);
 
             console.log(respuesta);
 
-            // =================================
-            // GUARDAR EN LOCAL STORAGE
-            // =================================
+            localStorage.setItem('codigo_recuperacion', formulario.codigo);
 
-            localStorage.setItem(
-
-                'codigo_recuperacion',
-
-                formulario.codigo
-
-            );
-
-            localStorage.setItem(
-
-                'correo_recuperacion',
-
-                formulario.correo
-
-            );
+            localStorage.setItem('correo_recuperacion', formulario.correo);
 
             alert('Código correcto');
-
-            // =================================
-            // REDIRECCIONAR
-            // =================================
 
             navigate('/cambio_de_password');
 
@@ -99,43 +56,75 @@ function VerificacionCodigo() {
 
     };
 
-    // =====================================
-    // RENDER
-    // =====================================
-
     return (
 
-        <div>
+        <div className="verificar-contenedor">
 
-            <h1>Verificación de código</h1>
+            <div className="verificar-card">
 
-            <form onSubmit={handleSubmit}>
-
-                <input
-                    type="text"
-                    name="correo"
-                    placeholder="Correo"
-                    onChange={handleChange}
+                <img
+                    src={logo}
+                    alt="Logo"
+                    className="verificar-logo"
                 />
 
-                <br />
+                <h1 className="verificar-titulo">
+                    Verificar Código
+                </h1>
 
-                <input
-                    type="text"
-                    name="codigo"
-                    placeholder="Código"
-                    onChange={handleChange}
-                />
+                <p className="verificar-subtitulo">
+                    Ingresa el código que enviamos a tu correo electrónico
+                </p>
 
-                <br />
+                <form
+                    className="verificar-form"
+                    onSubmit={handleSubmit}
+                >
 
-                <button type="submit">
+                    <input
+                        className="verificar-input"
+                        type="email"
+                        name="correo"
+                        placeholder="Correo electrónico"
+                        onChange={handleChange}
+                    />
 
-                    Verificar código
+                    <input
+                        className="verificar-input"
+                        type="text"
+                        name="codigo"
+                        placeholder="Código de verificación"
+                        onChange={handleChange}
+                    />
 
-                </button>
+                    <button
+                        className="verificar-btn"
+                        type="submit"
+                    >
+                        Verificar código
+                    </button>
 
-            </form>
+                </form>
+
+                <div className="verificar-enlaces">
+
+                    <Link
+                        className="verificar-link"
+                        to="/recuperacion"
+                    >
+                        Reenviar código
+                    </Link>
+
+                    <Link
+                        className="verificar-link"
+                        to="/login"
+                    >
+                        Volver al inicio de sesión
+                    </Link>
+
+                </div>
+
+            </div>
 
         </div>
 
