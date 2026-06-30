@@ -186,57 +186,6 @@ function DesplegarCatalogo(){
     return(
         <div className="catalogo-layout">
 
-            <aside className="catalogo-sidebar">
-
-                <h2 className="catalogo-sidebar-titulo">
-                    Categorías
-                </h2>
-
-                <nav className="catalogo-sidebar-opciones">
-
-                    <div
-                        className="catalogo-categoria-wrapper"
-                        style={{ animationDelay: '0s' }}
-                    >
-                        <button
-                            className={`catalogo-categoria-item ${
-                                categoriaActiva === 'Todas'
-                                    ? 'activo'
-                                    : ''
-                            }`}
-                            onClick={() =>
-                                setCategoriaActiva('Todas')
-                            }
-                        >
-                            Todas
-                        </button>
-                    </div>
-
-                    {categorias.map((cat, i) => (
-                        <div
-                            key={cat.id}
-                            className="catalogo-categoria-wrapper"
-                            style={{ animationDelay: `${(i + 1) * 0.05}s` }}
-                        >
-                            <button
-                                className={`catalogo-categoria-item ${
-                                    categoriaActiva === cat.id
-                                        ? 'activo'
-                                        : ''
-                                }`}
-                                onClick={() =>
-                                    setCategoriaActiva(cat.id)
-                                }
-                            >
-                                {cat.nombre}
-                            </button>
-                        </div>
-                    ))}
-
-                </nav>
-
-            </aside>
-
             <div className="catalogo-contenido">
 
                 <div className="catalogo-buscador">
@@ -250,6 +199,41 @@ function DesplegarCatalogo(){
                             setBusqueda(e.target.value)
                         }
                     />
+
+                    <span className="catalogo-buscador-linea" />
+
+                </div>
+
+                <div className="catalogo-carrusel-categorias">
+
+                    <button
+                        className={`catalogo-carrusel-item ${
+                            categoriaActiva === 'Todas'
+                                ? 'activo'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            setCategoriaActiva('Todas')
+                        }
+                    >
+                        Todas
+                    </button>
+
+                    {categorias.map((cat) => (
+                        <button
+                            key={cat.id}
+                            className={`catalogo-carrusel-item ${
+                                categoriaActiva === cat.id
+                                    ? 'activo'
+                                    : ''
+                            }`}
+                            onClick={() =>
+                                setCategoriaActiva(cat.id)
+                            }
+                        >
+                            {cat.nombre}
+                        </button>
+                    ))}
 
                 </div>
 
@@ -269,14 +253,29 @@ function DesplegarCatalogo(){
 
                         let idx = 0;
 
-                        return Object.entries(grupos).map(([nombreCat, prods]) => (
+                        let secIdx = 0;
+
+                        return Object.entries(grupos).map(([nombreCat, prods]) => {
+
+                            const secDelay = secIdx * 0.15;
+
+                            secIdx++;
+
+                            return (
                             <section
                                 key={nombreCat}
                                 className="catalogo-seccion"
                             >
-                                <h3 className="catalogo-seccion-titulo">
+                                <h3
+                                    className="catalogo-seccion-titulo"
+                                    style={{ animationDelay: `${secDelay}s` }}
+                                >
                                     {nombreCat}
                                 </h3>
+                                <span
+                                    className="catalogo-seccion-linea"
+                                    style={{ animationDelay: `${secDelay + 0.5}s` }}
+                                />
                                 <div className="catalogo-grid">
                                     {prods.map((p) => {
                                         const delay = idx * 0.04;
@@ -301,10 +300,11 @@ function DesplegarCatalogo(){
                                     })}
                                 </div>
                             </section>
-                        ));
+                        );
+
+                    });
 
                     })()
-
                 ) : (
                     <div className="catalogo-vacio">
                         <h3>No se encontraron productos</h3>

@@ -10,6 +10,11 @@ const {
 } = require('../controllers/comentario.controller');
 const e = require('express');
 
+const {
+    verificarToken,
+    verificarAdmin
+} = require('../middlewares/auth.middleware');
+
 // =====================================
 // OBTENER COMENTARIOS
 // =====================================
@@ -25,7 +30,7 @@ router.delete('/:id', eliminarComentario)
 // CREAR COMENTARIO
 //======================================
 
-router.post('/', crearComentario)
+router.post('/', verificarToken, crearComentario)
 
 //=====================================
 // SEPARAR COMENTARIOS POR TIPO

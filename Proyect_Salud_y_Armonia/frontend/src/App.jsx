@@ -2,8 +2,7 @@ import {
 
     BrowserRouter,
     Routes,
-    Route,
-    Navigate
+    Route
 
 } from 'react-router-dom';
 
@@ -28,6 +27,9 @@ from './pages/Catalogo/ConfirmarPedido'
 
 import CambioDePassword 
 from './pages/Login/CambioDePassword';
+
+import Inicio 
+from './pages/Home/Inicio';
 
 import VerificarCorreo 
 from './pages/Login/VerificarCorreo';
@@ -55,7 +57,7 @@ function App() {
 
                 <Route
                     path="/"
-                    element={<Navigate to="/login" />}
+                    element={<Inicio />}
                 />
 
                 <Route

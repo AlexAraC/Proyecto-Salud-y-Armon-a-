@@ -2,7 +2,7 @@ import './Navbar.css';
 
 import { Link } from 'react-router-dom';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import logo from '../assets/logo.png';
 
@@ -34,6 +34,18 @@ function Navbar() {
 
     const [menuAbierto, setMenuAbierto] = useState(false);
 
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+
+        const handleScroll = () => setScrolled(window.scrollY > 50);
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+
+    }, []);
+
     const token = localStorage.getItem('token');
 
     const esAdmin = obtenerRolDesdeToken(token) === 'admin';
@@ -48,7 +60,7 @@ function Navbar() {
 
     return (
 
-        <nav className="navbar">
+        <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
 
             {/* LOGO */}
             <div className="navbar-logo">

@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { obtenerProductoPorId } from '../../services/productosApi';
 import { agregarAlCarrito } from '../../services/carritoApi';
 import { agregarAlCarritoLocal } from '../../services/carritoLocal';
+import { crearComentario } from '../../services/comentariosApi';
 import './DetalleProducto.css';
 
 function DetalleProducto() {
@@ -12,6 +13,9 @@ function DetalleProducto() {
     const [producto, setProducto] = useState(null);
     const [cantidad, setCantidad] = useState(1);
     const [cargando, setCargando] = useState(true);
+    const [modalReporte, setModalReporte] = useState(false);
+    const [mensajeReporte, setMensajeReporte] = useState('');
+    const [enviando, setEnviando] = useState(false);
 
     useEffect(() => {
         const cargar = async () => {
@@ -145,6 +149,13 @@ function DetalleProducto() {
                             <button
                                 className="detalle-btn-reportar"
                                 title="Reportar error"
+                                onClick={() => {
+                                    if (!localStorage.getItem('token')) {
+                                        navigate('/login');
+                                    } else {
+                                        setModalReporte(true);
+                                    }
+                                }}
                             >
                                 ⚠
                             </button>
@@ -155,6 +166,40 @@ function DetalleProducto() {
                 </div>
 
             </div>
+
+            {modalReporte && (
+                <div className="modal-reporte-overlay" onClick={() => setModalReporte(false)}>
+                    <div className="modal-reporte" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-reporte-cerrar" onClick={() => setModalReporte(false)}>✕</button>
+                        <h2 className="modal-reporte-titulo">Reportar error</h2>
+                        <p className="modal-reporte-sub">Producto: {producto.nombre}</p>
+                        {enviando ? (
+                            <p className="modal-reporte-enviando">Enviando reporte...</p>
+                        ) : (
+                            <form className="modal-reporte-form" onSubmit={async (e) => {
+                                e.preventDefault();
+                                if (!mensajeReporte.trim()) return;
+                                setEnviando(true);
+                                try {
+                                    await crearComentario({ tipo: 'reporte', contenido: mensajeReporte });
+                                    setModalReporte(false);
+                                    setMensajeReporte('');
+                                } catch (err) {
+                                    alert(err.response?.data?.mensaje || 'Error al enviar el reporte');
+                                } finally {
+                                    setEnviando(false);
+                                }
+                            }}>
+                                <label>
+                                    ¿Qué ocurrió?
+                                    <textarea required rows="4" value={mensajeReporte} onChange={(e) => setMensajeReporte(e.target.value)} placeholder="Describe brevemente el error..." />
+                                </label>
+                                <button type="submit" className="modal-reporte-enviar">Enviar reporte</button>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 

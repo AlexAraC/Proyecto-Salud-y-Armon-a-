@@ -13,7 +13,8 @@ const obtenerInformacionInstitucional = async (req, res) => {
             SELECT
                 id,
                 slogan,
-                descripcion,
+                mision,
+                vision,
                 telefono,
                 correo,
                 imagen
@@ -55,7 +56,8 @@ const crearInformacionInstitucional = async (req, res) => {
         const {
 
             slogan,
-            descripcion,
+            mision,
+            vision,
             telefono,
             correo
 
@@ -82,7 +84,8 @@ const crearInformacionInstitucional = async (req, res) => {
             INSERT INTO informacionInstitucional
             (
                 slogan,
-                descripcion,
+                mision,
+                vision,
                 telefono,
                 correo,
                 imagen
@@ -91,7 +94,8 @@ const crearInformacionInstitucional = async (req, res) => {
             VALUES
             (
                 ${slogan},
-                ${descripcion},
+                ${mision},
+                ${vision},
                 ${telefono},
                 ${correo},
                 ${imagen}
@@ -133,7 +137,8 @@ const actualizarInformacionInstitucional = async (req, res) => {
         const {
 
             slogan,
-            descripcion,
+            mision,
+            vision,
             telefono,
             correo
 
@@ -195,7 +200,9 @@ const actualizarInformacionInstitucional = async (req, res) => {
 
                 slogan = ${slogan},
 
-                descripcion = ${descripcion},
+                mision = ${mision},
+
+                vision = ${vision},
 
                 telefono = ${telefono},
 

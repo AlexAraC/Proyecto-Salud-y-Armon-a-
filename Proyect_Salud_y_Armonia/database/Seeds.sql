@@ -173,7 +173,9 @@ CREATE TABLE informacionInstitucional (
 
     slogan VARCHAR(200),
 
-    descripcion VARCHAR(1000),
+    mision VARCHAR(1000),
+
+    vision VARCHAR(1000),
 
     telefono VARCHAR(20),
 
@@ -191,6 +193,10 @@ CREATE TABLE Comentario (
 
     contenido VARCHAR(MAX) NOT NULL,
 
-    fecha DATETIME NOT NULL DEFAULT GETDATE()
+    fecha DATETIME NOT NULL DEFAULT GETDATE(),
+
+    usuario_id INT NOT NULL,
+
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
 
 );

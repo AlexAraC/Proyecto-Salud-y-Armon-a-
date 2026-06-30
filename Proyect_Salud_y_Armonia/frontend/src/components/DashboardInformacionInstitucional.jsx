@@ -21,7 +21,8 @@ function DashboardInformacionInstitucional({ tipo }) {
         useState({
 
             slogan: '',
-            descripcion: '',
+            mision: '',
+            vision: '',
             telefono: '',
             correo: '',
             imagen: null
@@ -58,8 +59,11 @@ function DashboardInformacionInstitucional({ tipo }) {
                     slogan:
                         empresa.slogan,
 
-                    descripcion:
-                        empresa.descripcion,
+                    mision:
+                        empresa.mision || '',
+
+                    vision:
+                        empresa.vision || '',
 
                     telefono:
                         empresa.telefono,
@@ -111,8 +115,11 @@ function DashboardInformacionInstitucional({ tipo }) {
                         slogan:
                             empresa.slogan,
 
-                        descripcion:
-                            empresa.descripcion,
+                        mision:
+                            empresa.mision || '',
+
+                        vision:
+                            empresa.vision || '',
 
                         telefono:
                             empresa.telefono,
@@ -314,7 +321,7 @@ function DashboardInformacionInstitucional({ tipo }) {
 
                     <label>
 
-                        Descripción
+                        Misión
 
                     </label>
 
@@ -326,10 +333,10 @@ function DashboardInformacionInstitucional({ tipo }) {
 
                         <textarea
 
-                            name="descripcion"
+                            name="mision"
 
                             value={
-                                formulario.descripcion
+                                formulario.mision
                             }
 
                             onChange={
@@ -344,9 +351,52 @@ function DashboardInformacionInstitucional({ tipo }) {
 
                             {
 
-                                informacion?.descripcion ||
+                                informacion?.mision ||
 
-                                'Sin descripción'
+                                'Sin misión'
+
+                            }
+
+                        </p>
+
+                    }
+
+
+                    <label>
+
+                        Visión
+
+                    </label>
+
+                    {
+
+                        tipo === "admin"
+
+                        ?
+
+                        <textarea
+
+                            name="vision"
+
+                            value={
+                                formulario.vision
+                            }
+
+                            onChange={
+                                handleChange
+                            }
+
+                        />
+
+                        :
+
+                        <p>
+
+                            {
+
+                                informacion?.vision ||
+
+                                'Sin visión'
 
                             }
 

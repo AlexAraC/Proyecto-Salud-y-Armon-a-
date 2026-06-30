@@ -22,7 +22,7 @@
     display: grid;
     grid-template-columns: 1.5fr 1fr;
     gap: 48px;
-    align-items: start;
+    align-items: stretch;
 }
 
 .detalle-imagen-contenedor {
@@ -45,6 +45,7 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
+    height: 100%;
 }
 
 .detalle-categoria {
@@ -95,7 +96,7 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    margin-top: 16px;
+    margin-top: auto;
     padding: 20px 0;
     border-top: 1px solid rgba(58, 49, 43, 0.08);
 }
@@ -274,6 +275,124 @@
 
 .anim-acciones {
     animation: fadeInUp 0.5s ease both;
+}
+
+.modal-reporte-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-reporte {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 480px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.modal-reporte-cerrar {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #6B4F3A;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.modal-reporte-cerrar:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.modal-reporte-titulo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #3A312B;
+    margin: 0 0 4px;
+}
+
+.modal-reporte-sub {
+    color: #6B4F3A;
+    font-size: 15px;
+    margin: 0 0 24px;
+}
+
+.modal-reporte-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-reporte-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3A312B;
+}
+
+.modal-reporte-form input,
+.modal-reporte-form textarea {
+    padding: 12px 14px;
+    border: 1px solid rgba(58,49,43,0.2);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: 0.2s;
+}
+
+.modal-reporte-form input:focus,
+.modal-reporte-form textarea:focus {
+    border-color: #A3B18A;
+    box-shadow: 0 0 0 3px rgba(163,177,138,0.2);
+}
+
+.modal-reporte-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.modal-reporte-enviando {
+    text-align: center;
+    color: #6B4F3A;
+    font-size: 16px;
+    padding: 30px 0;
+}
+
+.modal-reporte-enviar {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #D56A6A;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 4px;
+}
+
+.modal-reporte-enviar:hover {
+    background: #C25858;
+    transform: translateY(-1px);
 }
 
 @media (max-width: 768px) {

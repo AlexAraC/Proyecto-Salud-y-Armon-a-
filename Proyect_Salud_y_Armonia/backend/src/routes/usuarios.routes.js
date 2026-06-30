@@ -9,6 +9,7 @@ const {
     actualizarUsuario,
     eliminarUsuario,
     cambiarRol,
+    banearUsuario,
     verificarAdministrador,
     verificarCorreo
 } = require('../controllers/usuarios.controller');
@@ -65,6 +66,12 @@ router.put('/:id/rol',
     verificarToken,
     verificarAdmin,
     cambiarRol
+);
+
+router.put('/:id/ban',
+    verificarToken,
+    verificarAdmin,
+    banearUsuario
 );
 
 // =====================================

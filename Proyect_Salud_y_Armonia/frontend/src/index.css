@@ -69,6 +69,15 @@ body {
 }
 
 
+body.hero-animando {
+
+    background: #000;
+
+    background-image: none;
+
+}
+
+
 /* ===================================== */
 /* TITULOS */
 /* ===================================== */

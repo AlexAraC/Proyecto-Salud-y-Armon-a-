@@ -113,6 +113,17 @@
     color:#0C5460;
 }
 
+.rol.baneado{
+    background:#F8D7DA;
+    color:#721C24;
+    cursor:help;
+}
+
+.rol.activo{
+    background:#D4EDDA;
+    color:#155724;
+}
+
 /* ===========================
    ACCIONES
 =========================== */
@@ -248,6 +259,42 @@
 
 .btn-cerrar:hover{
     background:#51443c;
+}
+
+.btn-ban{
+    min-height:38px;
+    padding:9px 14px;
+    border:1px solid rgba(58,49,43,.18);
+    border-radius:8px;
+    cursor:pointer;
+    font:inherit;
+    font-weight:700;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    background:#D9534F;
+    color:white;
+}
+.btn-ban:hover{
+    background:#C9302C;
+    transform:translateY(-1px);
+    box-shadow:0 6px 14px rgba(0,0,0,.08);
+}
+
+.btn-desban{
+    min-height:38px;
+    padding:9px 14px;
+    border:1px solid rgba(58,49,43,.18);
+    border-radius:8px;
+    cursor:pointer;
+    font:inherit;
+    font-weight:700;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    background:#8A9A5B;
+    color:white;
+}
+.btn-desban:hover{
+    background:#728349;
+    transform:translateY(-1px);
+    box-shadow:0 6px 14px rgba(0,0,0,.08);
 }
 
 @media (max-width:620px){

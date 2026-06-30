@@ -47,6 +47,8 @@ function DashboardProductos() {
                 datos
             );
 
+            return datos;
+
         } catch (error) {
 
             console.error(error);
@@ -147,7 +149,10 @@ function DashboardProductos() {
                 'Actualizado correctamente'
             );
 
-            await cargarProductos();
+            const datos =
+                await cargarProductos();
+
+            return datos;
 
         } catch (error) {
 
@@ -252,6 +257,7 @@ function DashboardProductos() {
                             />
                             <textarea
                                 placeholder="Descripción"
+                                rows={6}
                                 value={formEditar.descripcion}
                                 onChange={(e) => setFormEditar({ ...formEditar, descripcion: e.target.value })}
                             />
@@ -283,11 +289,13 @@ function DashboardProductos() {
                                 <button
                                     className="detalle-admin-btn detalle-admin-btn-guardar"
                                     onClick={async () => {
-                                        await handleEditar(p.id, formEditar);
+                                        const datos = await handleEditar(p.id, formEditar);
                                         setEditandoProducto(false);
-                                        setProductoSeleccionado(
-                                            productos.find(prod => prod.id === p.id) || null
-                                        );
+                                        if (datos) {
+                                            setProductoSeleccionado(
+                                                datos.find(prod => prod.id === p.id) || null
+                                            );
+                                        }
                                     }}
                                 >
                                     Guardar

@@ -239,6 +239,8 @@ function DashboardPedidos() {
 
                         <th>Estado</th>
 
+                        <th>Tipo Envío</th>
+
                         <th>Acciones</th>
 
                     </tr>
@@ -311,6 +313,28 @@ function DashboardPedidos() {
 
                                     <td>
 
+                                        <span
+
+                                            className={
+
+                                                `tipo-envio ${pedido.tipo_envio || 'Normal'}`
+
+                                            }
+
+                                        >
+
+                                            {
+
+                                                pedido.tipo_envio || 'Normal'
+
+                                            }
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
                                         <button
 
                                             className="btn-detalles"
@@ -351,7 +375,7 @@ function DashboardPedidos() {
 
                                         {
 
-                                            pedido.estado === 'Pendiente'
+                                            pedido.estado === 'Pendiente' && pedido.tipo_envio === 'Express'
 
                                             &&
 
@@ -374,6 +398,37 @@ function DashboardPedidos() {
                                             >
 
                                                 Enviar
+
+                                            </button>
+
+                                        }
+
+
+                                        {
+
+                                            pedido.estado === 'Pendiente' && pedido.tipo_envio !== 'Express'
+
+                                            &&
+
+                                            <button
+
+                                                className="btn-entregar"
+
+                                                onClick={() =>
+
+                                                    cambiarEstado(
+
+                                                        pedido.id,
+
+                                                        'Entregado'
+
+                                                    )
+
+                                                }
+
+                                            >
+
+                                                Entregar
 
                                             </button>
 
@@ -444,7 +499,7 @@ function DashboardPedidos() {
 
                                         {
 
-                                            pedido.estado === 'Entregado'
+                                            pedido.estado === 'Entregado' && pedido.tipo_envio === 'Express'
 
                                             &&
 
@@ -459,6 +514,37 @@ function DashboardPedidos() {
                                                         pedido.id,
 
                                                         'Enviado'
+
+                                                    )
+
+                                                }
+
+                                            >
+
+                                                Volver
+
+                                            </button>
+
+                                        }
+
+
+                                        {
+
+                                            pedido.estado === 'Entregado' && pedido.tipo_envio !== 'Express'
+
+                                            &&
+
+                                            <button
+
+                                                className="btn-atras"
+
+                                                onClick={() =>
+
+                                                    cambiarEstado(
+
+                                                        pedido.id,
+
+                                                        'Pendiente'
 
                                                     )
 
@@ -552,6 +638,19 @@ function DashboardPedidos() {
 
                         </p>
 
+                        <p>
+
+                            Tipo de envío:
+
+                            {' '}
+
+                            {
+
+                                detallePedido.pedido.tipo_envio || 'Normal'
+
+                            }
+
+                        </p>
 
                         <p>
 
@@ -568,9 +667,11 @@ function DashboardPedidos() {
                         </p>
 
 
-                        <p>
+                        <p className="total-pagar">
 
-                            Total:
+                            <strong>Total a pagar:</strong>
+
+                            {' '}
 
                             ₡
 

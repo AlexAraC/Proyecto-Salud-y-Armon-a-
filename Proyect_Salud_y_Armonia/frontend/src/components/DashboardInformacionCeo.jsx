@@ -23,6 +23,7 @@ function DashboardInformacionCeo({tipo}) {
             nombre: '',
             correo: '',
             telefono: '',
+            slogan: '',
             imagen: null
 
         });

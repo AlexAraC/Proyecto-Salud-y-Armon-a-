@@ -7,6 +7,8 @@ import DashboardCategorias from '../../components/DashboardCategorias';
 import DashboardProductos from '../../components/DashboardProductos';
 import DashboardHomePage from '../../components/DashboardHomePage';
 import DashboardPedidos from '../../components/DashboardPedidos';
+import DashboardVentas from '../../components/DashboardVentas';
+import DashboardHistorialVentas from '../../components/DashboardHistorialVentas';
 import DashboardUsuarios from '../../components/DashboardUsuarios';
 
 import { obtenerEstadisticas } from '../../services/estadisticasService';
@@ -127,6 +129,22 @@ function MenuPrincipal() {
                     seccionActiva === 'homepage' && (
 
                         <DashboardHomePage />
+
+                    )
+                }
+
+                {
+                    seccionActiva === 'ventas' && (
+
+                        <DashboardVentas />
+
+                    )
+                }
+
+                {
+                    seccionActiva === 'historial' && (
+
+                        <DashboardHistorialVentas />
 
                     )
                 }

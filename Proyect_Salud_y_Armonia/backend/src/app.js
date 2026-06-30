@@ -100,6 +100,9 @@ const comentariosRoutes =
 const estadisticasRoute = 
     require('./routes/estadisticas.routes')
 
+// Ventas Físicas
+const ventasRoute =
+    require('./routes/ventas.route');
 
 
 // =====================================
@@ -177,6 +180,9 @@ app.use('/comentarios', comentariosRoutes);
 //estadisticas
 
 app.use('/estadisticas', estadisticasRoute);
+
+// Ventas Físicas
+app.use('/ventas', ventasRoute);
 
 
 // =====================================

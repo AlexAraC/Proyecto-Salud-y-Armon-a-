@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/comentarios';
 
+const obtenerToken = () => localStorage.getItem('token');
+
 // Obtener todos
 export const obtenerComentariosPorTipo = async () => {
 
@@ -18,7 +20,12 @@ export const crearComentario = async (comentario) => {
 
     const respuesta = await axios.post(
         API_URL,
-        comentario
+        comentario,
+        {
+            headers: {
+                Authorization: `Bearer ${obtenerToken()}`
+            }
+        }
     );
 
     return respuesta.data;

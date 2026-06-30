@@ -71,6 +71,10 @@ function ListaComentarios({ titulo, tipo, items }) {
                                         #{item.id}
                                     </strong>
 
+                                    <span className="comentario-item-nombre">
+                                        {item.usuario_nombre || 'Desconocido'}
+                                    </span>
+
                                     <span>
                                         {formatearFecha(item.fecha)}
                                     </span>

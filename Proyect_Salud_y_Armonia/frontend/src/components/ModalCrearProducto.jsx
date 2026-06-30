@@ -139,6 +139,7 @@ function ModalCrearProducto({
 
                 <textarea
                     placeholder="Descripción"
+                    rows={6}
                     value={descripcion}
                     onChange={(e) =>
                         setDescripcion(

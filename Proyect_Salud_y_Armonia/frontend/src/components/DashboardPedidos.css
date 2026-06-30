@@ -196,6 +196,28 @@
 }
 
 /* =========================
+   TIPO DE ENVÍO
+========================= */
+
+.tipo-envio{
+    padding:4px 12px;
+    border-radius:30px;
+    font-weight:700;
+    font-size:12px;
+    white-space:nowrap;
+}
+
+.tipo-envio.Express{
+    background:#D1ECF1;
+    color:#0C5460;
+}
+
+.tipo-envio.Normal{
+    background:#E8E8E8;
+    color:#666;
+}
+
+/* =========================
    ACCIONES
 ========================= */
 
@@ -352,6 +374,18 @@
 
     box-shadow: 0 5px 15px rgba(0,0,0,.1);
 }
+.total-pagar{
+    font-size:20px;
+    padding:15px 20px;
+    background:#EFE7DC;
+    border-radius:10px;
+    margin:20px 0;
+    text-align:center;
+}
+.total-pagar strong{
+    color:#6B4F3A;
+}
+
 .btn-cerrar{
     margin-top:20px;
     border:1px solid rgba(58,49,43,.18);

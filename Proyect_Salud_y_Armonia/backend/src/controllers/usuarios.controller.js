@@ -18,8 +18,11 @@ const obtenerUsuarios = async (req, res) => {
                 contraseña,
                 rol,
                 direccion,
-                telefono
+                telefono,
+                baneado,
+                motivo_ban
             FROM Usuarios
+            WHERE correo != 'ventas_fisico@tienda.com'
         `);
 
         res.json(usuarios.recordset);
@@ -549,12 +552,81 @@ const verificarCorreo = async (req, res) => {
 };
 
 
+const banearUsuario = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+        const { baneado, motivo } = req.body;
+
+        const usuarioDB = await sql.query`
+
+            SELECT id, rol
+
+            FROM Usuarios
+
+            WHERE id = ${id}
+        `;
+
+        if (usuarioDB.recordset.length === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Usuario no encontrado'
+            });
+
+        }
+
+        if (usuarioDB.recordset[0].rol === 'admin') {
+
+            return res.status(400).json({
+                mensaje: 'No se puede banear a un administrador'
+            });
+
+        }
+
+        if (baneado && !motivo) {
+
+            return res.status(400).json({
+                mensaje: 'Debe especificar un motivo para el baneo'
+            });
+
+        }
+
+        await sql.query`
+
+            UPDATE Usuarios
+
+            SET baneado = ${baneado ? 1 : 0},
+                motivo_ban = ${baneado ? motivo : null}
+
+            WHERE id = ${id}
+        `;
+
+        res.json({
+            mensaje: baneado
+                ? 'Usuario baneado correctamente'
+                : 'Usuario desbaneado correctamente'
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: 'Error al cambiar estado del usuario'
+        });
+
+    }
+
+};
+
 module.exports = {
     obtenerUsuarios,
     crearUsuario,
     actualizarUsuario,
     eliminarUsuario,
     cambiarRol,
+    banearUsuario,
     verificarAdministrador,
     verificarCorreo
 

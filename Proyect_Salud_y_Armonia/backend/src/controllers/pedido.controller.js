@@ -380,12 +380,16 @@ const obtenerPedidoPorId = async (req, res) => {
             SELECT
                 p.id,
                 p.usuario_id,
+                u.nombre AS usuario,
                 p.fecha,
                 p.estado,
                 p.total,
-                p.metodo_pago
+                p.metodo_pago,
+                p.tipo_envio
 
             FROM Pedidos p
+            LEFT JOIN Usuarios u
+                ON p.usuario_id = u.id
 
             WHERE p.id = ${id}
         `;
@@ -445,7 +449,7 @@ const actualizarEstadoPedido = async (req, res) => {
         // ESTADOS PERMITIDOS
         // =====================================
 
-      const estadosValidos = [
+        const estadosValidos = [
             'Pendiente',
             'Enviado',
             'Entregado',
@@ -472,7 +476,7 @@ const actualizarEstadoPedido = async (req, res) => {
 
         const pedidoDB = await sql.query`
 
-            SELECT id
+            SELECT id, estado AS estado_actual, tipo_envio
 
             FROM Pedidos
 
@@ -484,6 +488,36 @@ const actualizarEstadoPedido = async (req, res) => {
 
             return res.status(404).json({
                 mensaje: 'Pedido no encontrado'
+            });
+
+        }
+
+        const pedido = pedidoDB.recordset[0];
+
+
+        // =====================================
+        // VALIDAR TRANSICIÓN SEGÚN TIPO DE ENVÍO
+        // =====================================
+
+        const transicionesValidas = {
+            'Normal': {
+                'Pendiente': ['Entregado'],
+                'Entregado': ['Pendiente']
+            },
+            'Express': {
+                'Pendiente': ['Enviado', 'Entregado'],
+                'Enviado': ['Entregado', 'Pendiente'],
+                'Entregado': ['Pendiente', 'Enviado']
+            }
+        };
+
+        const tipoEnvio = pedido.tipo_envio || 'Normal';
+        const permitidas = transicionesValidas[tipoEnvio]?.[pedido.estado_actual] || [];
+
+        if (!permitidas.includes(estado) && estado !== 'Cancelado') {
+
+            return res.status(400).json({
+                mensaje: `Transición de ${pedido.estado_actual} a ${estado} no permitida para envío ${tipoEnvio}`
             });
 
         }
@@ -547,7 +581,9 @@ const verPedidosAdmin = async (req, res) => {
 
                 p.total,
 
-                p.metodo_pago
+                p.metodo_pago,
+
+                p.tipo_envio
 
             FROM Pedidos p
 
@@ -598,7 +634,8 @@ const verPedidosCliente = async (req, res) => {
                 p.fecha,
                 p.estado,
                 p.total,
-                p.metodo_pago
+                p.metodo_pago,
+                p.tipo_envio
 
             FROM Pedidos p
 
@@ -740,13 +777,15 @@ const obtenerPedidosPorUsuario = async (req, res) => {
                 p.fecha,
                 p.estado,
                 p.total,
-                p.metodo_pago
+                p.metodo_pago,
+                p.tipo_envio
 
             FROM Pedidos p
 
             WHERE p.usuario_id = ${id}
 
             ORDER BY p.fecha DESC
+
         `;
 
         res.json({
@@ -756,7 +795,6 @@ const obtenerPedidosPorUsuario = async (req, res) => {
             pedidos: pedidos.recordset
 
         });
-
     }
 
     catch (error) {

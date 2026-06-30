@@ -11,12 +11,15 @@ const obtenerComentarios = async (req, res) => {
         const comentarios = await sql.query`
 
             SELECT
-                id,
-                tipo,
-                contenido,
-                fecha
+                c.id,
+                c.tipo,
+                c.contenido,
+                c.fecha,
+                c.usuario_id,
+                u.nombre AS usuario_nombre
 
-            FROM Comentarios
+            FROM Comentario c
+            LEFT JOIN Usuarios u ON c.usuario_id = u.id
         `;
 
         res.json({
@@ -48,7 +51,25 @@ const crearComentario = async (req, res) => {
     try {
 
         const { tipo, contenido } = req.body;
-        const tiposValidos = ['Comentario', 'Reporte']
+        const tiposValidos = ['comentario', 'reporte']
+
+        const usuarioDB = await sql.query`
+
+            SELECT baneado, motivo_ban
+
+            FROM Usuarios
+
+            WHERE id = ${req.usuario.id}
+        `;
+
+        if (usuarioDB.recordset.length > 0 && usuarioDB.recordset[0].baneado) {
+
+            return res.status(403).json({
+                mensaje: `No puedes enviar comentarios. Tu cuenta ha sido suspendida. Motivo: ${usuarioDB.recordset[0].motivo_ban || 'No especificado'}`
+            });
+
+        }
+
 
         if (!tiposValidos.includes(tipo)) {
 
@@ -61,9 +82,9 @@ const crearComentario = async (req, res) => {
 
         await sql.query`
 
-            INSERT INTO Comentarios (tipo, contenido, fecha)
+            INSERT INTO Comentario (tipo, contenido, fecha, usuario_id)
 
-            VALUES (${tipo}, ${contenido}, GETDATE())
+            VALUES (${tipo}, ${contenido}, GETDATE(), ${req.usuario.id})
 
         `;
 
@@ -101,7 +122,7 @@ const eliminarComentario = async (req, res) => {
             SELECT
                 id
 
-            FROM Comentarios
+            FROM Comentario
 
             WHERE id = ${id}
         `;
@@ -122,7 +143,7 @@ const eliminarComentario = async (req, res) => {
 
         await sql.query`
 
-            DELETE FROM Comentarios
+            DELETE FROM Comentario
 
             WHERE id = ${id}
         `;
@@ -161,31 +182,37 @@ const separarComentariosPorTipo = async (req, res) => {
         const comentarios = await sql.query`
 
             SELECT
-                id,
-                tipo,
-                contenido,
-                fecha
+                c.id,
+                c.tipo,
+                c.contenido,
+                c.fecha,
+                c.usuario_id,
+                u.nombre AS usuario_nombre
 
-            FROM Comentario
+            FROM Comentario c
+            LEFT JOIN Usuarios u ON c.usuario_id = u.id
 
-            WHERE tipo = 'comentario'
+            WHERE c.tipo = 'comentario'
 
-            ORDER BY fecha DESC
+            ORDER BY c.fecha DESC
         `;
 
         const reportes = await sql.query`
 
             SELECT
-                id,
-                tipo,
-                contenido,
-                fecha
+                c.id,
+                c.tipo,
+                c.contenido,
+                c.fecha,
+                c.usuario_id,
+                u.nombre AS usuario_nombre
 
-            FROM Comentario
+            FROM Comentario c
+            LEFT JOIN Usuarios u ON c.usuario_id = u.id
 
-            WHERE tipo = 'reporte'
+            WHERE c.tipo = 'reporte'
 
-            ORDER BY fecha DESC
+            ORDER BY c.fecha DESC
         `;
 
         res.json({

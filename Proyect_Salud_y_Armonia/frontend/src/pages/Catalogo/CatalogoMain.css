@@ -3,74 +3,73 @@
 /* ===================================== */
 
 .catalogo-layout {
-    display: flex;
-    gap: 20px;
     width: 90%;
     max-width: 1500px;
     margin: 0 auto 40px;
     min-height: 100vh;
-    padding: 140px 0 0 220px;
+    padding: 100px 0 0;
 }
+
 
 /* ===================================== */
-/* SIDEBAR - CATEGORIAS */
+/* CARRUSEL DE CATEGORIAS */
 /* ===================================== */
 
-.catalogo-sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 250px;
-    height: 100vh;
-    padding: 100px 18px 24px;
-    box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-right: 1px solid rgba(58, 49, 43, 0.08);
-    overflow-y: auto;
-    z-index: 1;
-}
+.catalogo-carrusel-categorias {
 
-.catalogo-sidebar-titulo {
-    color: #3A312B;
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 22px;
-    font-weight: 700;
-    font-family: 'Montserrat', sans-serif;
-}
-
-.catalogo-sidebar-opciones {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+
+    gap: 10px;
+
+    overflow-x: auto;
+
+    padding-bottom: 8px;
+
+    margin-bottom: 28px;
+
+    scrollbar-width: thin;
+
 }
 
-.catalogo-categoria-wrapper {
-    animation: slideInIzq 0.35s ease both;
-}
 
-.catalogo-categoria-item {
+.catalogo-carrusel-item {
+
+    flex: 0 0 auto;
+
     text-decoration: none;
+
     color: #3A312B;
+
     background: transparent;
-    padding: 13px 16px;
+
+    padding: 10px 18px;
+
     border-radius: 12px;
+
     border: 1px solid #3A312B;
-    transition: all 0.3s ease;
-    font-size: 15px;
+
+    transition: all .3s ease;
+
+    font-size: 14px;
+
     font-weight: 600;
+
     font-family: 'Open Sans', sans-serif;
-    text-align: left;
+
     cursor: pointer;
+
+    white-space: nowrap;
+
 }
 
-.catalogo-categoria-item:hover,
-.catalogo-categoria-item.activo {
+
+.catalogo-carrusel-item:hover,
+.catalogo-carrusel-item.activo {
+
     background-color: #3A312B;
+
     color: #EFE7DC;
-    transform: translateX(5px);
+
 }
 
 /* ===================================== */
@@ -78,7 +77,6 @@
 /* ===================================== */
 
 .catalogo-contenido {
-    flex: 1;
     min-width: 0;
 }
 
@@ -87,15 +85,12 @@
 /* ===================================== */
 
 .catalogo-buscador {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
+    position: relative;
+    margin-bottom: 16px;
 }
 
 .catalogo-input-busqueda {
-    flex: 1;
-    min-width: 200px;
+    width: 100%;
     padding: 14px 18px;
     border: none;
     border-radius: 12px;
@@ -107,6 +102,8 @@
     outline: none;
     color: #3A312B;
     transition: 0.3s;
+    clip-path: inset(0 100% 0 0);
+    animation: revealLeft 0.6s ease-out forwards;
 }
 
 .catalogo-input-busqueda:focus {
@@ -116,6 +113,23 @@
 
 .catalogo-input-busqueda::placeholder {
     color: #A69B8F;
+}
+
+
+.catalogo-buscador-linea {
+
+    display: block;
+
+    height: 2px;
+
+    background: rgba(163, 177, 138, 0.5);
+
+    transform: scaleX(0);
+
+    transform-origin: left;
+
+    animation: lineExpand 0.5s ease-out 0.6s forwards;
+
 }
 
 /* ===================================== */
@@ -131,25 +145,37 @@
     font-size: 20px;
     font-weight: 700;
     color: var(--color-cafe);
-    margin-bottom: 16px;
+    margin-bottom: 0;
     padding-bottom: 8px;
-    border-bottom: 2px solid rgba(163, 177, 138, 0.4);
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typing 0.5s steps(20) forwards;
+}
+
+
+.catalogo-seccion-linea {
+
+    display: block;
+
+    height: 2px;
+
+    background: rgba(163, 177, 138, 0.4);
+
+    transform: scaleX(0);
+
+    transform-origin: left;
+
+    animation: lineExpand 0.4s ease-out forwards;
+
+    margin-bottom: 16px;
+
 }
 
 /* ===================================== */
 /* GRILLA DE PRODUCTOS */
 /* ===================================== */
-
-@keyframes slideInIzq {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -569,54 +595,54 @@
     animation: fadeIn 0.25s ease;
 }
 
+
+/* ===================================== */
+/* KEYFRAMES */
+/* ===================================== */
+
+@keyframes revealLeft {
+
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+
+}
+
+
+@keyframes typing {
+
+    to {
+        width: 100%;
+    }
+
+}
+
+
+@keyframes lineExpand {
+
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+
+}
+
+
 /* ===================================== */
 /* RESPONSIVE */
 /* ===================================== */
 
 @media (max-width: 900px) {
     .catalogo-layout {
-        flex-direction: column;
         width: 95%;
         padding: 80px 0 0;
-    }
-
-    .catalogo-sidebar {
-        position: static;
-        width: 100%;
-        height: auto;
-        padding: 18px;
-        background: transparent;
-        backdrop-filter: none;
-        border-right: none;
-    }
-
-    .catalogo-sidebar-titulo {
-        text-align: left;
-        font-size: 20px;
-        margin-bottom: 14px;
-    }
-
-    .catalogo-sidebar-opciones {
-        flex-direction: row;
-        gap: 10px;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        scrollbar-width: thin;
-    }
-
-    .catalogo-categoria-item {
-        flex: 0 0 auto;
-        min-width: 130px;
-        max-width: 160px;
-        padding: 11px 14px;
-        font-size: 14px;
-        text-align: center;
-        white-space: normal;
-        line-height: 1.2;
-    }
-
-    .catalogo-categoria-item:hover {
-        transform: translateY(-2px);
     }
 }
 
@@ -646,16 +672,5 @@
     .catalogo-grid {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
-    }
-
-    .catalogo-sidebar {
-        padding: 14px 12px;
-    }
-
-    .catalogo-categoria-item {
-        min-width: 110px;
-        max-width: 140px;
-        padding: 10px 12px;
-        font-size: 13px;
     }
 }

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 
 import {
     obtenerUsuarios,
-    cambiarRol
+    cambiarRol,
+    toggleBan
 } from '../services/usuariosApi';
 
 import {
@@ -24,6 +25,12 @@ function DashboardUsuarios() {
     const [pedidosUsuario, setPedidosUsuario] = useState([]);
 
     const [nombreUsuario, setNombreUsuario] = useState('');
+
+    const [mostrarModalBan, setMostrarModalBan] = useState(false);
+
+    const [usuarioBan, setUsuarioBan] = useState(null);
+
+    const [motivoBan, setMotivoBan] = useState('');
 
     const cargarUsuarios = async () => {
 
@@ -134,6 +141,57 @@ function DashboardUsuarios() {
 
     };
 
+
+
+    const handleBan = async () => {
+
+        if (!usuarioBan) return;
+
+        const baneando = !usuarioBan.baneado;
+
+        if (baneando && !motivoBan.trim()) {
+
+            alert('Debe especificar un motivo para el baneo');
+
+            return;
+
+        }
+
+        try {
+
+            await toggleBan(
+
+                usuarioBan.id,
+
+                baneando,
+
+                motivoBan.trim()
+
+            );
+
+            setMostrarModalBan(false);
+
+            setUsuarioBan(null);
+
+            setMotivoBan('');
+
+            cargarUsuarios();
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert(
+
+                error.response?.data?.mensaje ||
+
+                'Error al cambiar estado del usuario'
+
+            );
+
+        }
+
+    };
 
 
     const verPedidos = async (
@@ -319,6 +377,12 @@ function DashboardUsuarios() {
 
                         <th>
 
+                            Estado
+
+                        </th>
+
+                        <th>
+
                             Acciones
 
                         </th>
@@ -400,6 +464,42 @@ function DashboardUsuarios() {
 
                                     <td>
 
+                                        {
+
+                                            usuario.baneado
+
+                                            ?
+
+                                            <span
+
+                                                className="rol baneado"
+
+                                                title={usuario.motivo_ban}
+
+                                            >
+
+                                                Baneado
+
+                                            </span>
+
+                                            :
+
+                                            <span
+
+                                                className="rol activo"
+
+                                            >
+
+                                                Activo
+
+                                            </span>
+
+                                        }
+
+                                    </td>
+
+                                    <td>
+
                                         <button
 
                                             className="btn-pedidos"
@@ -459,6 +559,50 @@ function DashboardUsuarios() {
                                             }
 
                                         </button>
+
+                                        {
+
+                                            usuario.rol !== 'admin'
+
+                                            &&
+
+                                            <button
+
+                                                className={
+
+                                                    `btn-${usuario.baneado ? 'desban' : 'ban'}`
+
+                                                }
+
+                                                onClick={() => {
+
+                                                    setUsuarioBan(usuario);
+
+                                                    setMotivoBan(
+
+                                                        usuario.motivo_ban || ''
+
+                                                    );
+
+                                                    setMostrarModalBan(true);
+
+                                                }}
+
+                                            >
+
+                                                {
+
+                                                    usuario.baneado
+
+                                                        ? 'Desbanear'
+
+                                                        : 'Banear'
+
+                                                }
+
+                                            </button>
+
+                                        }
 
                                     </td>
 
@@ -631,6 +775,204 @@ function DashboardUsuarios() {
                             Cerrar
 
                         </button>
+
+                    </div>
+
+                </div>
+
+            }
+
+            {
+
+                mostrarModalBan
+
+                &&
+
+                usuarioBan
+
+                &&
+
+                <div
+
+                    className="modal-fondo"
+
+                    onClick={() =>
+
+                        setMostrarModalBan(false)
+
+                    }
+
+                >
+
+                    <div
+
+                        className="modal-detalles"
+
+                        onClick={
+
+                            e =>
+
+                                e.stopPropagation()
+
+                        }
+
+                    >
+
+                        <h2>
+
+                            {
+
+                                usuarioBan.baneado
+
+                                    ? `Desbanear a ${usuarioBan.nombre}`
+
+                                    : `Banear a ${usuarioBan.nombre}`
+
+                            }
+
+                        </h2>
+
+                        {
+
+                            !usuarioBan.baneado
+
+                            &&
+
+                            <>
+
+                                <p>
+
+                                    <strong>Motivo del baneo:</strong>
+
+                                </p>
+
+                                <textarea
+
+                                    className="motivo-ban-input"
+
+                                    placeholder="Escriba el motivo por el cual se banea este usuario..."
+
+                                    value={motivoBan}
+
+                                    onChange={
+
+                                        e =>
+
+                                            setMotivoBan(
+
+                                                e.target.value
+
+                                            )
+
+                                    }
+
+                                    rows={4}
+
+                                    style={{
+
+                                        width: '100%',
+
+                                        padding: '12px',
+
+                                        borderRadius: '8px',
+
+                                        border: '1px solid rgba(58,49,43,.18)',
+
+                                        font: 'inherit',
+
+                                        boxSizing: 'border-box',
+
+                                        resize: 'vertical'
+
+                                    }}
+
+                                />
+
+                            </>
+
+                        }
+
+                        {
+
+                            usuarioBan.baneado
+
+                            &&
+
+                            <p>
+
+                                Motivo del baneo:
+
+                                {' '}
+
+                                {
+
+                                    usuarioBan.motivo_ban
+
+                                }
+
+                            </p>
+
+                        }
+
+                        <div
+
+                            style={{
+
+                                display: 'flex',
+
+                                gap: '10px',
+
+                                marginTop: '20px'
+
+                            }}
+
+                        >
+
+                            <button
+
+                                className="btn-cerrar"
+
+                                onClick={() => {
+
+                                    setMostrarModalBan(false);
+
+                                    setUsuarioBan(null);
+
+                                    setMotivoBan('');
+
+                                }}
+
+                            >
+
+                                Cancelar
+
+                            </button>
+
+                            <button
+
+                                className={
+
+                                    `btn-${usuarioBan.baneado ? 'desban' : 'ban'}`
+
+                                }
+
+                                onClick={handleBan}
+
+                            >
+
+                                {
+
+                                    usuarioBan.baneado
+
+                                        ? 'Desbanear'
+
+                                        : 'Banear'
+
+                                }
+
+                            </button>
+
+                        </div>
 
                     </div>
 

@@ -46,8 +46,13 @@ export const crearInformacionInstitucional =
         );
 
         formData.append(
-            'descripcion',
-            informacion.descripcion
+            'mision',
+            informacion.mision
+        );
+
+        formData.append(
+            'vision',
+            informacion.vision
         );
 
         formData.append(
@@ -114,8 +119,13 @@ export const actualizarInformacionInstitucional =
         );
 
         formData.append(
-            'descripcion',
-            informacion.descripcion
+            'mision',
+            informacion.mision
+        );
+
+        formData.append(
+            'vision',
+            informacion.vision
         );
 
         formData.append(

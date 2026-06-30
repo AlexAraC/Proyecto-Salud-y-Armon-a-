@@ -63,6 +63,30 @@ function MenuLateral({ seccionActiva, cambiarSeccion }) {
                 <button
                     type="button"
                     className={`menu-item ${
+                        seccionActiva === 'ventas'
+                            ? 'activo'
+                            : ''
+                    }`}
+                    onClick={() => cambiarSeccion('ventas')}
+                >
+                    Ventas
+                </button>
+
+                <button
+                    type="button"
+                    className={`menu-item ${
+                        seccionActiva === 'historial'
+                            ? 'activo'
+                            : ''
+                    }`}
+                    onClick={() => cambiarSeccion('historial')}
+                >
+                    Historial de Ventas
+                </button>
+
+                <button
+                    type="button"
+                    className={`menu-item ${
                         seccionActiva === 'pedidos'
                             ? 'activo'
                             : ''

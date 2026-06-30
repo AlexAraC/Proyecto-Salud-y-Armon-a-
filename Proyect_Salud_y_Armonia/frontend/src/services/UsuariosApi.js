@@ -129,7 +129,6 @@ export const eliminarUsuario = async (id) => {
 // =====================================
 // CAMBIAR ROL
 // =====================================
-
 export const cambiarRol = async (
 
     id,
@@ -153,6 +152,48 @@ export const cambiarRol = async (
             headers: {
 
                 Authorization:
+
+                    `Bearer ${obtenerToken()}`
+
+            }
+
+        }
+
+    );
+
+    return respuesta.data;
+
+};
+
+
+export const toggleBan = async (
+
+    id,
+
+    baneado,
+
+    motivo
+
+) => {
+
+    const respuesta = await axios.put(
+
+        `${API_URL}/${id}/ban`,
+
+        {
+
+            baneado,
+
+            motivo
+
+        },
+
+        {
+
+            headers: {
+
+                Authorization:
+
                     `Bearer ${obtenerToken()}`
 
             }

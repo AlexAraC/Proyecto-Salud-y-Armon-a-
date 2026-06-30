@@ -1,0 +1,357 @@
+.hero {
+
+    height: 100vh;
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    animation: heroEntrance .8s ease-out forwards;
+
+}
+
+
+.hero-logo-wrapper {
+
+    display: flex;
+
+    justify-content: center;
+
+    width: 100%;
+
+}
+
+
+.hero-logo {
+
+    max-width: 50%;
+
+    max-height: 50vh;
+
+    object-fit: contain;
+
+    clip-path: inset(0 100% 0 0);
+
+    animation: logoReveal 1s ease-out .8s forwards;
+
+}
+
+
+.hero-texto {
+
+    color: #3A312B;
+
+    font-size: 18px;
+
+    text-align: center;
+
+    max-width: 500px;
+
+    line-height: 1.6;
+
+    margin-top: 24px;
+
+    font-weight: 500;
+
+    min-height: 58px;
+
+}
+
+
+.hero-cursor {
+
+    animation: blink .7s step-end infinite;
+
+    font-weight: 400;
+
+}
+
+
+.hero-botones {
+
+    display: flex;
+
+    gap: 16px;
+
+    margin-top: 28px;
+
+}
+
+
+.hero-btn {
+
+    padding: 12px 28px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    background-color: #A3B18A;
+
+    color: #fff;
+
+    border: none;
+
+    transition: .3s;
+
+    opacity: 0;
+
+    transform: translateY(12px);
+
+}
+
+
+.hero-btn.visible {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+    transition: opacity .5s ease, transform .5s ease;
+
+}
+
+
+.hero-btn:hover {
+
+    background-color: #000;
+
+    transform: translateY(-2px);
+
+}
+
+
+.hero-btn-outline {
+
+    background: transparent;
+
+    color: #000;
+
+    border: 2px solid #000;
+
+}
+
+
+.hero-btn-outline:hover {
+
+    background: #000;
+
+    color: #fff;
+
+}
+
+
+.destacados {
+
+    padding: 60px 5%;
+
+}
+
+
+.destacados-titulo {
+
+    text-align: center;
+
+    font-size: 28px;
+
+    margin-bottom: 50px;
+
+    color: #3A312B;
+
+    background-color: rgba(255, 255, 255, 0.55);
+
+    padding: 14px 30px;
+
+    border-radius: 12px;
+
+    width: fit-content;
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+
+
+}
+
+
+.destacados-lista {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 50px;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+}
+
+
+.destacados-item {
+
+    display: flex;
+
+    gap: 40px;
+
+    align-items: center;
+
+    position: relative;
+
+    padding: 24px;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+        to top,
+        rgba(255,255,255,0.9) 0%,
+        rgba(255,255,255,0.1) 80%
+    );
+
+    width: 100%;
+
+
+
+}
+
+
+.destacados-item.reverso {
+
+    flex-direction: row-reverse;
+
+    align-self: flex-end;
+
+    max-width: 92%;
+
+}
+
+
+.destacados-item:not(.reverso) {
+
+    align-self: flex-start;
+
+    max-width: 92%;
+
+}
+
+
+.destacados-item-img {
+
+    width: 450px;
+
+    height: 450px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    flex-shrink: 0;
+
+}
+
+
+.destacados-item-info {
+
+    flex: 1;
+
+}
+
+
+.destacados-item-nombre {
+
+    font-size: 22px;
+
+    color: #3A312B;
+
+    margin-bottom: 10px;
+
+}
+
+
+.destacados-item-descripcion {
+
+    font-size: 18px;
+
+    color: #6B4F3A;
+
+    margin-bottom: 12px;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+
+    margin-left: 24px;
+
+}
+
+
+.destacados-item-precio {
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #fff;
+
+    margin-left: 24px;
+
+    background-color: #6B8E23;
+
+    padding: 6px 16px;
+
+    border-radius: 8px;
+
+    display: inline-block;
+
+}
+
+
+@keyframes heroEntrance {
+
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+
+}
+
+
+@keyframes logoReveal {
+
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+
+}
+
+
+@keyframes blink {
+
+    50% {
+        opacity: 0;
+    }
+
+}

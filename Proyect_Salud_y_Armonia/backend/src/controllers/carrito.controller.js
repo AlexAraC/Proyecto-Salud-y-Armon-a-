@@ -740,6 +740,28 @@ const convertirCarritoAPedido = async (req, res) => {
 
 
         // =====================================
+        // VERIFICAR QUE NO ESTÉ BANEADO
+        // =====================================
+
+        const usuarioDB = await sql.query`
+
+            SELECT baneado, motivo_ban
+
+            FROM Usuarios
+
+            WHERE id = ${usuario_id}
+        `;
+
+        if (usuarioDB.recordset.length > 0 && usuarioDB.recordset[0].baneado) {
+
+            return res.status(403).json({
+                mensaje: `Tu cuenta ha sido suspendida. Motivo: ${usuarioDB.recordset[0].motivo_ban || 'No especificado'}`
+            });
+
+        }
+
+
+        // =====================================
         // OBTENER MÉTODO DE PAGO
         // =====================================
 
