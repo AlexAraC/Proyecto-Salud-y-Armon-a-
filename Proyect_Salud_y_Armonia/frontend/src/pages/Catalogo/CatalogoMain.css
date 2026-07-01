@@ -73,6 +73,31 @@
 }
 
 /* ===================================== */
+/* TITULO PRINCIPAL */
+/* ===================================== */
+
+.catalogo-titulo {
+    font-size: 28px;
+    color: #3A312B;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto 24px;
+    text-align: center;
+    width: fit-content;
+}
+
+.catalogo-titulo-linea {
+    display: block;
+    height: 3px;
+    background-color: #E8D5B0;
+    border-radius: 2px;
+    width: 100%;
+}
+
+
+/* ===================================== */
 /* CONTENIDO DERECHO */
 /* ===================================== */
 
@@ -103,7 +128,7 @@
     color: #3A312B;
     transition: 0.3s;
     clip-path: inset(0 100% 0 0);
-    animation: revealLeft 0.6s ease-out forwards;
+    animation: revealLeft 1s ease-out forwards;
 }
 
 .catalogo-input-busqueda:focus {
@@ -128,7 +153,7 @@
 
     transform-origin: left;
 
-    animation: lineExpand 0.5s ease-out 0.6s forwards;
+    animation: lineExpand 0.8s ease-out 1s forwards;
 
 }
 
@@ -151,7 +176,7 @@
     overflow: hidden;
     white-space: nowrap;
     width: 0;
-    animation: typing 0.5s steps(20) forwards;
+    animation: typing 0.8s steps(20) forwards;
 }
 
 
@@ -167,7 +192,7 @@
 
     transform-origin: left;
 
-    animation: lineExpand 0.4s ease-out forwards;
+    animation: lineExpand 0.7s ease-out forwards;
 
     margin-bottom: 16px;
 
@@ -200,7 +225,7 @@
 }
 
 .catalogo-producto-wrapper {
-    animation: dropIn 0.35s ease both;
+    animation: dropIn 0.7s ease both;
 }
 
 .catalogo-vacio {

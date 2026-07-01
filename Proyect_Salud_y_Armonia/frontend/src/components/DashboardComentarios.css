@@ -86,6 +86,24 @@
 
 }
 
+.comentario-btn-desechar {
+    margin-top: 10px;
+    padding: 6px 14px;
+    background: #8A2E24;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .3s ease;
+}
+
+.comentario-btn-desechar:hover {
+    background: #6B1F17;
+}
+
+
 .comentarios-grid {
 
     display: grid;

@@ -170,7 +170,19 @@
 
     }
 
-    .boton-ceo {
+.textarea-ceo {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 15px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+
+.boton-ceo {
 
         width: 100%;
 

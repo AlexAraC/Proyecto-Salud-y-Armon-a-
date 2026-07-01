@@ -3,15 +3,17 @@ import { useState, useEffect, useRef } from 'react';
 import HeroBackground from '../../assets/HeroBackground.png';
 import Logo from '../../assets/logo.png';
 import { obtenerDestacados } from '../../services/productosApi';
+import DestacadoItem from './DestacadoItem';
 import './Inicio.css';
 
 const TEXTO = "Tu bienestar es nuestra prioridad. Productos naturales seleccionados para acompañarte cada día.";
+const TITULO_DESTACADOS = "Le Ofrecemos la mejor calidad";
 
 function Inicio() {
 
     const navigate = useNavigate();
 
-    const [mostrarTexto, setMostrarTexto] = useState(false);
+    const [mostrarTexto] = useState(true);
 
     const [textoVisible, setTextoVisible] = useState('');
 
@@ -20,6 +22,14 @@ function Inicio() {
     const [mostrarBtn2, setMostrarBtn2] = useState(false);
 
     const [destacados, setDestacados] = useState([]);
+
+    const [tituloVisible, setTituloVisible] = useState('');
+
+    const [mostrarTitulo, setMostrarTitulo] = useState(false);
+
+    const [tituloCompleto, setTituloCompleto] = useState(false);
+
+    const tituloRef = useRef(null);
 
     const logoRef = useRef(null);
 
@@ -33,49 +43,6 @@ function Inicio() {
                 }
             })
             .catch(console.error);
-
-    }, []);
-
-
-    useEffect(() => {
-
-        const originalBg = document.body.style.background;
-
-        const originalBgImg = document.body.style.backgroundImage;
-
-        document.body.style.setProperty('background', '#000', 'important');
-
-        document.body.style.setProperty('background-image', 'none', 'important');
-
-        const timer = setTimeout(() => {
-
-            document.body.style.removeProperty('background');
-
-            document.body.style.removeProperty('background-image');
-
-        }, 800);
-
-        return () => {
-
-            clearTimeout(timer);
-
-            document.body.style.removeProperty('background');
-
-            document.body.style.removeProperty('background-image');
-
-        };
-
-    }, []);
-
-
-    useEffect(() => {
-
-        const timer1 = setTimeout(
-            () => setMostrarTexto(true),
-            1900
-        );
-
-        return () => clearTimeout(timer1);
 
     }, []);
 
@@ -115,6 +82,56 @@ function Inicio() {
         return () => clearInterval(interval);
 
     }, [mostrarTexto]);
+
+
+    useEffect(() => {
+
+        if (destacados.length === 0 || !tituloRef.current) return;
+
+        const observer = new IntersectionObserver(([entry]) => {
+
+            if (entry.isIntersecting) {
+
+                setMostrarTitulo(true);
+
+                observer.disconnect();
+
+            }
+
+        }, { threshold: 0.3 });
+
+        observer.observe(tituloRef.current);
+
+        return () => observer.disconnect();
+
+    }, [destacados]);
+
+
+    useEffect(() => {
+
+        if (!mostrarTitulo) return;
+
+        let i = 0;
+
+        const interval = setInterval(() => {
+
+            setTituloVisible(TITULO_DESTACADOS.slice(0, i + 1));
+
+            i++;
+
+            if (i >= TITULO_DESTACADOS.length) {
+
+                clearInterval(interval);
+
+                setTituloCompleto(true);
+
+            }
+
+        }, 50);
+
+        return () => clearInterval(interval);
+
+    }, [mostrarTitulo]);
 
 
     return (
@@ -170,46 +187,31 @@ function Inicio() {
 
             </div>
 
+            <span className="hoja hoja-1">🍂</span>
+            <span className="hoja hoja-2">🍁</span>
+            <span className="hoja hoja-3">🍂</span>
+            <span className="hoja hoja-4">🍁</span>
+            <span className="hoja hoja-5">🍂</span>
+            <span className="hoja hoja-6">🍁</span>
+            <span className="hoja hoja-7">🍂</span>
+            <span className="hoja hoja-8">🍁</span>
+
         </section>
 
             {destacados.length > 0 && (
                 <section className="destacados">
 
-                    <h2 className="destacados-titulo">
-                        Productos Destacados
+                    <h2 ref={tituloRef} className={`destacados-titulo ${mostrarTitulo ? 'visible' : ''} ${tituloCompleto ? 'completo' : ''}`}>
+                        {tituloVisible}
+                        {mostrarTitulo && !tituloCompleto && (
+                            <span className="destacados-cursor">|</span>
+                        )}
                     </h2>
 
                     <div className="destacados-lista">
 
                         {destacados.map((p, i) => (
-                            <div
-                                key={p.id}
-                                className={`destacados-item ${i % 2 === 1 ? 'reverso' : ''}`}
-                            >
-
-                                <img
-                                    className="destacados-item-img"
-                                    src={`http://localhost:3000${p.imagen}`}
-                                    alt={p.nombre}
-                                />
-
-                                <div className="destacados-item-info">
-
-                                    <h3 className="destacados-item-nombre">
-                                        {p.nombre}
-                                    </h3>
-
-                                    <p className="destacados-item-descripcion">
-                                        {p.descripcion}
-                                    </p>
-
-                                    <span className="destacados-item-precio">
-                                        ₡{p.precio}
-                                    </span>
-
-                                </div>
-
-                            </div>
+                            <DestacadoItem key={p.id} producto={p} index={i} />
                         ))}
 
                     </div>

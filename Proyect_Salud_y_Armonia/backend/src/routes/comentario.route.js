@@ -8,8 +8,6 @@ const {
     eliminarComentario,
     separarComentariosPorTipo
 } = require('../controllers/comentario.controller');
-const e = require('express');
-
 const {
     verificarToken,
     verificarAdmin
@@ -24,7 +22,7 @@ router.get('/', obtenerComentarios);
 // BORRAR COMENTARIOS
 // =====================================
 
-router.delete('/:id', eliminarComentario)
+router.delete('/:id', verificarToken, verificarAdmin, eliminarComentario)
 
 //======================================
 // CREAR COMENTARIO

@@ -186,6 +186,11 @@ function DesplegarCatalogo(){
     return(
         <div className="catalogo-layout">
 
+            <h2 className="catalogo-titulo">
+                Descubre Nuestros Productos
+                <span className="catalogo-titulo-linea" />
+            </h2>
+
             <div className="catalogo-contenido">
 
                 <div className="catalogo-buscador">
@@ -257,7 +262,7 @@ function DesplegarCatalogo(){
 
                         return Object.entries(grupos).map(([nombreCat, prods]) => {
 
-                            const secDelay = secIdx * 0.15;
+                            const secDelay = secIdx * 0.3;
 
                             secIdx++;
 
@@ -278,7 +283,7 @@ function DesplegarCatalogo(){
                                 />
                                 <div className="catalogo-grid">
                                     {prods.map((p) => {
-                                        const delay = idx * 0.04;
+                                        const delay = idx * 0.08;
                                         idx++;
                                         return (
                                             <div

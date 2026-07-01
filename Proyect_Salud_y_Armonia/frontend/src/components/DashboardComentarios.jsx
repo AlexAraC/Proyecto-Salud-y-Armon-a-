@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { obtenerComentariosPorTipo } from '../services/comentariosApi';
+import { obtenerComentariosPorTipo, eliminarComentario } from '../services/comentariosApi';
 
 import './DashboardComentarios.css';
 
@@ -23,7 +23,7 @@ const formatearFecha = (fecha) => {
 
 };
 
-function ListaComentarios({ titulo, tipo, items }) {
+function ListaComentarios({ titulo, tipo, items, onEliminar }) {
 
     return (
 
@@ -85,6 +85,13 @@ function ListaComentarios({ titulo, tipo, items }) {
                                     {item.contenido}
                                 </p>
 
+                                <button
+                                    className="comentario-btn-desechar"
+                                    onClick={() => onEliminar(item.id)}
+                                >
+                                    Desechar
+                                </button>
+
                             </article>
 
                         ))
@@ -107,40 +114,58 @@ function DashboardComentarios() {
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState('');
 
+    const cargarComentarios = useCallback(async () => {
+
+        try {
+
+            setCargando(true);
+            setError('');
+
+            const datos = await obtenerComentariosPorTipo();
+
+            setComentarios(datos.comentarios || []);
+            setReportes(datos.reportes || []);
+
+        }
+
+        catch (errorApi) {
+
+            console.error(errorApi);
+            setError('No se pudieron cargar los comentarios y reportes.');
+
+        }
+
+        finally {
+
+            setCargando(false);
+
+        }
+
+    }, []);
+
     useEffect(() => {
-
-        const cargarComentarios = async () => {
-
-            try {
-
-                setCargando(true);
-                setError('');
-
-                const datos = await obtenerComentariosPorTipo();
-
-                setComentarios(datos.comentarios || []);
-                setReportes(datos.reportes || []);
-
-            }
-
-            catch (errorApi) {
-
-                console.error(errorApi);
-                setError('No se pudieron cargar los comentarios y reportes.');
-
-            }
-
-            finally {
-
-                setCargando(false);
-
-            }
-
-        };
 
         cargarComentarios();
 
-    }, []);
+    }, [cargarComentarios]);
+
+    const handleEliminar = async (id) => {
+
+        try {
+
+            await eliminarComentario(id);
+            cargarComentarios();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+            alert('Error al desechar el registro.');
+
+        }
+
+    };
 
     const totalRegistros = useMemo(
         () => comentarios.length + reportes.length,
@@ -203,12 +228,14 @@ function DashboardComentarios() {
                     titulo="Comentarios"
                     tipo="Tipo comentario"
                     items={comentarios}
+                    onEliminar={handleEliminar}
                 />
 
                 <ListaComentarios
                     titulo="Reportes"
                     tipo="Tipo reporte"
                     items={reportes}
+                    onEliminar={handleEliminar}
                 />
 
             </div>

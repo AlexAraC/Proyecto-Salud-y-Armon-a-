@@ -68,18 +68,6 @@ router.put(
 
 
 // =====================================
-// ELIMINAR PRODUCTO
-// =====================================
-
-router.delete(
-    '/',
-    verificarToken,
-    verificarUser,
-    eliminarProductoDelCarrito
-);
-
-
-// =====================================
 // VACIAR CARRITO
 // =====================================
 
@@ -88,6 +76,18 @@ router.delete(
     verificarToken,
     verificarUser,
     vaciarCarrito
+);
+
+
+// =====================================
+// ELIMINAR PRODUCTO
+// =====================================
+
+router.delete(
+    '/:producto_id',
+    verificarToken,
+    verificarUser,
+    eliminarProductoDelCarrito
 );
 
 

@@ -17,16 +17,15 @@ function Footer() {
 
                 <div className="footer-seccion">
                     <h3>Contacto</h3>
-                    <p>📍 San José, Costa Rica</p>
-                    <p>📞 +506 2222-3333</p>
-                    <p>✉️ contacto@saludyarmonia.com</p>
+                    <p>📍 San Carlos, Alajuela, Costa Rica</p>
+                    <p>📞 8949-8822</p>
+                    <p>✉️ grassolhr@gmail.com</p>
                 </div>
 
                 <div className="footer-seccion">
                     <h3>Horarios</h3>
-                    <p>Lunes a Viernes</p>
-                    <p>8:00 a.m. - 6:00 p.m.</p>
-                    <p>Sábados: 9:00 a.m. - 3:00 p.m.</p>
+                    <p>Lunes a sábado</p>
+                    <p>10:00 a.m. - 6:00 p.m.</p>
                 </div>
 
             </div>

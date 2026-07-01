@@ -24,6 +24,7 @@ function DashboardInformacionCeo({tipo}) {
             correo: '',
             telefono: '',
             slogan: '',
+            acerca_de_mi: '',
             imagen: null
 
         });
@@ -65,6 +66,8 @@ function DashboardInformacionCeo({tipo}) {
                         ceo.telefono,
                     slogan:
                         ceo.slogan,
+                    acerca_de_mi:
+                        ceo.acerca_de_mi || '',
 
                     imagen: null
 
@@ -115,6 +118,8 @@ function DashboardInformacionCeo({tipo}) {
                             ceo.telefono,
                         slogan:
                             ceo.slogan,
+                        acerca_de_mi:
+                            ceo.acerca_de_mi || '',
 
                         imagen: null
 
@@ -337,6 +342,27 @@ function DashboardInformacionCeo({tipo}) {
                         :
 
                         <p>{informacion?.slogan || 'Sin slogan'}</p>
+                    }
+
+
+                    <label>Acerca de mí</label>
+
+                    {
+                        tipo === "admin"
+
+                        ?
+
+                        <textarea
+                            name="acerca_de_mi"
+                            value={formulario.acerca_de_mi}
+                            onChange={handleChange}
+                            rows="5"
+                            className="textarea-ceo"
+                        />
+
+                        :
+
+                        <p>{informacion?.acerca_de_mi || 'Sin información'}</p>
                     }
 
 

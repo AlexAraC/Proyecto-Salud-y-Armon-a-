@@ -53,6 +53,11 @@ export const crearInformacionCeo = async (informacion) => {
         informacion.telefono
     );
 
+    formData.append(
+        'acerca_de_mi',
+        informacion.acerca_de_mi
+    );
+
     if (informacion.imagen) {
 
         formData.append(
@@ -118,6 +123,11 @@ export const actualizarInformacionCeo = async (
     formData.append(
         'telefono',
         informacion.telefono
+    );
+
+    formData.append(
+        'acerca_de_mi',
+        informacion.acerca_de_mi
     );
 
     if (informacion.imagen) {

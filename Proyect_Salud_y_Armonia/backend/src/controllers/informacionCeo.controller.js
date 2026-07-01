@@ -18,7 +18,8 @@ const obtenerInformacionCeo = async (req, res) => {
                 correo,
                 telefono,
                 imagen,
-                slogan
+                slogan,
+                acerca_de_mi
 
             FROM informacionCeo
         `;
@@ -59,7 +60,8 @@ const crearInformacionCeo = async (req, res) => {
             nombre,
             correo,
             telefono,
-            slogan
+            slogan,
+            acerca_de_mi
 
         } = req.body;
 
@@ -87,7 +89,8 @@ const crearInformacionCeo = async (req, res) => {
                 correo,
                 telefono,
                 imagen,
-                slogan
+                slogan,
+                acerca_de_mi
             )
 
             VALUES
@@ -96,7 +99,8 @@ const crearInformacionCeo = async (req, res) => {
                 ${correo},
                 ${telefono},
                 ${imagen},
-                ${slogan}
+                ${slogan},
+                ${acerca_de_mi}
             )
         `;
 
@@ -137,7 +141,8 @@ const actualizarInformacionCeo = async (req, res) => {
             nombre,
             correo,
             telefono,
-            slogan
+            slogan,
+            acerca_de_mi
 
         } = req.body;
 
@@ -203,7 +208,9 @@ const actualizarInformacionCeo = async (req, res) => {
 
                 imagen = ${imagen},
 
-                slogan = ${slogan}
+                slogan = ${slogan},
+
+                acerca_de_mi = ${acerca_de_mi}
 
             WHERE id = ${id}
         `;

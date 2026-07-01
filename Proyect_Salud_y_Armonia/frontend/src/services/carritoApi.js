@@ -26,9 +26,8 @@ export const actualizarCantidad = async (producto_id, cantidad) => {
 };
 
 export const eliminarDelCarrito = async (producto_id) => {
-    const respuesta = await axios.delete(API_URL, {
-        headers: { Authorization: `Bearer ${obtenerToken()}` },
-        data: { producto_id }
+    const respuesta = await axios.delete(`${API_URL}/${producto_id}`, {
+        headers: { Authorization: `Bearer ${obtenerToken()}` }
     });
     return respuesta.data;
 };

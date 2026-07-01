@@ -2,6 +2,28 @@ const { sql } = require('../config/db');
 
 
 // =====================================
+// LIMPIAR PRODUCTOS INACTIVOS
+// =====================================
+
+const limpiarProductosInactivos = async (usuario_id) => {
+
+    await sql.query`
+
+        DELETE cd
+        FROM CarritoDetalle cd
+        INNER JOIN Carrito c
+        ON cd.carrito_id = c.id
+        INNER JOIN Productos p
+        ON cd.producto_id = p.id
+        WHERE c.usuario_id = ${usuario_id}
+        AND c.estado = 'Activo'
+        AND p.activo = 0
+    `;
+
+};
+
+
+// =====================================
 // OBTENER CARRITO DEL USUARIO
 // =====================================
 
@@ -14,6 +36,12 @@ const obtenerCarritoPorUsuario = async (req, res) => {
         // =====================================
 
         const usuario_id = req.usuario.id;
+
+        // =====================================
+        // ELIMINAR PRODUCTOS INACTIVOS
+        // =====================================
+
+        await limpiarProductosInactivos(usuario_id);
 
         // =====================================
         // BUSCAR CARRITO ACTIVO
@@ -46,6 +74,7 @@ const obtenerCarritoPorUsuario = async (req, res) => {
 
             WHERE c.usuario_id = ${usuario_id}
             AND c.estado = 'Activo'
+            AND p.activo = 1
         `;
 
 
@@ -153,6 +182,7 @@ const agregarProductoAlCarrito = async (req, res) => {
             FROM Productos
 
             WHERE id = ${producto_id}
+            AND activo = 1
         `;
 
 
@@ -410,6 +440,12 @@ const actualizarCantidadProductoEnCarrito = async (req, res) => {
 
 
         // =====================================
+        // ELIMINAR PRODUCTOS INACTIVOS
+        // =====================================
+
+        await limpiarProductosInactivos(usuario_id);
+
+        // =====================================
         // BUSCAR CARRITO ACTIVO
         // =====================================
 
@@ -449,19 +485,22 @@ const actualizarCantidadProductoEnCarrito = async (req, res) => {
         const productoCarritoDB = await sql.query`
 
             SELECT
-                id
+                cd.id
 
-            FROM CarritoDetalle
+            FROM CarritoDetalle cd
+            INNER JOIN Productos p
+            ON cd.producto_id = p.id
 
-            WHERE carrito_id = ${carritoId}
-            AND producto_id = ${producto_id}
+            WHERE cd.carrito_id = ${carritoId}
+            AND cd.producto_id = ${producto_id}
+            AND p.activo = 1
         `;
 
 
         if (productoCarritoDB.recordset.length === 0) {
 
             return res.status(404).json({
-                mensaje: 'Producto no está en el carrito'
+                mensaje: 'Producto no está en el carrito o ya no está disponible'
             });
 
         }
@@ -549,7 +588,7 @@ const eliminarProductoDelCarrito = async (req, res) => {
         // OBTENER PRODUCTO
         // =====================================
 
-        const { producto_id } = req.body;
+        const { producto_id } = req.params;
 
 
         // =====================================
@@ -655,13 +694,13 @@ const vaciarCarrito = async (req, res) => {
         // OBTENER USUARIO DEL TOKEN
         // =====================================
 
+  
+        console.log("DELETE /carrito recibido");
         const usuario_id = req.usuario.id;
-
-
         // =====================================
         // BUSCAR CARRITO ACTIVO
         // =====================================
-
+        console.log("usuario_id:", usuario_id);
         const carritoDB = await sql.query`
 
             SELECT
@@ -769,6 +808,12 @@ const convertirCarritoAPedido = async (req, res) => {
 
 
         // =====================================
+        // ELIMINAR PRODUCTOS INACTIVOS
+        // =====================================
+
+        await limpiarProductosInactivos(usuario_id);
+
+        // =====================================
         // BUSCAR CARRITO ACTIVO
         // =====================================
 
@@ -820,6 +865,7 @@ const convertirCarritoAPedido = async (req, res) => {
             ON cd.producto_id = p.id
 
             WHERE cd.carrito_id = ${carritoId}
+            AND p.activo = 1
         `;
 
 
