@@ -495,6 +495,46 @@ const cambiarRol = async (req, res) => {
     }
 
 };
+const obtenerMiPerfil = async (req, res) => {
+
+    try {
+
+        const { id } = req.usuario;
+
+        const usuario = await sql.query`
+            SELECT
+                id,
+                nombre,
+                correo,
+                rol,
+                direccion,
+                telefono,
+                baneado,
+                motivo_ban
+            FROM Usuarios
+            WHERE id = ${id}
+        `;
+
+        if (usuario.recordset.length === 0) {
+            return res.status(404).json({
+                mensaje: 'Usuario no encontrado'
+            });
+        }
+
+        res.json(usuario.recordset[0]);
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            mensaje: 'Error obteniendo perfil'
+        });
+
+    }
+
+};
+
 const verificarAdministrador = async (req, res) => {
 
     res.json({
@@ -628,6 +668,7 @@ module.exports = {
     cambiarRol,
     banearUsuario,
     verificarAdministrador,
-    verificarCorreo
+    verificarCorreo,
+    obtenerMiPerfil
 
 };

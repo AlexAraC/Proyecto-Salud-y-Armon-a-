@@ -2,12 +2,21 @@ import { useEffect, useState } from 'react';
 import CardProducto from './CardProducto';
 import DashboardInformacionCeo from './DashboardInformacionCeo';
 import DashboardInformacionInstitucional from './DashboardInformacionInstitucional';
-import { obtenerDestacados } from '../services/productosApi';
+import { obtenerDestacados, quitarDestacado } from '../services/productosApi';
 import './DashboardHomePage.css';
 
 function DashboardHomePage() {
 
     const [productos, setProductos] = useState([]);
+
+    const handleQuitarDestacado = async (id) => {
+        try {
+            await quitarDestacado(id);
+            setProductos(prev => prev.filter(p => p.id !== id));
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
 
@@ -34,6 +43,10 @@ function DashboardHomePage() {
     return (
 
         <div className="dashboard-home-page">
+
+            <button className="boton-volver" onClick={() => window.history.back()}>
+                ← Volver
+            </button>
 
             <h1 className="home-title fade-1">
                 Editor de la Página Principal
@@ -68,6 +81,7 @@ function DashboardHomePage() {
                             <CardProducto
                                 producto={producto}
                                 tipo="gestionHome"
+                                onQuitarDestacado={handleQuitarDestacado}
                             />
                         </div>
 

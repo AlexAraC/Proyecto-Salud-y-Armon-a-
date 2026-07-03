@@ -11,7 +11,8 @@ const {
     cambiarRol,
     banearUsuario,
     verificarAdministrador,
-    verificarCorreo
+    verificarCorreo,
+    obtenerMiPerfil
 } = require('../controllers/usuarios.controller');
 
 const {
@@ -34,6 +35,12 @@ router.get(
     verificarToken,
     verificarAdmin,
     verificarAdministrador
+);
+
+router.get(
+    '/me',
+    verificarToken,
+    obtenerMiPerfil
 );
 
 // =====================================

@@ -1,7 +1,10 @@
+// Importación de Express para crear rutas
 const express = require('express');
 
+// Enrutador de Express
 const router = express.Router();
 
+// Controladores de categorías
 const {
     verCategorias,
     crearCategoria,
@@ -9,6 +12,7 @@ const {
     eliminarCategoria
 } = require('../controllers/categorias.controller');
 
+// Middlewares de autenticación y autorización
 const {
     verificarToken,
     verificarAdmin

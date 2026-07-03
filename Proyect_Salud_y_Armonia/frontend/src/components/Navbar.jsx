@@ -1,6 +1,6 @@
 import './Navbar.css';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { useState, useEffect } from 'react';
 
@@ -32,9 +32,24 @@ const obtenerRolDesdeToken = (token) => {
 
 function Navbar() {
 
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [menuAbierto, setMenuAbierto] = useState(false);
 
     const [scrolled, setScrolled] = useState(false);
+
+    const scrollToAcerca = () => {
+        setMenuAbierto(false);
+        if (location.pathname !== '/') {
+            navigate('/');
+            setTimeout(() => {
+                document.getElementById('acerca-nosotros')?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        } else {
+            document.getElementById('acerca-nosotros')?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     useEffect(() => {
 
@@ -90,7 +105,7 @@ function Navbar() {
 
                 <Link to="/catalogo">Catálogo</Link>
 
-                <Link to="/acerca">Acerca de nosotros</Link>
+                <span className="navbar-link-acerca" onClick={scrollToAcerca}>Acerca de nosotros</span>
 
                 {
 
@@ -117,6 +132,13 @@ function Navbar() {
                         </Link>
 
                     ) : (
+                        <>
+
+                        <Link to="/perfil" onClick={() => setMenuAbierto(false)}>
+
+                            Perfil
+
+                        </Link>
 
                         <button
                             className="cerrar-sesion-btn"
@@ -126,6 +148,8 @@ function Navbar() {
                             Cerrar sesión
 
                         </button>
+
+                        </>
 
                     )
 

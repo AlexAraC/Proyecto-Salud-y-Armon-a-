@@ -1,3 +1,4 @@
+/* Controlador de autenticación. Maneja login, logout, recuperación de contraseña y cambio de contraseña. */
 const { sql } = require('../config/db');
 
 const bcrypt = require('bcrypt');
@@ -7,10 +8,12 @@ const jwt = require('jsonwebtoken');
 const transporter = require('../config/mail');
 
 
-// =====================================
-// LOGIN
-// =====================================
-
+/**
+ * Inicia sesión del usuario.
+ * @param {Object} req.body - { correo, contraseña }
+ * @returns {Object} Token JWT y mensaje de éxito.
+ * Endpoint: POST /api/auth/login
+ */
 const login = async (req, res) => {
 
     try {
@@ -123,10 +126,11 @@ const login = async (req, res) => {
 };
 
 
-// =====================================
-// LOGOUT
-// =====================================
-
+/**
+ * Cierra la sesión del usuario (invalida el token desde el cliente).
+ * @returns {Object} Mensaje de confirmación.
+ * Endpoint: POST /api/auth/logout
+ */
 const logout = async (req, res) => {
 
     try {
@@ -152,10 +156,12 @@ const logout = async (req, res) => {
 };
 
 
-// =====================================
-// ENVIAR CÓDIGO RECUPERACIÓN
-// =====================================
-
+/**
+ * Envía un código de recuperación al correo del usuario.
+ * @param {Object} req.body - { correo }
+ * @returns {Object} Mensaje indicando que el código fue enviado.
+ * Endpoint: POST /api/auth/enviar-codigo
+ */
 const enviarCodigoRecuperacion = async (req, res) => {
 
     try {
@@ -280,10 +286,12 @@ const enviarCodigoRecuperacion = async (req, res) => {
 };
 
 
-// =====================================
-// VERIFICAR CÓDIGO
-// =====================================
-
+/**
+ * Verifica que el código de recuperación sea válido y no haya expirado.
+ * @param {Object} req.body - { correo, codigo }
+ * @returns {Object} Mensaje indicando si el código es válido.
+ * Endpoint: POST /api/auth/verificar-codigo
+ */
 const verificarCodigo = async (req, res) => {
 
     try {

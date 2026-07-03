@@ -166,6 +166,25 @@ export const cambiarRol = async (
 };
 
 
+export const obtenerMiPerfil = async () => {
+
+    const respuesta = await axios.get(
+
+        `${API_URL}/me`,
+
+        {
+            headers: {
+                Authorization:
+                    `Bearer ${obtenerToken()}`
+            }
+        }
+
+    );
+
+    return respuesta.data;
+
+};
+
 export const toggleBan = async (
 
     id,

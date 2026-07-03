@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 
 import {
     obtenerPedidosAdmin,
@@ -23,6 +23,8 @@ function DashboardPedidos() {
     const [mostrarModalCliente, setMostrarModalCliente] = useState(false);
 
     const [clienteInfo, setClienteInfo] = useState(null);
+
+    const [confirmarRevertir, setConfirmarRevertir] = useState(null);
 
 
     const cargarPedidos = async () => {
@@ -493,13 +495,11 @@ function DashboardPedidos() {
                                                 Volver
 
                                             </button>
-
                                         }
-
 
                                         {
 
-                                            pedido.estado === 'Entregado' && pedido.tipo_envio === 'Express'
+                                            pedido.estado === 'Entregado'
 
                                             &&
 
@@ -508,52 +508,14 @@ function DashboardPedidos() {
                                                 className="btn-atras"
 
                                                 onClick={() =>
-
-                                                    cambiarEstado(
-
-                                                        pedido.id,
-
-                                                        'Enviado'
-
-                                                    )
-
+                                                    setConfirmarRevertir({
+                                                        id: pedido.id,
+                                                        estado: pedido.tipo_envio === 'Express' ? 'Enviado' : 'Pendiente'
+                                                    })
                                                 }
 
                                             >
-
                                                 Volver
-
-                                            </button>
-
-                                        }
-
-
-                                        {
-
-                                            pedido.estado === 'Entregado' && pedido.tipo_envio !== 'Express'
-
-                                            &&
-
-                                            <button
-
-                                                className="btn-atras"
-
-                                                onClick={() =>
-
-                                                    cambiarEstado(
-
-                                                        pedido.id,
-
-                                                        'Pendiente'
-
-                                                    )
-
-                                                }
-
-                                            >
-
-                                                Volver
-
                                             </button>
 
                                         }
@@ -651,6 +613,48 @@ function DashboardPedidos() {
                             }
 
                         </p>
+
+                        {
+                            detallePedido.pedido.tipo_envio === 'Express' &&
+                            <p>
+                                <strong>Dirección de entrega:</strong>
+                                {' '}
+                                {detallePedido.pedido.direccion_envio || detallePedido.pedido.usuario_direccion || 'No registrada'}
+                            </p>
+                        }
+
+                        <p>
+                            <strong>Teléfono de contacto:</strong>
+                            {' '}
+                            {detallePedido.pedido.usuario_telefono || 'No registrado'}
+                        </p>
+                        {
+                            detallePedido.pedido.usuario_telefono &&
+                            <p>
+                                <a
+                                    href={`https://wa.me/506${detallePedido.pedido.usuario_telefono.replace(/\D/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-enviar"
+                                    style={{
+                                        fontSize: 14,
+                                        padding: '8px 20px',
+                                        textDecoration: 'none',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: 6,
+                                        backgroundColor: '#25D366',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: 8,
+                                        fontWeight: 600,
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    WhatsApp
+                                </a>
+                            </p>
+                        }
 
                         <p>
 
@@ -880,6 +884,41 @@ function DashboardPedidos() {
 
             }
 
+            {
+                confirmarRevertir &&
+                <div
+                    className="modal-fondo"
+                    onClick={() => setConfirmarRevertir(null)}
+                >
+                    <div
+                        className="modal-detalles"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <h2>¿Revertir pedido?</h2>
+                        <p>¿Está seguro de que desea revertir el estado del pedido <strong>#{confirmarRevertir.id}</strong>?</p>
+                        <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
+                            <button
+                                className="btn-enviar"
+                                style={{ flex: 1, textAlign: 'center', padding: '9px 14px', minHeight: 38 }}
+                                onClick={() => {
+                                    cambiarEstado(confirmarRevertir.id, confirmarRevertir.estado);
+                                    setConfirmarRevertir(null);
+                                }}
+                            >
+                                Confirmar
+                            </button>
+                            <button
+                                className="btn-cerrar"
+                                style={{ flex: 1, textAlign: 'center', padding: '9px 14px', minHeight: 38, marginTop: 0 }}
+                                onClick={() => setConfirmarRevertir(null)}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
         </div>
 
     );
@@ -887,3 +926,7 @@ function DashboardPedidos() {
 }
 
 export default DashboardPedidos;
+
+
+
+

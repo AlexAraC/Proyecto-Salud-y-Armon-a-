@@ -48,7 +48,12 @@ export const actualizarComentario = async (id, comentario) => {
 export const eliminarComentario = async (id) => {
 
     const respuesta = await axios.delete(
-        `${API_URL}/${id}`
+        `${API_URL}/${id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${obtenerToken()}`
+            }
+        }
     );
 
     return respuesta.data;

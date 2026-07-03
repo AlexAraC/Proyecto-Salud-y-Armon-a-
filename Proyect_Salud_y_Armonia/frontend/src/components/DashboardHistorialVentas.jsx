@@ -23,7 +23,7 @@ function DashboardHistorialVentas() {
     const cargarPedidos = async () => {
         try {
             const respuesta = await obtenerPedidosAdmin();
-            setPedidos(respuesta.pedidos);
+            setPedidos((respuesta.pedidos || []).filter(p => p.estado === 'Entregado'));
         } catch (error) {
             console.log(error);
         }
@@ -173,6 +173,43 @@ function DashboardHistorialVentas() {
                             <strong>Tipo de envío:</strong>{' '}
                             {detallePedido.pedido.tipo_envio || 'Normal'}
                         </p>
+                        {detallePedido.pedido.tipo_envio === 'Express' && (
+                            <p>
+                                <strong>Dirección de entrega:</strong>{' '}
+                                {detallePedido.pedido.direccion_envio || detallePedido.pedido.usuario_direccion || 'No registrada'}
+                            </p>
+                        )}
+                        <p>
+                            <strong>Teléfono de contacto:</strong>{' '}
+                            {detallePedido.pedido.usuario_telefono || 'No registrado'}
+                        </p>
+                        {
+                            detallePedido.pedido.usuario_telefono &&
+                            <p>
+                                <a
+                                    href={`https://wa.me/506${detallePedido.pedido.usuario_telefono.replace(/\D/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn-enviar"
+                                    style={{
+                                        fontSize: 14,
+                                        padding: '8px 20px',
+                                        textDecoration: 'none',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: 6,
+                                        backgroundColor: '#25D366',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: 8,
+                                        fontWeight: 600,
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    WhatsApp
+                                </a>
+                            </p>
+                        }
                         <p>
                             <strong>Método de pago:</strong>{' '}
                             {detallePedido.pedido.metodo_pago}

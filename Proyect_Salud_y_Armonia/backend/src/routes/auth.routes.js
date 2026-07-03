@@ -1,7 +1,10 @@
+// Importación de Express para crear rutas
 const express = require('express');
 
+// Enrutador de Express
 const router = express.Router();
 
+// Controladores de autenticación
 const {
 
     login,

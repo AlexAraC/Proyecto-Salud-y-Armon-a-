@@ -28,6 +28,9 @@ from './pages/Catalogo/ConfirmarPedido'
 import CambioDePassword 
 from './pages/Login/CambioDePassword';
 
+import Perfil 
+from './pages/Login/Perfil';
+
 import Inicio 
 from './pages/Home/Inicio';
 
@@ -102,6 +105,10 @@ function App() {
                 <Route
                 path='/confirmar-pedido'
                 element={<ConfirmarPedido />}
+                />
+                <Route
+                path='/perfil'
+                element={<Perfil />}
                 />
 
         

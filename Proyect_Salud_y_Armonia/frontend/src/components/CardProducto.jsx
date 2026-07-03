@@ -1,3 +1,8 @@
+/* Componente que muestra la tarjeta de un producto individual.
+   Soporta tres modos: catálogo (con carrito), admin (con editar/eliminar/destacado)
+   y gestionHome (para administrar productos destacados).
+   Incluye un modal de detalle y un modal de edición. */
+
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -24,20 +29,24 @@ function CardProducto({
 
 }) {
 
+    // Estado para controlar la apertura/cierre del modal de detalles
     const [modalAbierto,
         setModalAbierto] =
         useState(false);
 
+    // Estado para controlar la apertura/cierre del modal de edición
     const [modalEditarAbierto,
         setModalEditarAbierto] =
         useState(false);
 
     const navigate = useNavigate();
 
+    // Cantidad seleccionada para agregar al carrito desde el modal
     const [cantidad,
         setCantidad] =
         useState(1);
 
+    // Formulario para editar los datos del producto
     const [formulario,
         setFormulario] =
         useState({
@@ -61,6 +70,7 @@ function CardProducto({
 
         });
 
+    // Guarda los cambios realizados en el formulario de edición
     const guardarCambios =
         async () => {
 
@@ -82,39 +92,44 @@ function CardProducto({
 
         <>
 
+            {/* TARJETA PRINCIPAL DEL PRODUCTO */}
             <div className="card-producto">
 
+                {/* Imagen del producto */}
                 <img
                     src={`http://localhost:3000${producto.imagen}`}
                     alt={producto.nombre}
                     className="producto-imagen"
                 />
 
+                {/* Nombre del producto */}
                 <h3>
                     {producto.nombre}
                 </h3>
 
+                {/* Precio del producto */}
                 <p>
                     ₡{producto.precio}
                 </p>
 
+                {/* Stock disponible */}
                 <p>
                     Stock: {producto.stock}
                 </p>
 
+                {/* Botón para ver detalles del producto */}
                 <button
                     className="boton-detalles"
                     onClick={() =>
-                        tipo === "catalogo"
-                            ? navigate(`/producto/${producto.id}`)
-                            : onVerDetalle
-                                ? onVerDetalle(producto)
-                                : setModalAbierto(true)
+                        onVerDetalle
+                            ? onVerDetalle(producto)
+                            : setModalAbierto(true)
                     }
                 >
                     Ver detalles
                 </button>
 
+                {/* Botón para agregar al carrito (solo en modo catálogo) */}
                 {tipo === "catalogo" && (
 
                     <button
@@ -133,29 +148,32 @@ function CardProducto({
 
                     <>
 
-                                    <button
-                                        className="boton-cerrar-modal"
-                                        onClick={() =>
-                                            setModalAbierto(
-                                                false
-                                            )
-                                        }
-                                    >
-                                        Cerrar
-                                    </button>
+                        <div className="admin-acciones">
 
-                        <button
-                            className="boton-eliminar"
-                            onClick={() =>
-                                onEliminar(
-                                    producto.id
-                                )
-                            }
-                        >
-                            Eliminar
-                        </button>
+                            <button
+                                className="boton-editar"
+                                onClick={() =>
+                                    setModalEditarAbierto(
+                                        true
+                                    )
+                                }
+                            >
+                                Editar
+                            </button>
 
-                   
+                            <button
+                                className="boton-eliminar"
+                                onClick={() =>
+                                    onEliminar(
+                                        producto.id
+                                    )
+                                }
+                            >
+                                Eliminar
+                            </button>
+
+                        </div>
+
                         <button
                             className={`boton-destacado ${
                                 producto.destacado
@@ -181,7 +199,6 @@ function CardProducto({
                             </span>
 
                         </button>
-                        
 
                     </>
 
@@ -191,9 +208,9 @@ function CardProducto({
 
             {modalAbierto && createPortal((
 
-                <div className="modal-fondo">
+                <div className="modal-fondo" onClick={() => setModalAbierto(false)}>
 
-                    <div className="modal-producto">
+                    <div className="modal-producto modal-producto-card" onClick={e => e.stopPropagation()}>
 
                         <div className="modal-grid">
 
@@ -222,10 +239,12 @@ function CardProducto({
                                     {producto.descripcion}
                                 </p>
 
-                                <p className="modal-stock">
-                                    Stock disponible: {' '}
-                                    <span>{producto.stock} unidades</span>
-                                </p>
+                                {tipo !== "catalogo" && (
+                                    <p className="modal-stock">
+                                        Stock disponible: {' '}
+                                        <span>{producto.stock} unidades</span>
+                                    </p>
+                                )}
 
                                 {tipo === "catalogo" && (
 
@@ -265,6 +284,11 @@ function CardProducto({
 
                                 <>
 
+                                    <p className="modal-stock">
+                                        Stock disponible: {' '}
+                                        <span>{producto.stock} unidades</span>
+                                    </p>
+
                                     <button
                                         className="boton-agregar"
                                         onClick={() => {
@@ -302,7 +326,25 @@ function CardProducto({
 
                             )}
 
-                            {tipo === "admin" && (
+                {tipo === "gestionHome" && onQuitarDestacado && (
+                    <button
+                        className="boton-destacado"
+                        onClick={() => onQuitarDestacado(producto.id)}
+                    >
+                        Quitar de destacados
+                    </button>
+                )}
+
+                {tipo === "gestionHome" && (
+                    <button
+                        className="boton-cerrar"
+                        onClick={() => setModalAbierto(false)}
+                    >
+                        Cerrar
+                    </button>
+                )}
+
+                {tipo === "admin" && (
 
                                 <>
 

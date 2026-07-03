@@ -1,5 +1,7 @@
+// Importación de Express para crear rutas
 const express = require('express');
 
+// Enrutador de Express
 const router = express.Router();
 
 
@@ -7,6 +9,7 @@ const router = express.Router();
 // CONTROLADOR
 // =====================================
 
+// Funciones del carrito de compras
 const {
 
     obtenerCarritoPorUsuario,

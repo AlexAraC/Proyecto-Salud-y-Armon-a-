@@ -18,6 +18,7 @@ import {
     vaciarCarritoLocal,
     calcularTotalLocal
 } from '../../services/carritoLocal';
+import { obtenerPedidosCliente, obtenerPedidoPorId } from '../../services/pedidosApi';
 import './CatalogoMain.css'
 
 function DesplegarCatalogo(){
@@ -30,6 +31,12 @@ function DesplegarCatalogo(){
     const [carritoAbierto, setCarritoAbierto] = useState(false);
     const [carritoItems, setCarritoItems] = useState([]);
     const [carritoTotal, setCarritoTotal] = useState(0);
+    const [historialAbierto, setHistorialAbierto] = useState(false);
+    const [historialOrden, setHistorialOrden] = useState('asc');
+    const [carritoHover, setCarritoHover] = useState(false);
+    const [pedidos, setPedidos] = useState([]);
+    const [detallesPedido, setDetallesPedido] = useState({});
+    const [pedidoAbierto, setPedidoAbierto] = useState({});
 
     const [notificacion, setNotificacion] = useState(false);
 
@@ -72,7 +79,30 @@ function DesplegarCatalogo(){
         cargarProductos();
         cargarCategorias();
         cargarCarrito();
-    }, [cargarCarrito]);
+        if (usuarioLogueado) {
+            obtenerPedidosCliente()
+                .then((data) => {
+                    if (data.pedidos) setPedidos(data.pedidos);
+                })
+                .catch(() => {});
+        }
+    }, [cargarCarrito, usuarioLogueado]);
+
+    const toggleDetallesPedido = async (id) => {
+        if (pedidoAbierto[id]) {
+            setPedidoAbierto((prev) => ({ ...prev, [id]: false }));
+            return;
+        }
+        if (detallesPedido[id]) {
+            setPedidoAbierto((prev) => ({ ...prev, [id]: true }));
+            return;
+        }
+        try {
+            const data = await obtenerPedidoPorId(id);
+            setDetallesPedido((prev) => ({ ...prev, [id]: data }));
+            setPedidoAbierto((prev) => ({ ...prev, [id]: true }));
+        } catch {}
+    };
 
     useEffect(() => {
         if (searchParams.get('carrito') === 'abierto') {
@@ -182,6 +212,8 @@ function DesplegarCatalogo(){
         return coincideBusqueda && coincideCategoria;
 
     });
+
+    const pedidosCrono = [...pedidos].reverse();
 
     return(
         <div className="catalogo-layout">
@@ -321,7 +353,7 @@ function DesplegarCatalogo(){
 
             </div>
 
-            <div className="boton-carrito-wrapper">
+            <div className="boton-carrito-wrapper" onMouseEnter={() => setCarritoHover(true)} onMouseLeave={() => setCarritoHover(false)}>
 
             <button
                 className={`boton-carrito-flotante ${carritoAbierto ? 'abierto' : ''} ${notificacion ? 'pulso' : ''}`}
@@ -367,6 +399,77 @@ function DesplegarCatalogo(){
                 )}
 
             </div>
+
+            {usuarioLogueado && pedidos.length > 0 && (
+                <button
+                    className={`boton-historial-flotante ${historialAbierto ? 'abierto' : ''} ${carritoHover ? 'carrito-hover' : ''}`}
+                    onClick={() => setHistorialAbierto(!historialAbierto)}
+                >
+                    <span className="historial-flotante-texto">Historial</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </button>
+            )}
+
+            <aside className={`historial-sidebar ${historialAbierto ? 'abierto' : ''}`}>
+                <div className="historial-sidebar-header">
+                    <h2>Historial de pedidos</h2>
+                    <div className="historial-sidebar-acciones">
+                        <button className="historial-orden-btn" onClick={() => setHistorialOrden(historialOrden === 'asc' ? 'desc' : 'asc')} title={historialOrden === 'asc' ? 'Más antiguos primero' : 'Más recientes primero'}>
+                            {historialOrden === 'asc' ? 'Más antiguos' : 'Más recientes'}
+                        </button>
+                        <button className="historial-sidebar-cerrar" onClick={() => setHistorialAbierto(false)}>✕</button>
+                    </div>
+                </div>
+                <div className="historial-sidebar-contenido">
+                    {pedidos.length === 0 ? (
+                        <p className="historial-sidebar-vacio">No hay pedidos realizados</p>
+                    ) : (
+                        <>
+                        {pedidos.some((p) => p.estado?.toLowerCase() === 'pendiente') && (
+                            <div className="historial-mensaje-pendiente">Gracias por comprar en Salud y Armonía Web, el administrador se comunicará con usted cuando el pedido esté listo.</div>
+                        )}
+                        {(historialOrden === 'asc' ? [...pedidos].reverse() : pedidos).map((p) => (
+                            <div key={p.id} className="historial-pedido">
+                                <div className="historial-pedido-header">
+                                    <span className="historial-pedido-id">Pedido {pedidosCrono.indexOf(p) + 1}</span>
+                                    <span className={`historial-pedido-estado ${p.estado?.toLowerCase()}`}>{p.estado}</span>
+                                </div>
+                                <div className="historial-pedido-body">
+                                    <p>Fecha: {new Date(p.fecha).toLocaleDateString('es-CR')}</p>
+                                    <p>Total: ₡{Number(p.total).toLocaleString('es-CR')}</p>
+                                    <p>Pago: {p.metodo_pago}</p>
+                                    <p>Envío: {p.tipo_envio}</p>
+                                </div>
+                                <button className="historial-pedido-btn" onClick={() => toggleDetallesPedido(p.id)}>
+                                    {pedidoAbierto[p.id] ? 'Ocultar detalles' : 'Ver detalles'}
+                                </button>
+                                {detallesPedido[p.id] && (
+                                    <div className={`historial-pedido-detalles ${pedidoAbierto[p.id] ? 'abierto' : ''}`}>
+                                        <div className="historial-pedido-detalles-inner">
+                                            <p className="historial-pedido-detalles-titulo">Productos</p>
+                                            {detallesPedido[p.id].productos?.map((prod, i) => (
+                                                <div key={i} className="historial-pedido-producto">
+                                                    <span>{prod.nombre_producto}</span>
+                                                    <span className="historial-pedido-producto-cant">x{prod.cantidad}</span>
+                                                    <span className="historial-pedido-producto-subtotal">₡{Number(prod.subtotal).toLocaleString('es-CR')}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                        </>
+                    )}
+                </div>
+            </aside>
+
+            {historialAbierto && (
+                <div className="historial-overlay" onClick={() => setHistorialAbierto(false)} />
+            )}
 
             <aside className={`carrito-sidebar ${carritoAbierto ? 'abierto' : ''}`}>
 

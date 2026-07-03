@@ -140,6 +140,26 @@
 
 }
 
+.boton-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    margin-bottom: 20px;
+    background: rgba(239,231,220,0.72);
+    color: #3A312B;
+    border: 1px solid rgba(58,49,43,0.18);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background .2s ease;
+}
+
+.boton-volver:hover {
+    background: rgba(206, 198, 189, 0.72);
+}
+
 .home-title {
 
     position: relative;
@@ -169,9 +189,10 @@
 =========================== */
 
 .grid-productos {
-
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
     margin-bottom: 50px;
-
 }
 
 .producto-destacado-animado {

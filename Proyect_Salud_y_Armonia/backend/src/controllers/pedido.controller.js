@@ -385,7 +385,10 @@ const obtenerPedidoPorId = async (req, res) => {
                 p.estado,
                 p.total,
                 p.metodo_pago,
-                p.tipo_envio
+                p.tipo_envio,
+                p.direccion_envio,
+                u.direccion AS usuario_direccion,
+                u.telefono AS usuario_telefono
 
             FROM Pedidos p
             LEFT JOIN Usuarios u
