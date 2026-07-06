@@ -109,6 +109,8 @@ function Inicio() {
     const [textosInfo, setTextosInfo] = useState(INFO_UBICANOS.map(() => ''));
     const [lineaActual, setLineaActual] = useState(-1);
     const [mostrarLineas, setMostrarLineas] = useState(false);
+    const [contactBtnActivo, setContactBtnActivo] = useState(false);
+    const [ubicanosDestello, setUbicanosDestello] = useState(false);
 
 
     useEffect(() => {
@@ -174,7 +176,7 @@ function Inicio() {
 
             }
 
-        }, 20);
+        }, 10);
 
         return () => clearInterval(interval);
 
@@ -224,7 +226,7 @@ function Inicio() {
 
             }
 
-        }, 50);
+        }, 25);
 
         return () => clearInterval(interval);
 
@@ -263,7 +265,7 @@ function Inicio() {
             });
             if (i >= texto.length) {
                 clearInterval(interval);
-                setTimeout(() => setLineaActual(prev => prev + 1), 300);
+                setTimeout(() => setLineaActual(prev => prev + 1), 120);
             }
         }, 25);
 
@@ -272,7 +274,7 @@ function Inicio() {
 
     useEffect(() => {
         if (lineaActual >= INFO_UBICANOS.length) {
-            const timer = setTimeout(() => setMostrarLineas(true), 400);
+            const timer = setTimeout(() => setMostrarLineas(true), 150);
             return () => clearTimeout(timer);
         }
     }, [lineaActual]);
@@ -346,13 +348,13 @@ function Inicio() {
                                         clearInterval(interval2);
                                         setMostrarVisionTexto(true);
                                     }
-                                }, 80);
-                            }, 400);
+                                }, 35);
+                            }, 150);
                         }
-                    }, 80);
-                }, 300);
+                    }, 35);
+                }, 120);
             }
-        }, 60);
+        }, 25);
 
         return () => clearInterval(intervalA);
     }, [acercaVisible]);
@@ -361,7 +363,7 @@ function Inicio() {
         if (!fundadorVisible) return;
         const timer = setTimeout(() => {
             setFundadorContenedorExpandido(true);
-        }, 200);
+        }, 80);
         return () => clearTimeout(timer);
     }, [fundadorVisible]);
 
@@ -386,10 +388,10 @@ function Inicio() {
                             clearInterval(intervalN);
                             setFundadorNombreCompleto(true);
                         }
-                    }, 60);
-                }, 300);
+                    }, 25);
+                }, 120);
             }
-        }, 60);
+        }, 25);
 
         return () => clearInterval(intervalA);
     }, [fundadorContenedorExpandido, fundador]);
@@ -400,8 +402,8 @@ function Inicio() {
             setFundadorLineaExpandida(true);
             setTimeout(() => {
                 setMostrarFundadorBio(true);
-            }, 600);
-        }, 200);
+            }, 250);
+        }, 80);
         return () => clearTimeout(timer);
     }, [fundadorNombreCompleto]);
 
@@ -416,7 +418,7 @@ function Inicio() {
             if (i >= SL.length) {
                 clearInterval(interval);
             }
-        }, 40);
+        }, 15);
 
         return () => clearInterval(interval);
     }, [mostrarFundadorBio, fundador]);
@@ -442,12 +444,12 @@ function Inicio() {
                             clearInterval(intervalI);
                             setTimeout(() => {
                                 setComentarioContenedorVisible(true);
-                            }, 300);
+                            }, 120);
                         }
-                    }, 40);
-                }, 300);
+                    }, 20);
+                }, 120);
             }
-        }, 50);
+        }, 20);
 
         return () => clearInterval(intervalT);
     }, [comentarioVisible]);
@@ -495,8 +497,21 @@ function Inicio() {
                 </button>
 
                 <button
-                    className={`hero-btn hero-btn-outline ${mostrarBtn2 ? 'visible' : ''}`}
-                    onClick={() => navigate('/contacto')}
+                    className={`hero-btn hero-btn-outline ${mostrarBtn2 ? 'visible' : ''} ${contactBtnActivo ? 'contactenos-activo' : ''}`}
+                    onClick={() => {
+                        setContactBtnActivo(true);
+                        setTimeout(() => setContactBtnActivo(false), 700);
+                        setTimeout(() => {
+                            const el = document.getElementById('ubicanos');
+                            if (el) {
+                                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                setTimeout(() => {
+                                    setUbicanosDestello(true);
+                                    setTimeout(() => setUbicanosDestello(false), 1200);
+                                }, 700);
+                            }
+                        }, 220);
+                    }}
                 >
 
                     Contáctenos
@@ -537,7 +552,7 @@ function Inicio() {
                 </section>
             )}
 
-            <section ref={ubicanosRef} className={`ubicanos ${ubicanosVisible ? 'visible' : ''}`}>
+            <section id="ubicanos" ref={ubicanosRef} className={`ubicanos ${ubicanosVisible ? 'visible' : ''} ${ubicanosDestello ? 'destello' : ''}`}>
                 <div className="ubicanos-contenedor">
                     <h2 className="ubicanos-titulo">Ubícanos</h2>
                     <div className="ubicanos-grid">

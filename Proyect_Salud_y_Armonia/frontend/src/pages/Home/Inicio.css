@@ -22,7 +22,7 @@
 
     transform: translateY(-100vh);
 
-    transition: opacity .8s ease, transform .8s ease;
+    transition: opacity .4s ease, transform .4s ease;
 
 }
 
@@ -116,7 +116,7 @@
 
     border: none;
 
-    transition: .3s;
+    transition: .15s;
 
     opacity: 0;
 
@@ -131,7 +131,7 @@
 
     transform: translateY(0);
 
-    transition: opacity .5s ease, transform .5s ease;
+    transition: opacity .25s ease, transform .25s ease;
 
 }
 
@@ -198,7 +198,7 @@
 
     transform: translateY(-20px);
 
-    transition: opacity .6s ease-out, transform .6s ease-out;
+    transition: opacity .3s ease-out, transform .3s ease-out;
 
 }
 
@@ -310,7 +310,7 @@
 
     opacity: 0;
 
-    transition: opacity .8s ease-out, transform .8s ease-out, box-shadow .5s ease;
+    transition: opacity .4s ease-out, transform .4s ease-out, box-shadow .25s ease;
 
 }
 
@@ -331,7 +331,7 @@
     width: 100px;
     flex-shrink: 0;
     opacity: 0;
-    transition: opacity .8s ease-out .6s;
+    transition: opacity .4s ease-out .3s;
 }
 
 .destacados-item.visible .destacado-decoracion {
@@ -467,7 +467,7 @@
 
     transform: translateY(40px);
 
-    transition: opacity .7s ease-out .3s, transform .7s ease-out .3s;
+    transition: opacity .35s ease-out .15s, transform .35s ease-out .15s;
 
 }
 
@@ -509,7 +509,7 @@
 
     transform: translateY(20px);
 
-    transition: opacity .7s ease-out .1s, transform .7s ease-out .1s;
+    transition: opacity .35s ease-out .05s, transform .35s ease-out .05s;
 
 }
 
@@ -552,7 +552,7 @@
 
     transform: translateY(20px);
 
-    transition: opacity .7s ease-out .5s, transform .7s ease-out .5s;
+    transition: opacity .35s ease-out .25s, transform .35s ease-out .25s;
 
 }
 
@@ -629,7 +629,7 @@
 
     opacity: 0;
 
-    transition: opacity .6s ease-out 1s;
+    transition: opacity .3s ease-out .5s;
 
 }
 
@@ -924,7 +924,7 @@
 .acerca {
     padding: 60px 5%;
     opacity: 0;
-    transition: opacity .6s ease;
+    transition: opacity .3s ease;
 }
 
 .acerca.visible {
@@ -956,7 +956,7 @@
     gap: 16px;
     opacity: 0;
     transform: translateX(-60px);
-    transition: opacity .7s ease .3s, transform .7s ease .3s;
+    transition: opacity .35s ease .15s, transform .35s ease .15s;
 }
 
 .acerca.visible .acerca-logo {
@@ -979,7 +979,7 @@
     color: #6B4F3A;
     margin-top: 8px;
     opacity: 0;
-    transition: opacity .5s ease 1.8s;
+    transition: opacity .3s ease .45s;
 }
 
 .acerca.visible .acerca-contacto {
@@ -1026,7 +1026,7 @@
     text-align: justify;
     opacity: 0;
     transform: translateY(14px);
-    transition: opacity .6s ease, transform .6s ease;
+    transition: opacity .3s ease, transform .3s ease;
 }
 
 .acerca-parrafo.visible {
@@ -1064,7 +1064,7 @@
 
 .ubicanos {
     opacity: 0;
-    transition: opacity .6s ease .3s;
+    transition: opacity .3s ease .15s;
 }
 
 .ubicanos.visible {
@@ -1079,7 +1079,7 @@
     overflow: hidden;
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity .6s ease .5s, transform .6s ease .5s;
+    transition: opacity .3s ease .25s, transform .3s ease .25s;
 }
 
 .ubicanos.visible .ubicanos-contenedor {
@@ -1110,7 +1110,7 @@
     overflow: hidden;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity .6s ease .5s, transform .6s ease .5s;
+    transition: opacity .3s ease .25s, transform .3s ease .25s;
 }
 
 .ubicanos.visible .ubicanos-mapa {
@@ -1148,7 +1148,7 @@
     width: 0;
     height: 1px;
     background: #D4B896;
-    transition: width .5s ease;
+    transition: width .25s ease;
 }
 
 .ubicanos-info.mostrar-lineas .ubicanos-linea-texto::after {
@@ -1185,7 +1185,7 @@
 .fundador {
     padding: 60px 5%;
     opacity: 0;
-    transition: opacity .6s ease;
+    transition: opacity .3s ease;
 }
 
 .fundador.visible {
@@ -1222,7 +1222,7 @@
     padding: 40px 40px 40px 20px;
     overflow: hidden;
     clip-path: inset(0 100% 0 0);
-    transition: clip-path .8s ease;
+    transition: clip-path .4s ease;
 }
 
 .fundador-contenedor.expandido {
@@ -1233,7 +1233,7 @@
     flex: 0 0 380px;
     opacity: 0;
     transform: translateX(-60px);
-    transition: opacity .7s ease .3s, transform .7s ease .3s;
+    transition: opacity .35s ease .15s, transform .35s ease .15s;
     z-index: 1;
 }
 
@@ -1302,7 +1302,7 @@
     width: 0;
     height: 2px;
     background: #E8D5B0;
-    transition: width .6s ease;
+    transition: width .3s ease;
 }
 
 .fundador-nombre.linea-expandida::after {
@@ -1317,7 +1317,7 @@
     text-align: justify;
     opacity: 0;
     transform: translateY(14px);
-    transition: opacity .6s ease, transform .6s ease;
+    transition: opacity .3s ease, transform .3s ease;
 }
 
 .fundador-bio.visible {
@@ -1394,7 +1394,7 @@
     gap: 16px;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity .6s ease, transform .6s ease;
+    transition: opacity .3s ease, transform .3s ease;
 }
 
 .comentario-contenedor.visible {
@@ -1521,4 +1521,28 @@
     .ubicanos-grid {
         padding: 20px 16px 24px;
     }
+}
+
+/* ── Animación botón Contáctenos ── */
+.hero-btn-outline.contactenos-activo {
+    animation: contactenos-pulso .6s ease forwards;
+}
+
+@keyframes contactenos-pulso {
+    0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(0,0,0,0.25); }
+    30%  { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(0,0,0,0.08); }
+    60%  { transform: scale(0.97); box-shadow: 0 0 0 4px rgba(0,0,0,0.04); }
+    100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+}
+
+/* ── Destello de llegada en sección Ubícanos ── */
+.ubicanos.destello .ubicanos-contenedor {
+    animation: ubicanos-destello 1.1s ease;
+}
+
+@keyframes ubicanos-destello {
+    0%   { box-shadow: 0 0 0 0 rgba(163, 177, 138, 0); }
+    25%  { box-shadow: 0 0 0 8px rgba(163, 177, 138, 0.45); }
+    60%  { box-shadow: 0 0 0 16px rgba(163, 177, 138, 0.2); }
+    100% { box-shadow: 0 0 0 0 rgba(163, 177, 138, 0); }
 }

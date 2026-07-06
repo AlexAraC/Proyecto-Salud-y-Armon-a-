@@ -68,8 +68,8 @@ function Navbar() {
     const cerrarSesion = () => {
 
         localStorage.removeItem('token');
-
-        window.location.href = '/login';
+        localStorage.removeItem('loginTime');
+        window.location.href = '/';
 
     };
 

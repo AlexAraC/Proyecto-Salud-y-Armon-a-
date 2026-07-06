@@ -1,0 +1,105 @@
+.sem-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: sem-fadeIn .2s ease;
+}
+
+@keyframes sem-fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.sem-card {
+    background: #FAF5EB;
+    border-radius: 16px;
+    padding: 40px 36px 32px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    animation: sem-slideUp .25s ease;
+}
+
+@keyframes sem-slideUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.sem-icono {
+    font-size: 48px;
+    margin-bottom: 16px;
+    line-height: 1;
+}
+
+.sem-titulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    color: #3A312B;
+    margin-bottom: 12px;
+}
+
+.sem-mensaje {
+    font-size: 15px;
+    color: #6B4F3A;
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.sem-acciones {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.sem-btn {
+    padding: 11px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: .2s;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.sem-btn-principal {
+    background: #A3B18A;
+    color: #fff;
+}
+
+.sem-btn-principal:hover {
+    background: #3A312B;
+}
+
+.sem-btn-secundario {
+    background: transparent;
+    color: #3A312B;
+    border: 2px solid #3A312B;
+}
+
+.sem-btn-secundario:hover {
+    background: #3A312B;
+    color: #fff;
+}
+
+@media (max-width: 480px) {
+    .sem-card {
+        padding: 32px 20px 24px;
+    }
+    .sem-titulo {
+        font-size: 19px;
+    }
+    .sem-acciones {
+        flex-direction: column;
+    }
+    .sem-btn {
+        width: 100%;
+    }
+}

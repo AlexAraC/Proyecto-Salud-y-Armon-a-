@@ -29,6 +29,10 @@ const conectarDB = async () => {
 
         console.log('Conectado a SQL Server');
 
+        // Crear admin por defecto si no existe ninguno
+        const { seedAdmin } = require('./seedAdmin');
+        await seedAdmin();
+
     } catch (error) {
 
         console.log(error);

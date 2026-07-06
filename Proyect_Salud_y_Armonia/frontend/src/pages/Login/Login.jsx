@@ -35,15 +35,10 @@ function Login() {
                 formulario
             );
 
-            localStorage.setItem(
-                'token',
+            localStorage.setItem('token', respuesta.data.token);
+            localStorage.setItem('loginTime', Date.now().toString());
 
-                respuesta.data.token
-            );
-
-            alert('Login correcto');
-
-            window.location.href = '/administracion';
+            window.location.href = '/';
 
         } catch (error) {
 

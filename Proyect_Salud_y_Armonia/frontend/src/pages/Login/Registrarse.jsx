@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { crearUsuario } from '../../services/usuariosApi';
+import { evaluarPassword, mensajeErrorPassword } from '../../utils/passwordStrength';
+import PasswordStrengthBar from '../../components/PasswordStrengthBar';
 import './Registrarse.css';
 import logo from '../../assets/logo.png';
 
@@ -15,19 +17,21 @@ function Register() {
         rol: 'usuario'
     });
 
+    const [passwordInfo, setPasswordInfo] = useState(evaluarPassword(''));
+    const [mostrarReglas, setMostrarReglas] = useState(false);
+    const passwordRef = useRef(null);
+
     const handleChange = (e) => {
-
-        setFormulario({
-            ...formulario,
-            [e.target.name]: e.target.value
-        });
-
+        const { name, value } = e.target;
+        setFormulario({ ...formulario, [name]: value });
+        if (name === 'contraseña') {
+            setPasswordInfo(evaluarPassword(value));
+        }
     };
 
     const [registrado, setRegistrado] = useState(false);
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,22 +40,27 @@ function Register() {
             return;
         }
 
+        const errorPwd = mensajeErrorPassword(formulario.contraseña);
+        if (errorPwd) {
+            // Mostrar el panel y hacer scroll al campo para que el usuario vea qué falta
+            setMostrarReglas(true);
+            setTimeout(() => {
+                passwordRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                passwordRef.current?.focus();
+            }, 50);
+            return;
+        }
+
         try {
-
-            const respuesta = await crearUsuario(formulario);
+            await crearUsuario(formulario);
             setRegistrado(true);
-
         } catch (error) {
-
             console.log(error);
-
             alert(
                 error.response?.data?.mensaje ||
                 'Error al registrar'
             );
-
         }
-
     };
 
     if (registrado) {
@@ -87,29 +96,16 @@ function Register() {
     }
 
     return (
-
         <div className="register-contenedor">
-
             <div className="register-card">
 
-                <img
-                    src={logo}
-                    alt="Logo"
-                    className="register-logo"
-                />
+                <img src={logo} alt="Logo" className="register-logo" />
 
-                <h1 className="register-titulo">
-                    Crear Cuenta
-                </h1>
+                <h1 className="register-titulo">Crear Cuenta</h1>
 
-                <p className="register-subtitulo">
-                    Regístrate para comenzar
-                </p>
+                <p className="register-subtitulo">Regístrate para comenzar</p>
 
-                <form
-                    className="register-form"
-                    onSubmit={handleSubmit}
-                >
+                <form className="register-form" onSubmit={handleSubmit}>
 
                     <input
                         className="register-input"
@@ -127,13 +123,21 @@ function Register() {
                         onChange={handleChange}
                     />
 
-                    <input
-                        className="register-input"
-                        type="password"
-                        name="contraseña"
-                        placeholder="Contraseña"
-                        onChange={handleChange}
-                    />
+                    <div className="register-password-wrapper">
+                        <input
+                            ref={passwordRef}
+                            className="register-input"
+                            type="password"
+                            name="contraseña"
+                            placeholder="Contraseña"
+                            onChange={handleChange}
+                            onFocus={() => setMostrarReglas(true)}
+                        />
+
+                        {mostrarReglas && (
+                            <PasswordStrengthBar info={passwordInfo} />
+                        )}
+                    </div>
 
                     <input
                         className="register-input"
@@ -161,22 +165,14 @@ function Register() {
                 </form>
 
                 <div className="register-enlaces">
-
-                    <Link
-                        className="register-link"
-                        to="/login"
-                    >
+                    <Link className="register-link" to="/login">
                         ¿Ya tienes cuenta? Inicia sesión
                     </Link>
-
                 </div>
 
             </div>
-
         </div>
-
     );
-
 }
 
 export default Register;
