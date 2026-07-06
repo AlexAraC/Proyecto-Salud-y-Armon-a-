@@ -18,7 +18,7 @@ import {
     vaciarCarritoLocal,
     calcularTotalLocal
 } from '../../services/carritoLocal';
-import { obtenerPedidosCliente, obtenerPedidoPorId } from '../../services/pedidosApi';
+import { obtenerPedidosCliente, obtenerPedidoPorId, cancelarPedido } from '../../services/pedidosApi';
 import './CatalogoMain.css'
 
 function DesplegarCatalogo(){
@@ -37,6 +37,7 @@ function DesplegarCatalogo(){
     const [pedidos, setPedidos] = useState([]);
     const [detallesPedido, setDetallesPedido] = useState({});
     const [pedidoAbierto, setPedidoAbierto] = useState({});
+    const [cancelando, setCancelando] = useState(null);
 
     const [notificacion, setNotificacion] = useState(false);
 
@@ -102,6 +103,28 @@ function DesplegarCatalogo(){
             setDetallesPedido((prev) => ({ ...prev, [id]: data }));
             setPedidoAbierto((prev) => ({ ...prev, [id]: true }));
         } catch {}
+    };
+
+    const handleCancelarPedido = async (id) => {
+        if (!window.confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
+        setCancelando(id);
+        try {
+            await cancelarPedido(id);
+            // Refrescar lista de pedidos
+            const data = await obtenerPedidosCliente();
+            if (data.pedidos) setPedidos(data.pedidos);
+            
+            // Mostrar notificación de éxito
+            setNotificacion(true);
+            setTimeout(() => setNotificacion(false), 2000);
+            
+            // Opcional: alert de confirmación
+            alert('Pedido cancelado correctamente');
+        } catch (err) {
+            alert(err.response?.data?.mensaje || 'Error al cancelar el pedido');
+        } finally {
+            setCancelando(null);
+        }
     };
 
     useEffect(() => {
@@ -435,7 +458,7 @@ function DesplegarCatalogo(){
                             <div key={p.id} className="historial-pedido">
                                 <div className="historial-pedido-header">
                                     <span className="historial-pedido-id">Pedido {pedidosCrono.indexOf(p) + 1}</span>
-                                    <span className={`historial-pedido-estado ${p.estado?.toLowerCase()}`}>{p.estado}</span>
+                                    <span className={`historial-pedido-estado historial-pedido-estado--${p.estado?.toLowerCase().replace(/\s+/g, '-')}`}>{p.estado}</span>
                                 </div>
                                 <div className="historial-pedido-body">
                                     <p>Fecha: {new Date(p.fecha).toLocaleDateString('es-CR')}</p>
@@ -446,6 +469,15 @@ function DesplegarCatalogo(){
                                 <button className="historial-pedido-btn" onClick={() => toggleDetallesPedido(p.id)}>
                                     {pedidoAbierto[p.id] ? 'Ocultar detalles' : 'Ver detalles'}
                                 </button>
+                                {p.estado !== 'Entregado' && p.estado !== 'Cancelado' && p.estado !== 'Listo para recoger' && (
+                                    <button
+                                        className="historial-pedido-btn-cancelar"
+                                        onClick={() => handleCancelarPedido(p.id)}
+                                        disabled={cancelando === p.id}
+                                    >
+                                        {cancelando === p.id ? 'Cancelando...' : 'Cancelar pedido'}
+                                    </button>
+                                )}
                                 {detallesPedido[p.id] && (
                                     <div className={`historial-pedido-detalles ${pedidoAbierto[p.id] ? 'abierto' : ''}`}>
                                         <div className="historial-pedido-detalles-inner">

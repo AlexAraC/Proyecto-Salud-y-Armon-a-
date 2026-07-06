@@ -901,22 +901,37 @@
     text-transform: capitalize;
 }
 
-.historial-pedido-estado.pendiente {
+.historial-pedido-estado.pendiente,
+.historial-pedido-estado--pendiente {
     background: #fcf8e3;
     color: #8a6d3b;
 }
 
-.historial-pedido-estado.enviado {
+.historial-pedido-estado.listo,
+.historial-pedido-estado--listo {
     background: #d9edf7;
     color: #31708f;
 }
 
-.historial-pedido-estado.entregado {
+.historial-pedido-estado--listo-para-recoger {
+    background: #E2D9F3;
+    color: #5A3E8E;
+}
+
+.historial-pedido-estado.enviado,
+.historial-pedido-estado--enviado {
+    background: #d9edf7;
+    color: #31708f;
+}
+
+.historial-pedido-estado.entregado,
+.historial-pedido-estado--entregado {
     background: #dff0d8;
     color: #3c763d;
 }
 
-.historial-pedido-estado.cancelado {
+.historial-pedido-estado.cancelado,
+.historial-pedido-estado--cancelado {
     background: #f2dede;
     color: #a94442;
 }
@@ -943,6 +958,33 @@
 .historial-pedido-btn:hover {
     background: #9E9E9E;
     color: #fff;
+}
+
+.historial-pedido-btn-cancelar {
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 6px 14px;
+    background: transparent;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.historial-pedido-btn-cancelar:hover:not(:disabled) {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.historial-pedido-btn-cancelar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: transparent;
+    color: #e74c3c;
+    border-color: #e74c3c;
 }
 
 .historial-pedido-detalles {

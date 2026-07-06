@@ -139,8 +139,8 @@ const crearPedido = async (req, res) => {
 
             VALUES
             (
-                ${usuario_id},
-                ${estado},
+                ${id},
+                'Pendiente',
                 ${total},
                 ${metodo_pago}
             )
@@ -292,6 +292,26 @@ const cancelarPedido = async (req, res) => {
 
             return res.status(400).json({
                 mensaje: 'El pedido ya está cancelado'
+            });
+
+        }
+
+        // =====================================
+        // VALIDAR NO ENTREGADO NI LISTO PARA RECOGER
+        // =====================================
+
+        if (pedido.estado === 'Entregado') {
+
+            return res.status(400).json({
+                mensaje: 'No se puede cancelar un pedido ya entregado'
+            });
+
+        }
+
+        if (pedido.estado === 'Listo para recoger') {
+
+            return res.status(400).json({
+                mensaje: 'No se puede cancelar un pedido listo para recoger. Contacte al administrador.'
             });
 
         }
@@ -454,6 +474,8 @@ const actualizarEstadoPedido = async (req, res) => {
 
         const estadosValidos = [
             'Pendiente',
+            'Listo para recoger',
+            'Listo',
             'Enviado',
             'Entregado',
             'Cancelado'
@@ -504,12 +526,14 @@ const actualizarEstadoPedido = async (req, res) => {
 
         const transicionesValidas = {
             'Normal': {
-                'Pendiente': ['Entregado'],
+                'Pendiente': ['Listo para recoger'],
+                'Listo para recoger': ['Entregado', 'Pendiente'],
                 'Entregado': ['Pendiente']
             },
             'Express': {
-                'Pendiente': ['Enviado', 'Entregado'],
-                'Enviado': ['Entregado', 'Pendiente'],
+                'Pendiente': ['Enviado', 'Listo', 'Entregado'],
+                'Enviado':   ['Listo', 'Entregado', 'Pendiente'],
+                'Listo':     ['Entregado', 'Pendiente'],
                 'Entregado': ['Pendiente', 'Enviado']
             }
         };

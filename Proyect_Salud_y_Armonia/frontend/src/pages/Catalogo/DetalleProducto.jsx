@@ -16,6 +16,7 @@ function DetalleProducto() {
     const [modalReporte, setModalReporte] = useState(false);
     const [mensajeReporte, setMensajeReporte] = useState('');
     const [enviando, setEnviando] = useState(false);
+    const [reporteEnviado, setReporteEnviado] = useState(false);
 
     useEffect(() => {
         const cargar = async () => {
@@ -175,15 +176,24 @@ function DetalleProducto() {
                         <p className="modal-reporte-sub">Producto: {producto.nombre}</p>
                         {enviando ? (
                             <p className="modal-reporte-enviando">Enviando reporte...</p>
+                        ) : reporteEnviado ? (
+                            <p className="modal-reporte-exito">✓ Reporte enviado correctamente</p>
                         ) : (
                             <form className="modal-reporte-form" onSubmit={async (e) => {
                                 e.preventDefault();
                                 if (!mensajeReporte.trim()) return;
                                 setEnviando(true);
                                 try {
-                                    await crearComentario({ tipo: 'reporte', contenido: mensajeReporte });
-                                    setModalReporte(false);
+                                    await crearComentario({
+                                        tipo: 'reporte',
+                                        contenido: `[${producto.nombre}] ${mensajeReporte}`
+                                    });
                                     setMensajeReporte('');
+                                    setReporteEnviado(true);
+                                    setTimeout(() => {
+                                        setModalReporte(false);
+                                        setReporteEnviado(false);
+                                    }, 2000);
                                 } catch (err) {
                                     alert(err.response?.data?.mensaje || 'Error al enviar el reporte');
                                 } finally {

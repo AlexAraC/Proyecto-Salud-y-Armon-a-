@@ -201,6 +201,12 @@ function DashboardPedidos() {
                         </button>
 
                         <button
+                            onClick={() => setFiltro('Listo para recoger')}
+                        >
+                            Listo para recoger
+                        </button>
+
+                        <button
                             onClick={() => setFiltro('Enviado')}
                         >
                             Enviado
@@ -297,7 +303,7 @@ function DashboardPedidos() {
 
                                             className={
 
-                                                `estado ${pedido.estado}`
+                                                `estado estado-${pedido.estado.toLowerCase().replace(/\s+/g, '-')}`
 
                                             }
 
@@ -414,6 +420,37 @@ function DashboardPedidos() {
 
                                             <button
 
+                                                className="btn-listo-recoger"
+
+                                                onClick={() =>
+
+                                                    cambiarEstado(
+
+                                                        pedido.id,
+
+                                                        'Listo para recoger'
+
+                                                    )
+
+                                                }
+
+                                            >
+
+                                                Listo para recoger
+
+                                            </button>
+
+                                        }
+
+
+                                        {
+
+                                            pedido.estado === 'Listo para recoger'
+
+                                            &&
+
+                                            <button
+
                                                 className="btn-entregar"
 
                                                 onClick={() =>
@@ -431,6 +468,37 @@ function DashboardPedidos() {
                                             >
 
                                                 Entregar
+
+                                            </button>
+
+                                        }
+
+
+                                        {
+
+                                            pedido.estado === 'Listo para recoger'
+
+                                            &&
+
+                                            <button
+
+                                                className="btn-atras"
+
+                                                onClick={() =>
+
+                                                    cambiarEstado(
+
+                                                        pedido.id,
+
+                                                        'Pendiente'
+
+                                                    )
+
+                                                }
+
+                                            >
+
+                                                Volver
 
                                             </button>
 

@@ -250,22 +250,37 @@
     text-transform: capitalize;
 }
 
-.perfil-pedido-estado.pendiente {
+.perfil-pedido-estado.pendiente,
+.perfil-pedido-estado--pendiente {
     background: #fcf8e3;
     color: #8a6d3b;
 }
 
-.perfil-pedido-estado.enviado {
+.perfil-pedido-estado.listo,
+.perfil-pedido-estado--listo {
     background: #d9edf7;
     color: #31708f;
 }
 
-.perfil-pedido-estado.entregado {
+.perfil-pedido-estado--listo-para-recoger {
+    background: #E2D9F3;
+    color: #5A3E8E;
+}
+
+.perfil-pedido-estado.enviado,
+.perfil-pedido-estado--enviado {
+    background: #d9edf7;
+    color: #31708f;
+}
+
+.perfil-pedido-estado.entregado,
+.perfil-pedido-estado--entregado {
     background: #dff0d8;
     color: #3c763d;
 }
 
-.perfil-pedido-estado.cancelado {
+.perfil-pedido-estado.cancelado,
+.perfil-pedido-estado--cancelado {
     background: #f2dede;
     color: #a94442;
 }
@@ -281,8 +296,8 @@
 }
 
 .perfil-pedido-btn {
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
     padding: 8px 18px;
     background: transparent;
     color: #A3B18A;
@@ -297,6 +312,40 @@
 .perfil-pedido-btn:hover {
     background: #A3B18A;
     color: #fff;
+}
+
+.perfil-pedido-btn-cancelar {
+    margin-top: 0;
+    margin-left: 0;
+    padding: 8px 18px;
+    background: transparent;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.perfil-pedido-btn-cancelar:hover:not(:disabled) {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.perfil-pedido-btn-cancelar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: transparent;
+    color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.perfil-pedido-acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
 }
 
 .perfil-pedido-detalles {
@@ -364,5 +413,17 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 6px;
+    }
+    
+    .perfil-pedido-btn,
+    .perfil-pedido-btn-cancelar {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        text-align: center;
+    }
+    
+    .perfil-pedido-btn-cancelar {
+        margin-left: 0;
     }
 }

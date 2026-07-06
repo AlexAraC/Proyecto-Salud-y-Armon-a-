@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import { crearComentario } from '../services/comentariosApi';
 
 import './CardProducto.css';
 
@@ -45,6 +46,43 @@ function CardProducto({
     const [cantidad,
         setCantidad] =
         useState(1);
+
+    // Estados del modal de reporte
+    const [modalReporte, setModalReporte] = useState(false);
+    const [mensajeReporte, setMensajeReporte] = useState('');
+    const [enviandoReporte, setEnviandoReporte] = useState(false);
+    const [reporteEnviado, setReporteEnviado] = useState(false);
+
+    const handleAbrirReporte = () => {
+        if (!localStorage.getItem('token')) {
+            setModalAbierto(false);
+            navigate('/login');
+        } else {
+            setModalReporte(true);
+        }
+    };
+
+    const handleEnviarReporte = async (e) => {
+        e.preventDefault();
+        if (!mensajeReporte.trim()) return;
+        setEnviandoReporte(true);
+        try {
+            await crearComentario({
+                tipo: 'reporte',
+                contenido: `[${producto.nombre}] ${mensajeReporte}`
+            });
+            setReporteEnviado(true);
+            setMensajeReporte('');
+            setTimeout(() => {
+                setModalReporte(false);
+                setReporteEnviado(false);
+            }, 2000);
+        } catch (err) {
+            alert(err.response?.data?.mensaje || 'Error al enviar el reporte');
+        } finally {
+            setEnviandoReporte(false);
+        }
+    };
 
     // Formulario para editar los datos del producto
     const [formulario,
@@ -307,6 +345,7 @@ function CardProducto({
                                     <button
                                         className="boton-reportar"
                                         title="Reportar error"
+                                        onClick={handleAbrirReporte}
                                     >
                                         ⚠
                                     </button>
@@ -419,6 +458,62 @@ function CardProducto({
 
                 </div>
 
+            ), document.body)}
+
+            {modalReporte && createPortal((
+                <div className="modal-fondo" onClick={() => setModalReporte(false)}>
+                    <div className="modal-producto modal-producto-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px' }}>
+                        <div className="modal-reporte-header">
+
+                            <h2>Reportar error</h2>
+
+                            <button
+                                className="boton-cerrar boton-cerrar-reporte"
+                                onClick={() => setModalReporte(false)}
+                            >
+                                ✕
+                            </button>
+
+                        </div>
+
+
+                       
+                        <p style={{ margin: '0 0 16px', fontSize: '14px', color: '#6B4F3A' }}>
+                            Producto: <strong>{producto.nombre}</strong>
+                        </p>
+                        {reporteEnviado ? (
+                            <p style={{ color: '#2ecc71', fontWeight: 700, textAlign: 'center', padding: '16px 0' }}>
+                                ✓ Reporte enviado correctamente
+                            </p>
+                        ) : (
+                            <form onSubmit={handleEnviarReporte} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                <label style={{ fontSize: '14px', color: '#3A312B', fontWeight: 600 }}>
+                                    ¿Qué ocurrió?
+                                    <textarea
+                                        required
+                                        rows="4"
+                                        value={mensajeReporte}
+                                        onChange={(e) => setMensajeReporte(e.target.value)}
+                                        placeholder="Describe brevemente el error..."
+                                        style={{
+                                            marginTop: '6px', width: '100%', padding: '10px 12px',
+                                            border: '2px solid #D4B896', borderRadius: '8px',
+                                            fontSize: '14px', resize: 'vertical', fontFamily: 'inherit',
+                                            boxSizing: 'border-box', outline: 'none'
+                                        }}
+                                    />
+                                </label>
+                                <button
+                                    type="submit"
+                                    disabled={enviandoReporte}
+                                    className="boton-agregar"
+                                >
+                                    {enviandoReporte ? 'Enviando...' : 'Enviar reporte'}
+                                </button>
+                            </form>
+                        )}
+                    </div>
+                </div>
             ), document.body)}
 
             {modalEditarAbierto && createPortal((

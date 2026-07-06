@@ -427,6 +427,24 @@
     background: rgba(206, 198, 189, 0.72) !important;
 }
 
+.modal-reporte-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.modal-reporte-header h2{
+    margin: 0;
+    color: #3A312B;
+}
+
+.boton-cerrar-reporte{
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+
 /* =====================================
    ANIMACIONES
 ===================================== */

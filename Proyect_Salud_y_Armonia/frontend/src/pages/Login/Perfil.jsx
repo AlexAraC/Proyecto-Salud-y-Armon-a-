@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { obtenerMiPerfil, actualizarUsuario } from '../../services/usuariosApi';
-import { obtenerPedidosCliente, obtenerPedidoPorId } from '../../services/pedidosApi';
+import { obtenerPedidosCliente, obtenerPedidoPorId, cancelarPedido } from '../../services/pedidosApi';
 import './Perfil.css';
 
 function Perfil() {
@@ -16,6 +16,7 @@ function Perfil() {
     const [editando, setEditando] = useState(false);
     const [form, setForm] = useState({});
     const [mensaje, setMensaje] = useState('');
+    const [cancelando, setCancelando] = useState(null);
 
     const token = localStorage.getItem('token');
 
@@ -66,6 +67,23 @@ function Perfil() {
             setDetallesPedido((prev) => ({ ...prev, [id]: data }));
             setPedidoAbierto((prev) => ({ ...prev, [id]: true }));
         } catch {}
+    };
+
+    const handleCancelarPedido = async (id) => {
+        if (!window.confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
+        setCancelando(id);
+        try {
+            await cancelarPedido(id);
+            const data = await obtenerPedidosCliente();
+            if (data.pedidos) setPedidos(data.pedidos);
+            setMensaje('Pedido cancelado correctamente');
+            setTimeout(() => setMensaje(''), 3000);
+        } catch (err) {
+            setMensaje(err.response?.data?.mensaje || 'Error al cancelar el pedido');
+            setTimeout(() => setMensaje(''), 3000);
+        } finally {
+            setCancelando(null);
+        }
     };
 
     const handleGuardar = async () => {
@@ -172,7 +190,7 @@ function Perfil() {
                             <div key={p.id} className="perfil-pedido">
                                 <div className="perfil-pedido-header">
                                     <span className="perfil-pedido-id">Pedido {pedidosCrono.indexOf(p) + 1}</span>
-                                    <span className={`perfil-pedido-estado ${p.estado?.toLowerCase()}`}>{p.estado}</span>
+                                    <span className={`perfil-pedido-estado perfil-pedido-estado--${p.estado?.toLowerCase().replace(/\s+/g, '-')}`}>{p.estado}</span>
                                 </div>
                                 <div className="perfil-pedido-body">
                                     <p><strong>Fecha:</strong> {formatearFecha(p.fecha)}</p>
@@ -180,9 +198,20 @@ function Perfil() {
                                     <p><strong>Método de pago:</strong> {p.metodo_pago}</p>
                                     <p><strong>Envío:</strong> {p.tipo_envio}</p>
                                 </div>
-                                <button className="perfil-pedido-btn" onClick={() => toggleDetalles(p.id)}>
-                                    {pedidoAbierto[p.id] ? 'Ocultar detalles' : 'Ver detalles'}
-                                </button>
+                                <div className="perfil-pedido-acciones">
+                                    <button className="perfil-pedido-btn" onClick={() => toggleDetalles(p.id)}>
+                                        {pedidoAbierto[p.id] ? 'Ocultar detalles' : 'Ver detalles'}
+                                    </button>
+                                    {p.estado !== 'Entregado' && p.estado !== 'Cancelado' && p.estado !== 'Listo para recoger' && (
+                                        <button
+                                            className="perfil-pedido-btn-cancelar"
+                                            onClick={() => handleCancelarPedido(p.id)}
+                                            disabled={cancelando === p.id}
+                                        >
+                                            {cancelando === p.id ? 'Cancelando...' : 'Cancelar pedido'}
+                                        </button>
+                                    )}
+                                </div>
                                 {detallesPedido[p.id] && (
                                     <div className={`perfil-pedido-detalles ${pedidoAbierto[p.id] ? 'abierto' : ''}`}>
                                         <div className="perfil-pedido-detalles-inner">
