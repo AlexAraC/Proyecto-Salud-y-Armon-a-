@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import './DestacadoItem.css';
+
 function DestacadoItem({ producto, index }) {
 
     const navigate = useNavigate();

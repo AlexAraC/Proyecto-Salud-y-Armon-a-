@@ -1,0 +1,19 @@
+.destacados-item-descripcion{
+    margin: 50px !important;
+    width: 100%;
+}
+
+.destacados-item:not(.reverso) .destacados-item-img {
+    margin-left: 35px;
+}
+
+.destacados-item.reverso .destacados-item-img {
+    margin-right: 35px;
+}
+.destacados-item-info {
+    flex: 3;
+}
+.destacados-item-nombre {
+    margin-top: 20px;
+    width: 100%;
+}
