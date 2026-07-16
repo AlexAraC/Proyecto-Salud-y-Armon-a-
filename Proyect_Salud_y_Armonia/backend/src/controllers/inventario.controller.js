@@ -1,5 +1,6 @@
 const { sql } = require('../config/db');
 
+
 const actualizarStock = async (req, res) => {
 
     try {
@@ -10,7 +11,37 @@ const actualizarStock = async (req, res) => {
         } = req.body;
 
 
-        await sql.query`
+        // =====================================
+        // VALIDAR producto_id
+        // =====================================
+
+        if (!Number.isInteger(producto_id) || producto_id <= 0) {
+
+            return res.status(400).json({
+                mensaje: 'producto_id debe ser un número entero positivo'
+            });
+
+        }
+
+
+        // =====================================
+        // VALIDAR nuevo_stock
+        // =====================================
+
+        if (!Number.isInteger(nuevo_stock) || nuevo_stock < 0) {
+
+            return res.status(400).json({
+                mensaje: 'nuevo_stock debe ser un número entero mayor o igual a 0'
+            });
+
+        }
+
+
+        // =====================================
+        // ACTUALIZAR STOCK
+        // =====================================
+
+        const resultado = await sql.query`
 
             UPDATE Inventario
 
@@ -19,9 +50,21 @@ const actualizarStock = async (req, res) => {
             WHERE producto_id = ${producto_id}
         `;
 
+        // =====================================
+        // VERIFICAR QUE EL PRODUCTO EXISTA
+        // =====================================
+
+        if (resultado.rowsAffected[0] === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado en el inventario'
+            });
+
+        }
+
 
         res.status(200).json({
-            message: 'Stock actualizado correctamente'
+            mensaje: 'Stock actualizado correctamente'
         });
 
 
@@ -30,12 +73,13 @@ const actualizarStock = async (req, res) => {
         console.error('Error al actualizar el stock:', error);
 
         res.status(500).json({
-            message: 'Error al actualizar el stock'
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
 
 const obtenerStocks = async (req, res) => {
 
@@ -53,7 +97,7 @@ const obtenerStocks = async (req, res) => {
 
             INNER JOIN Productos p
             ON i.producto_id = p.id
-        `;//UNIMOS LAS TABLAS INVENTARIO Y PRODUCTOS PARA OBTENER EL NOMBRE DEL PRODUCTO JUNTO CON SU STOCK
+        `;
 
 
         res.status(200).json({
@@ -67,12 +111,14 @@ const obtenerStocks = async (req, res) => {
         console.error('Error al obtener el stock:', error);
 
         res.status(500).json({
-            message: 'Error al obtener el stock'
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
+
 module.exports = {
     actualizarStock,
     obtenerStocks

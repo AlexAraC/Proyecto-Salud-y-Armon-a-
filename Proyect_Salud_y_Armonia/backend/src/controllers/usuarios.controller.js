@@ -2,6 +2,11 @@ const { sql } = require('../config/db');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const transporter = require('../config/mail');
+
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
 // =====================================
 // OBTENER USUARIOS
 // =====================================
@@ -10,12 +15,11 @@ const obtenerUsuarios = async (req, res) => {
 
     try {
 
-        const usuarios = await sql.query(`
+        const usuarios = await sql.query`
             SELECT
                 id,
                 nombre,
                 correo,
-                contraseña,
                 rol,
                 direccion,
                 telefono,
@@ -23,13 +27,13 @@ const obtenerUsuarios = async (req, res) => {
                 motivo_ban
             FROM Usuarios
             WHERE correo != 'ventas_fisico@tienda.com'
-        `);
+        `;
 
         res.json(usuarios.recordset);
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
             mensaje: 'Error obteniendo usuarios'
@@ -61,7 +65,6 @@ const crearUsuario = async (req, res) => {
         // VALIDAR FORMATO DE CORREO
         // =====================================
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(correo)) {
             return res.status(400).json({
                 mensaje: 'El correo no tiene un formato válido'
@@ -72,10 +75,10 @@ const crearUsuario = async (req, res) => {
         // VALIDAR CORREO ÚNICO
         // =====================================
 
-        const existe = await sql.query(`
+        const existe = await sql.query`
             SELECT id FROM Usuarios
-            WHERE correo = '${correo}'
-        `);
+            WHERE correo = ${correo}
+        `;
 
         if (existe.recordset.length > 0) {
 
@@ -106,7 +109,7 @@ const crearUsuario = async (req, res) => {
         // GUARDAR USUARIO
         // =====================================
 
-        await sql.query(`
+        await sql.query`
             INSERT INTO Usuarios
             (
                 nombre,
@@ -120,15 +123,15 @@ const crearUsuario = async (req, res) => {
 
             VALUES
             (
-                '${nombre}',
-                '${correo}',
-                '${passwordHash}',
-                '${rol}',
-                '${direccion}',
-                '${telefono}',
-                '${tokenVerificacion}'
+                ${nombre},
+                ${correo},
+                ${passwordHash},
+                ${rol},
+                ${direccion},
+                ${telefono},
+                ${tokenVerificacion}
             )
-        `);
+        `;
 
         // =====================================
         // ENVIAR EMAIL DE VERIFICACIÓN
@@ -158,7 +161,7 @@ const crearUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         if (error.number === 2627) {
 
@@ -210,6 +213,52 @@ const actualizarUsuario = async (req, res) => {
         } = req.body;
 
         // =====================================
+        // VALIDAR FORMATO DE CORREO (si se envía)
+        // =====================================
+
+        if (correo && !emailRegex.test(correo)) {
+            return res.status(400).json({
+                mensaje: 'El correo no tiene un formato válido'
+            });
+        }
+
+        // =====================================
+        // VALIDAR CORREO ÚNICO (si se envía)
+        // =====================================
+
+        if (correo) {
+
+            const existe = await sql.query`
+                SELECT id FROM Usuarios
+                WHERE correo = ${correo}
+                  AND id != ${id}
+            `;
+
+            if (existe.recordset.length > 0) {
+
+                return res.status(400).json({
+                    mensaje: 'El correo ya está registrado por otro usuario'
+                });
+
+            }
+
+        }
+
+        // =====================================
+        // HASHEAR CONTRASEÑA (si se envía)
+        // =====================================
+
+        let passwordHash;
+
+        if (contraseña) {
+
+            const salt = await bcrypt.genSalt(10);
+
+            passwordHash = await bcrypt.hash(contraseña, salt);
+
+        }
+
+        // =====================================
         // ACTUALIZAR USUARIO
         // =====================================
 
@@ -218,7 +267,7 @@ const actualizarUsuario = async (req, res) => {
             SET
                 nombre = ${nombre},
                 correo = ${correo},
-                contraseña = ${contraseña},
+                contraseña = ${passwordHash},
                 direccion = ${direccion},
                 telefono = ${telefono}
             WHERE id = ${id}
@@ -234,7 +283,7 @@ const actualizarUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
             mensaje: 'Error actualizando usuario'
@@ -346,7 +395,7 @@ const eliminarUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
             mensaje: 'Error eliminando usuario'
@@ -486,7 +535,7 @@ const cambiarRol = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
             mensaje: 'Error cambiando rol del usuario'
@@ -525,7 +574,7 @@ const obtenerMiPerfil = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
             mensaje: 'Error obteniendo perfil'
@@ -581,7 +630,7 @@ const verificarCorreo = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
             mensaje: 'Error verificando correo'
@@ -650,7 +699,7 @@ const banearUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
             mensaje: 'Error al cambiar estado del usuario'

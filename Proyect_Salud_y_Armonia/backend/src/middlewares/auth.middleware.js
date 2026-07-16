@@ -39,7 +39,8 @@ const verificarToken = (req, res, next) => {
 
         const decoded = jwt.verify(
             token,
-            'secreto_jwt'
+            process.env.JWT_SECRET,
+            
         );
 
         // =====================================
@@ -89,8 +90,30 @@ const verificarUser = (req, res, next) => {
     next();
 
 };
+const verificarPropietarioOAdmin = (req, res, next) => {
+
+    // Si es administrador, puede modificar cualquiera
+    if (req.usuario.rol === 'admin') {
+
+        return next();
+
+    }
+
+    // Si intenta modificarse a sí mismo
+    if (req.usuario.id == req.params.id) {
+
+        return next();
+
+    }
+
+    return res.status(403).json({
+        mensaje: 'Acceso denegado'
+    });
+
+};
 module.exports = {
     verificarToken,
     verificarAdmin,
-    verificarUser
+    verificarUser,
+    verificarPropietarioOAdmin
 };

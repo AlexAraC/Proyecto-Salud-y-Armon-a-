@@ -2,6 +2,13 @@ const { sql } = require('../config/db');
 
 
 // =====================================
+// CONSTANTES
+// =====================================
+
+const METODOS_PAGO_VALIDOS = ['Efectivo', 'Tarjeta', 'Sinpe'];
+
+
+// =====================================
 // LIMPIAR PRODUCTOS INACTIVOS
 // =====================================
 
@@ -122,15 +129,17 @@ const obtenerCarritoPorUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
+
 // =====================================
 // AGREGAR PRODUCTO AL CARRITO
 // =====================================
@@ -157,13 +166,26 @@ const agregarProductoAlCarrito = async (req, res) => {
 
 
         // =====================================
+        // VALIDAR producto_id
+        // =====================================
+
+        if (!Number.isInteger(producto_id) || producto_id <= 0) {
+
+            return res.status(400).json({
+                mensaje: 'producto_id debe ser un número entero positivo'
+            });
+
+        }
+
+
+        // =====================================
         // VALIDAR CANTIDAD
         // =====================================
 
-        if (cantidad <= 0) {
+        if (!Number.isInteger(cantidad) || cantidad <= 0) {
 
             return res.status(400).json({
-                mensaje: 'Cantidad inválida'
+                mensaje: 'La cantidad debe ser un número entero positivo'
             });
 
         }
@@ -391,15 +413,16 @@ const agregarProductoAlCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
 
 // =====================================
 // ACTUALIZAR CANTIDAD PRODUCTO
@@ -427,13 +450,26 @@ const actualizarCantidadProductoEnCarrito = async (req, res) => {
 
 
         // =====================================
+        // VALIDAR producto_id
+        // =====================================
+
+        if (!Number.isInteger(producto_id) || producto_id <= 0) {
+
+            return res.status(400).json({
+                mensaje: 'producto_id debe ser un número entero positivo'
+            });
+
+        }
+
+
+        // =====================================
         // VALIDAR CANTIDAD
         // =====================================
 
-        if (cantidad <= 0) {
+        if (!Number.isInteger(cantidad) || cantidad <= 0) {
 
             return res.status(400).json({
-                mensaje: 'Cantidad inválida'
+                mensaje: 'La cantidad debe ser un número entero positivo'
             });
 
         }
@@ -560,15 +596,17 @@ const actualizarCantidadProductoEnCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
+
 // =====================================
 // ELIMINAR PRODUCTO DEL CARRITO
 // =====================================
@@ -589,6 +627,19 @@ const eliminarProductoDelCarrito = async (req, res) => {
         // =====================================
 
         const { producto_id } = req.params;
+
+
+        // =====================================
+        // VALIDAR producto_id
+        // =====================================
+
+        if (!Number.isInteger(Number(producto_id)) || Number(producto_id) <= 0) {
+
+            return res.status(400).json({
+                mensaje: 'ID de producto no válido'
+            });
+
+        }
 
 
         // =====================================
@@ -673,15 +724,17 @@ const eliminarProductoDelCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
+
 // =====================================
 // VACIAR CARRITO
 // =====================================
@@ -694,13 +747,12 @@ const vaciarCarrito = async (req, res) => {
         // OBTENER USUARIO DEL TOKEN
         // =====================================
 
-  
-        console.log("DELETE /carrito recibido");
         const usuario_id = req.usuario.id;
+
         // =====================================
         // BUSCAR CARRITO ACTIVO
         // =====================================
-        console.log("usuario_id:", usuario_id);
+
         const carritoDB = await sql.query`
 
             SELECT
@@ -753,21 +805,24 @@ const vaciarCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
 
+
 // =====================================
 // CONVERTIR CARRITO EN PEDIDO
 // =====================================
 
 const convertirCarritoAPedido = async (req, res) => {
+
+    const transaction = new sql.Transaction();
 
     try {
 
@@ -776,6 +831,26 @@ const convertirCarritoAPedido = async (req, res) => {
         // =====================================
 
         const usuario_id = req.usuario.id;
+
+
+        // =====================================
+        // OBTENER DATOS
+        // =====================================
+
+        const { metodo_pago, tipo_envio, direccion_envio } = req.body;
+
+
+        // =====================================
+        // VALIDAR MÉTODO DE PAGO
+        // =====================================
+
+        if (!metodo_pago || !METODOS_PAGO_VALIDOS.includes(metodo_pago)) {
+
+            return res.status(400).json({
+                mensaje: `Método de pago no válido. Válidos: ${METODOS_PAGO_VALIDOS.join(', ')}`
+            });
+
+        }
 
 
         // =====================================
@@ -801,23 +876,24 @@ const convertirCarritoAPedido = async (req, res) => {
 
 
         // =====================================
-        // OBTENER MÉTODO DE PAGO
-        // =====================================
-
-        const { metodo_pago, tipo_envio, direccion_envio } = req.body;
-
-
-        // =====================================
         // ELIMINAR PRODUCTOS INACTIVOS
         // =====================================
 
         await limpiarProductosInactivos(usuario_id);
 
+
         // =====================================
-        // BUSCAR CARRITO ACTIVO
+        // INICIAR TRANSACCIÓN
         // =====================================
 
-        const carritoDB = await sql.query`
+        await transaction.begin();
+
+
+        // =====================================
+        // BUSCAR CARRITO ACTIVO (dentro de la transacción)
+        // =====================================
+
+        const carritoDB = await transaction.request().query`
 
             SELECT
                 id
@@ -828,12 +904,9 @@ const convertirCarritoAPedido = async (req, res) => {
             AND estado = 'Activo'
         `;
 
-
-        // =====================================
-        // VALIDAR CARRITO
-        // =====================================
-
         if (carritoDB.recordset.length === 0) {
+
+            await transaction.rollback();
 
             return res.status(404).json({
                 mensaje: 'Carrito no encontrado'
@@ -841,16 +914,14 @@ const convertirCarritoAPedido = async (req, res) => {
 
         }
 
-
-        const carritoId =
-            carritoDB.recordset[0].id;
+        const carritoId = carritoDB.recordset[0].id;
 
 
         // =====================================
         // OBTENER PRODUCTOS DEL CARRITO
         // =====================================
 
-        const productosDB = await sql.query`
+        const productosDB = await transaction.request().query`
 
             SELECT
                 cd.producto_id,
@@ -869,11 +940,9 @@ const convertirCarritoAPedido = async (req, res) => {
         `;
 
 
-        // =====================================
-        // VALIDAR CARRITO VACÍO
-        // =====================================
-
         if (productosDB.recordset.length === 0) {
+
+            await transaction.rollback();
 
             return res.status(400).json({
                 mensaje: 'El carrito está vacío'
@@ -883,32 +952,47 @@ const convertirCarritoAPedido = async (req, res) => {
 
 
         // =====================================
-        // CALCULAR TOTAL
+        // DESCONTAR STOCK Y CALCULAR TOTAL
         // =====================================
 
         let total = 0;
 
         const productosProcesados = [];
 
-
         for (const producto of productosDB.recordset) {
 
-            const subtotal =
-                producto.precio * producto.cantidad;
+            // Descontar stock atómicamente
+            const updateResult = await transaction.request().query`
+
+                UPDATE Inventario
+
+                SET stock = stock - ${producto.cantidad}
+
+                OUTPUT INSERTED.stock
+
+                WHERE producto_id = ${producto.producto_id}
+                  AND stock >= ${producto.cantidad}
+            `;
+
+            if (updateResult.rowsAffected[0] === 0) {
+
+                await transaction.rollback();
+
+                return res.status(400).json({
+                    mensaje: `Stock insuficiente para ${producto.nombre}`
+                });
+
+            }
+
+            const subtotal = producto.precio * producto.cantidad;
 
             total += subtotal;
 
-
             productosProcesados.push({
-
                 producto_id: producto.producto_id,
-
                 nombre_producto: producto.nombre,
-
                 cantidad: producto.cantidad,
-
                 subtotal
-
             });
 
         }
@@ -918,7 +1002,7 @@ const convertirCarritoAPedido = async (req, res) => {
         // CREAR PEDIDO
         // =====================================
 
-        const pedidoDB = await sql.query`
+        const pedidoDB = await transaction.request().query`
 
             INSERT INTO Pedidos
             (
@@ -943,9 +1027,7 @@ const convertirCarritoAPedido = async (req, res) => {
             )
         `;
 
-
-        const pedidoId =
-            pedidoDB.recordset[0].id;
+        const pedidoId = pedidoDB.recordset[0].id;
 
 
         // =====================================
@@ -954,7 +1036,7 @@ const convertirCarritoAPedido = async (req, res) => {
 
         for (const producto of productosProcesados) {
 
-            await sql.query`
+            await transaction.request().query`
 
                 INSERT INTO DetallePedido
                 (
@@ -975,28 +1057,14 @@ const convertirCarritoAPedido = async (req, res) => {
                 )
             `;
 
-
-            // =====================================
-            // ACTUALIZAR INVENTARIO
-            // =====================================
-
-            await sql.query`
-
-                UPDATE Inventario
-
-                SET stock = stock - ${producto.cantidad}
-
-                WHERE producto_id = ${producto.producto_id}
-            `;
-
         }
 
 
         // =====================================
-        // CAMBIAR ESTADO CARRITO
+        // MARCAR CARRITO COMO COMPLETADO
         // =====================================
 
-        await sql.query`
+        await transaction.request().query`
 
             UPDATE Carrito
 
@@ -1007,22 +1075,10 @@ const convertirCarritoAPedido = async (req, res) => {
 
 
         // =====================================
-        // ACTUALIZAR DIRECCION USUARIO
-        // =====================================
-
-        if (direccion_envio) {
-            await sql.query`
-                UPDATE Usuarios
-                SET direccion = ${direccion_envio}
-                WHERE id = ${usuario_id}
-            `;
-        }
-
-        // =====================================
         // ELIMINAR DETALLES CARRITO
         // =====================================
 
-        await sql.query`
+        await transaction.request().query`
 
             DELETE FROM CarritoDetalle
 
@@ -1031,31 +1087,58 @@ const convertirCarritoAPedido = async (req, res) => {
 
 
         // =====================================
+        // ACTUALIZAR DIRECCIÓN USUARIO
+        // =====================================
+
+        if (direccion_envio) {
+
+            await transaction.request().query`
+
+                UPDATE Usuarios
+                SET direccion = ${direccion_envio}
+                WHERE id = ${usuario_id}
+            `;
+
+        }
+
+
+        // =====================================
+        // CONFIRMAR TRANSACCIÓN
+        // =====================================
+
+        await transaction.commit();
+
+
+        // =====================================
         // RESPUESTA
         // =====================================
 
         res.json({
-
             mensaje: 'Pedido creado correctamente',
-
             pedidoId,
-
             total
-
         });
 
 
     } catch (error) {
 
-        console.log(error);
+        try {
+            await transaction.rollback();
+        } catch (rollbackError) {
+            // Ignorar si ya fue revertida
+        }
+
+        console.error(error);
 
         res.status(500).json({
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
+
 // =====================================
 // EXPORTAR FUNCIONES
 // =====================================

@@ -9,18 +9,18 @@ const verCategorias = async (req, res) => {
 
     try {
 
-        const categorias = await sql.query(`
+        const categorias = await sql.query`
             SELECT * FROM Categorias WHERE activo = 1
-        `);
+        `;
 
         res.json(categorias.recordset);
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: 'Error obteniendo categorias'
+            mensaje: 'Error interno del servidor'
         });
 
     }
@@ -38,11 +38,11 @@ const crearCategoria = async (req, res) => {
 
         const { nombre } = req.body;
 
-        await sql.query(`
+        await sql.query`
             INSERT INTO Categorias (nombre)
 
-            VALUES ('${nombre}')
-        `);
+            VALUES (${nombre})
+        `;
 
         res.json({
             mensaje: 'Categoria creada'
@@ -50,10 +50,10 @@ const crearCategoria = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: 'Error creando categoria'
+            mensaje: 'Error interno del servidor'
         });
 
     }
@@ -73,13 +73,13 @@ const actualizarCategoria = async (req, res) => {
 
         const { nombre } = req.body;
 
-        await sql.query(`
+        await sql.query`
             UPDATE Categorias
 
-            SET nombre = '${nombre}'
+            SET nombre = ${nombre}
 
             WHERE id = ${id}
-        `);
+        `;
 
         res.json({
             mensaje: 'Categoria actualizada'
@@ -87,10 +87,10 @@ const actualizarCategoria = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: 'Error actualizando categoria'
+            mensaje: 'Error interno del servidor'
         });
 
     }
@@ -122,11 +122,11 @@ const eliminarCategoria = async (req, res) => {
 
         }
 
-        await sql.query(`
+        await sql.query`
            UPDATE Categorias 
            SET activo = 0
            WHERE id = ${id}
-        `);
+        `;
 
         res.json({
             mensaje: 'Categoria eliminada'
@@ -134,10 +134,10 @@ const eliminarCategoria = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-            mensaje: 'Error eliminando categoria'
+            mensaje: 'Error interno del servidor'
         });
 
     }

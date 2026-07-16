@@ -60,9 +60,7 @@ const obtenerEstadisticas = async (req, res) => {
 
         res.status(500).json({
 
-            mensaje: 'Error al obtener estadísticas',
-
-            error: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 

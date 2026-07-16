@@ -57,6 +57,19 @@ const login = async (req, res) => {
 
 
         // =====================================
+        // BLOQUEAR USUARIO VENTA FÍSICA
+        // =====================================
+
+        if (usuario.correo === 'ventas_fisico@tienda.com') {
+
+            return res.status(403).json({
+                mensaje: 'Este usuario no puede iniciar sesión'
+            });
+
+        }
+
+
+        // =====================================
         // VALIDAR PASSWORD
         // =====================================
 
@@ -91,10 +104,10 @@ const login = async (req, res) => {
                 rol: usuario.rol
             },
 
-            'secreto_jwt',
+            process.env.JWT_SECRET,
 
             {
-                expiresIn: '2h'
+                expiresIn: '8h'
             }
         );
 
@@ -113,11 +126,11 @@ const login = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: 'Error en login'
+            mensaje: 'Error interno del servidor'
 
         });
 
@@ -143,11 +156,11 @@ const logout = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: 'Error en logout'
+            mensaje: 'Error interno del servidor'
 
         });
 
@@ -273,11 +286,11 @@ const enviarCodigoRecuperacion = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 
@@ -381,11 +394,11 @@ const verificarCodigo = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 
@@ -515,11 +528,11 @@ const nuevaPassword = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 

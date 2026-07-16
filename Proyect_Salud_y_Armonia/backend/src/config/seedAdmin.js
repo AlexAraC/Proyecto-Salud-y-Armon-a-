@@ -8,12 +8,12 @@ const bcrypt = require('bcrypt');
 const { sql } = require('./db');
 
 const ADMIN_DEFAULT = {
-    nombre:    'Admin',
-    correo:    'admin@correo.com',
+    nombre:    'Graciela',
+    correo:    'grassolhr@gmail.com',
     password:  'Ws2x5sf5yh',
     rol:       'admin',
-    telefono:  '0000-0000',
-    direccion: 'Administración',
+    telefono:  '8949-8822',
+    direccion: ' San Carlos, Alajuela, Costa Rica',
 };
 
 const seedAdmin = async () => {

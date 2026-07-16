@@ -18,7 +18,8 @@ const {
 const {
     verificarToken,
     verificarAdmin,
-    verificarUser
+    verificarUser,
+    verificarPropietarioOAdmin
 } = require('../middlewares/auth.middleware');
 // =====================================
 // GET
@@ -66,6 +67,7 @@ router.post('/', crearUsuario);
 router.put('/:id', 
     verificarToken,
     verificarUser,
+    verificarPropietarioOAdmin,
     actualizarUsuario);
 
 

@@ -32,11 +32,11 @@ const obtenerInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 
@@ -111,11 +111,11 @@ const crearInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 
@@ -222,11 +222,11 @@ const actualizarInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 
@@ -283,11 +283,11 @@ const eliminarInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: error.message
+            mensaje: 'Error interno del servidor'
 
         });
 

@@ -1,5 +1,100 @@
 const { sql } = require('../config/db');
 
+
+// =====================================
+// VALIDACIONES
+// =====================================
+
+const validarNombre = (nombre) => {
+
+    if (!nombre || typeof nombre !== 'string') {
+
+        return 'El nombre es obligatorio';
+
+    }
+
+    const nombreTrim = nombre.trim();
+
+    if (nombreTrim.length === 0) {
+
+        return 'El nombre no puede estar vacío';
+
+    }
+
+    if (nombreTrim.length > 200) {
+
+        return 'El nombre no puede tener más de 200 caracteres';
+
+    }
+
+    return null;
+
+};
+
+const validarPrecio = (precio) => {
+
+    if (precio === undefined || precio === null) {
+
+        return 'El precio es obligatorio';
+
+    }
+
+    if (!Number.isFinite(precio) || precio <= 0) {
+
+        return 'El precio debe ser un número mayor a 0';
+
+    }
+
+    return null;
+
+};
+
+const validarStock = (stock) => {
+
+    if (stock === undefined || stock === null) {
+
+        return 'El stock es obligatorio';
+
+    }
+
+    if (!Number.isInteger(stock) || stock < 0) {
+
+        return 'El stock debe ser un número entero mayor o igual a 0';
+
+    }
+
+    return null;
+
+};
+
+const validarCategoria = async (categoria_id) => {
+
+    if (!Number.isInteger(categoria_id) || categoria_id <= 0) {
+
+        return 'La categoría no es válida';
+
+    }
+
+    const existe = await sql.query`
+
+        SELECT id FROM Categorias WHERE id = ${categoria_id}
+    `;
+
+    if (existe.recordset.length === 0) {
+
+        return 'La categoría especificada no existe';
+
+    }
+
+    return null;
+
+};
+
+
+// =====================================
+// OBTENER PRODUCTOS DESTACADOS
+// =====================================
+
 const obtenerProductosDestacados = async (req, res) => {
 
     try {
@@ -37,17 +132,20 @@ const obtenerProductosDestacados = async (req, res) => {
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
+
+
+// =====================================
+// AGREGAR A DESTACADOS
+// =====================================
 
 const agregarDestacado = async (req, res) => {
 
@@ -55,30 +153,34 @@ const agregarDestacado = async (req, res) => {
 
         const { id } = req.params;
 
-        await sql.query`
+        const resultado = await sql.query`
 
             UPDATE Productos
 
             SET destacado = 1
 
             WHERE id = ${id}
-
+              AND activo = 1
         `;
 
+        if (resultado.rowsAffected[0] === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+
+        }
+
         res.json({
-
             mensaje: 'Producto agregado a destacados'
-
         });
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
@@ -86,6 +188,9 @@ const agregarDestacado = async (req, res) => {
 };
 
 
+// =====================================
+// QUITAR DE DESTACADOS
+// =====================================
 
 const quitarDestacado = async (req, res) => {
 
@@ -93,62 +198,126 @@ const quitarDestacado = async (req, res) => {
 
         const { id } = req.params;
 
-        await sql.query`
+        const resultado = await sql.query`
 
             UPDATE Productos
 
             SET destacado = 0
 
             WHERE id = ${id}
-
+              AND activo = 1
         `;
 
+        if (resultado.rowsAffected[0] === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+
+        }
+
         res.json({
-
             mensaje: 'Producto eliminado de destacados'
-
         });
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
 
+
+// =====================================
+// CREAR PRODUCTO
+// =====================================
+
 const crearProducto = async (req, res) => {
+
+    const transaction = new sql.Transaction();
 
     try {
 
         const {
-
             nombre,
             descripcion,
             precio,
             categoria_id,
             stock
-
         } = req.body;
 
+        // =====================================
+        // VALIDAR NOMBRE
+        // =====================================
 
-   
+        const errorNombre = validarNombre(nombre);
+
+        if (errorNombre) {
+
+            return res.status(400).json({ mensaje: errorNombre });
+
+        }
+
+        // =====================================
+        // VALIDAR PRECIO
+        // =====================================
+
+        const errorPrecio = validarPrecio(precio);
+
+        if (errorPrecio) {
+
+            return res.status(400).json({ mensaje: errorPrecio });
+
+        }
+
+        // =====================================
+        // VALIDAR STOCK
+        // =====================================
+
+        const errorStock = validarStock(stock);
+
+        if (errorStock) {
+
+            return res.status(400).json({ mensaje: errorStock });
+
+        }
+
+        // =====================================
+        // VALIDAR CATEGORÍA
+        // =====================================
+
+        const errorCategoria = await validarCategoria(categoria_id);
+
+        if (errorCategoria) {
+
+            return res.status(400).json({ mensaje: errorCategoria });
+
+        }
+
+        // =====================================
+        // IMAGEN
+        // =====================================
+
         const imagen = req.file
-
             ? `/uploads/${req.file.filename}`
-
             : null;
 
+        // =====================================
+        // INICIAR TRANSACCIÓN
+        // =====================================
 
- 
+        await transaction.begin();
 
-        const producto = await sql.query`
+        // =====================================
+        // INSERTAR PRODUCTO
+        // =====================================
+
+        const producto = await transaction.request().query`
 
             INSERT INTO Productos
             (
@@ -163,7 +332,7 @@ const crearProducto = async (req, res) => {
 
             VALUES
             (
-                ${nombre},
+                ${nombre.trim()},
                 ${descripcion},
                 ${precio},
                 ${categoria_id},
@@ -171,13 +340,13 @@ const crearProducto = async (req, res) => {
             )
         `;
 
+        const producto_id = producto.recordset[0].id;
 
+        // =====================================
+        // INSERTAR INVENTARIO
+        // =====================================
 
-        const producto_id =
-            producto.recordset[0].id;
-
-
-        await sql.query`
+        await transaction.request().query`
 
             INSERT INTO Inventario
             (
@@ -192,27 +361,38 @@ const crearProducto = async (req, res) => {
             )
         `;
 
+        // =====================================
+        // CONFIRMAR TRANSACCIÓN
+        // =====================================
+
+        await transaction.commit();
 
         res.json({
-
             mensaje: 'Producto creado'
-
         });
 
     } catch (error) {
 
-        console.log(error);
+        try {
+            await transaction.rollback();
+        } catch (rollbackError) {
+            // Ignorar si ya fue revertida
+        }
+
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
 
+
+// =====================================
+// OBTENER PRODUCTOS
+// =====================================
 
 const obtenerProductos = async (req, res) => {
 
@@ -248,24 +428,24 @@ const obtenerProductos = async (req, res) => {
             WHERE Productos.activo = 1
         `;
 
-        res.json(
-            productos.recordset
-        );
+        res.json(productos.recordset);
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
 
 };
 
+
+// =====================================
+// OBTENER PRODUCTO POR ID
+// =====================================
 
 const obtenerProductoPorId = async (req, res) => {
 
@@ -305,18 +485,22 @@ const obtenerProductoPorId = async (req, res) => {
             AND Productos.activo = 1
         `;
 
-        res.json(
-            producto.recordset[0]
-        );
+        if (producto.recordset.length === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+
+        }
+
+        res.json(producto.recordset[0]);
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
@@ -324,65 +508,127 @@ const obtenerProductoPorId = async (req, res) => {
 };
 
 
+// =====================================
+// ACTUALIZAR PRODUCTO
+// =====================================
 
 const actualizarProducto = async (req, res) => {
+
+    const transaction = new sql.Transaction();
 
     try {
 
         const { id } = req.params;
 
         const {
-
             nombre,
             descripcion,
             precio,
             categoria_id,
             stock
-
         } = req.body;
 
+        // =====================================
+        // VALIDAR NOMBRE
+        // =====================================
+
+        const errorNombre = validarNombre(nombre);
+
+        if (errorNombre) {
+
+            return res.status(400).json({ mensaje: errorNombre });
+
+        }
 
         // =====================================
-        // PRODUCTO ACTUAL
+        // VALIDAR PRECIO
         // =====================================
 
-        const productoActual = await sql.query`
+        const errorPrecio = validarPrecio(precio);
+
+        if (errorPrecio) {
+
+            return res.status(400).json({ mensaje: errorPrecio });
+
+        }
+
+        // =====================================
+        // VALIDAR STOCK
+        // =====================================
+
+        const errorStock = validarStock(stock);
+
+        if (errorStock) {
+
+            return res.status(400).json({ mensaje: errorStock });
+
+        }
+
+        // =====================================
+        // VALIDAR CATEGORÍA
+        // =====================================
+
+        const errorCategoria = await validarCategoria(categoria_id);
+
+        if (errorCategoria) {
+
+            return res.status(400).json({ mensaje: errorCategoria });
+
+        }
+
+        // =====================================
+        // INICIAR TRANSACCIÓN
+        // =====================================
+
+        await transaction.begin();
+
+        // =====================================
+        // VERIFICAR QUE EL PRODUCTO EXISTA
+        // =====================================
+
+        const productoActual = await transaction.request().query`
 
             SELECT imagen
 
             FROM Productos
 
             WHERE id = ${id}
+              AND activo = 1
         `;
 
+        if (productoActual.recordset.length === 0) {
+
+            await transaction.rollback();
+
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+
+        }
 
         // =====================================
         // IMAGEN
         // =====================================
 
-        let imagen =
-            productoActual.recordset[0].imagen;
-
+        let imagen = productoActual.recordset[0].imagen;
 
         if (req.file) {
 
-            imagen =
-                `/uploads/${req.file.filename}`;
+            imagen = `/uploads/${req.file.filename}`;
 
         }
-
 
         // =====================================
         // ACTUALIZAR PRODUCTO
         // =====================================
 
-        await sql.query`
+        await transaction.request().query`
 
             UPDATE Productos
 
             SET
 
-                nombre = ${nombre},
+                nombre = ${nombre.trim()},
                 descripcion = ${descripcion},
                 precio = ${precio},
                 categoria_id = ${categoria_id},
@@ -391,12 +637,11 @@ const actualizarProducto = async (req, res) => {
             WHERE id = ${id}
         `;
 
-
         // =====================================
         // ACTUALIZAR INVENTARIO
         // =====================================
 
-        await sql.query`
+        await transaction.request().query`
 
             UPDATE Inventario
 
@@ -405,21 +650,28 @@ const actualizarProducto = async (req, res) => {
             WHERE producto_id = ${id}
         `;
 
+        // =====================================
+        // CONFIRMAR TRANSACCIÓN
+        // =====================================
+
+        await transaction.commit();
 
         res.json({
-
             mensaje: 'Producto actualizado'
-
         });
 
     } catch (error) {
 
-        console.log(error);
+        try {
+            await transaction.rollback();
+        } catch (rollbackError) {
+            // Ignorar si ya fue revertida
+        }
+
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
@@ -428,38 +680,43 @@ const actualizarProducto = async (req, res) => {
 
 
 // =====================================
-// ELIMINAR PRODUCTO
+// ELIMINAR PRODUCTO (DESACTIVAR)
 // =====================================
+
 const eliminarProducto = async (req, res) => {
 
     try {
 
         const { id } = req.params;
 
-        await sql.query`
+        const resultado = await sql.query`
 
             UPDATE Productos
 
             SET activo = 0
 
             WHERE id = ${id}
-
+              AND activo = 1
         `;
 
+        if (resultado.rowsAffected[0] === 0) {
+
+            return res.status(404).json({
+                mensaje: 'Producto no encontrado'
+            });
+
+        }
+
         res.json({
-
             mensaje: 'Producto desactivado'
-
         });
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
-
-            mensaje: error.message
-
+            mensaje: 'Error interno del servidor'
         });
 
     }
