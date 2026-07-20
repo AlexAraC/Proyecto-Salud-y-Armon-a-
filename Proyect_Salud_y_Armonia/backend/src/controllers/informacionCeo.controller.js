@@ -5,7 +5,7 @@ const { sql } = require('../config/db');
 // OBTENER INFORMACIÓN CEO
 // =====================================
 
-const obtenerInformacionCeo = async (req, res) => {
+const obtenerInformacionCeo = async (req, res, next) => {
 
     try {
 
@@ -34,13 +34,7 @@ const obtenerInformacionCeo = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -51,7 +45,7 @@ const obtenerInformacionCeo = async (req, res) => {
 // CREAR INFORMACIÓN CEO
 // =====================================
 
-const crearInformacionCeo = async (req, res) => {
+const crearInformacionCeo = async (req, res, next) => {
 
     try {
 
@@ -113,13 +107,7 @@ const crearInformacionCeo = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -130,7 +118,7 @@ const crearInformacionCeo = async (req, res) => {
 // ACTUALIZAR INFORMACIÓN CEO
 // =====================================
 
-const actualizarInformacionCeo = async (req, res) => {
+const actualizarInformacionCeo = async (req, res, next) => {
 
     try {
 
@@ -224,13 +212,7 @@ const actualizarInformacionCeo = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -241,7 +223,7 @@ const actualizarInformacionCeo = async (req, res) => {
 // ELIMINAR INFORMACIÓN CEO
 // =====================================
 
-const eliminarInformacionCeo = async (req, res) => {
+const eliminarInformacionCeo = async (req, res, next) => {
 
     try {
 
@@ -285,13 +267,7 @@ const eliminarInformacionCeo = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 

@@ -5,7 +5,7 @@ const { sql } = require('../config/db');
 // OBTENER CATEGORIAS
 // =====================================
 
-const verCategorias = async (req, res) => {
+const verCategorias = async (req, res, next) => {
 
     try {
 
@@ -17,11 +17,7 @@ const verCategorias = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -32,7 +28,7 @@ const verCategorias = async (req, res) => {
 // CREAR CATEGORIA
 // =====================================
 
-const crearCategoria = async (req, res) => {
+const crearCategoria = async (req, res, next) => {
 
     try {
 
@@ -50,11 +46,7 @@ const crearCategoria = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -65,7 +57,7 @@ const crearCategoria = async (req, res) => {
 // ACTUALIZAR CATEGORIA
 // =====================================
 
-const actualizarCategoria = async (req, res) => {
+const actualizarCategoria = async (req, res, next) => {
 
     try {
 
@@ -87,11 +79,7 @@ const actualizarCategoria = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -102,7 +90,7 @@ const actualizarCategoria = async (req, res) => {
 // ELIMINAR CATEGORIA
 // =====================================
 
-const eliminarCategoria = async (req, res) => {
+const eliminarCategoria = async (req, res, next) => {
 
     try {
 
@@ -134,11 +122,7 @@ const eliminarCategoria = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 

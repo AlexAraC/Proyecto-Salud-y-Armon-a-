@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
-
+app.use(helmet());
 // =====================================
 // CONFIG STORAGE
 // =====================================

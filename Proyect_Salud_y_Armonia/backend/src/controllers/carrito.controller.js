@@ -34,7 +34,7 @@ const limpiarProductosInactivos = async (usuario_id) => {
 // OBTENER CARRITO DEL USUARIO
 // =====================================
 
-const obtenerCarritoPorUsuario = async (req, res) => {
+const obtenerCarritoPorUsuario = async (req, res, next) => {
 
     try {
 
@@ -129,11 +129,7 @@ const obtenerCarritoPorUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -144,7 +140,7 @@ const obtenerCarritoPorUsuario = async (req, res) => {
 // AGREGAR PRODUCTO AL CARRITO
 // =====================================
 
-const agregarProductoAlCarrito = async (req, res) => {
+const agregarProductoAlCarrito = async (req, res, next) => {
 
     try {
 
@@ -413,11 +409,7 @@ const agregarProductoAlCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -428,7 +420,7 @@ const agregarProductoAlCarrito = async (req, res) => {
 // ACTUALIZAR CANTIDAD PRODUCTO
 // =====================================
 
-const actualizarCantidadProductoEnCarrito = async (req, res) => {
+const actualizarCantidadProductoEnCarrito = async (req, res, next) => {
 
     try {
 
@@ -596,11 +588,7 @@ const actualizarCantidadProductoEnCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -611,7 +599,7 @@ const actualizarCantidadProductoEnCarrito = async (req, res) => {
 // ELIMINAR PRODUCTO DEL CARRITO
 // =====================================
 
-const eliminarProductoDelCarrito = async (req, res) => {
+const eliminarProductoDelCarrito = async (req, res, next) => {
 
     try {
 
@@ -724,11 +712,7 @@ const eliminarProductoDelCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -739,7 +723,7 @@ const eliminarProductoDelCarrito = async (req, res) => {
 // VACIAR CARRITO
 // =====================================
 
-const vaciarCarrito = async (req, res) => {
+const vaciarCarrito = async (req, res, next) => {
 
     try {
 
@@ -805,11 +789,7 @@ const vaciarCarrito = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -820,7 +800,7 @@ const vaciarCarrito = async (req, res) => {
 // CONVERTIR CARRITO EN PEDIDO
 // =====================================
 
-const convertirCarritoAPedido = async (req, res) => {
+const convertirCarritoAPedido = async (req, res, next) => {
 
     const transaction = new sql.Transaction();
 
@@ -1128,11 +1108,7 @@ const convertirCarritoAPedido = async (req, res) => {
             // Ignorar si ya fue revertida
         }
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 

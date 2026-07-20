@@ -1,12 +1,14 @@
 require('dotenv').config();
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
 
 // =====================================
 // IMPORTAR EXPRESS
 // =====================================
 
-const express = require('express');
+const { logError } = require('./utils/logger');
+const { errorHandler } = require('./middlewares/errorHandler.middleware');
 
 
 // =====================================
@@ -14,6 +16,7 @@ const express = require('express');
 // =====================================
 
 const app = express();
+app.use(helmet());
 
 
 // =====================================
@@ -22,17 +25,13 @@ const app = express();
 
 process.on('uncaughtException', (err) => {
 
-    console.log('ERROR NO CAPTURADO');
-
-    console.log(err);
+    logError(err, 'UNCAUGHT_EXCEPTION');
 
 });
 
 process.on('unhandledRejection', (err) => {
 
-    console.log('PROMESA RECHAZADA');
-
-    console.log(err);
+    logError(err, 'UNHANDLED_REJECTION');
 
 });
 
@@ -42,8 +41,9 @@ process.on('unhandledRejection', (err) => {
 // =====================================
 
 // Permite recibir JSON desde Postman o frontend
-app.use(express.json());
-
+app.use(express.json({
+    limit: "700kb"
+}));
 
 // =====================================
 // CONEXIÓN DB
@@ -109,13 +109,15 @@ const ventasRoute =
 // USAR RUTAS
 // =====================================
 
-// DEBUG
+// DEBUG (solo en desarrollo)
 app.use('/uploads', (req, res, next) => {
 
-    console.log(
-        'Archivo solicitado:',
-        req.url
-    );
+    if (process.env.NODE_ENV === 'development') {
+        console.log(
+            'Archivo solicitado:',
+            req.url
+        );
+    }
 
     next();
 
@@ -183,6 +185,13 @@ app.use('/estadisticas', estadisticasRoute);
 
 // Ventas Físicas
 app.use('/ventas', ventasRoute);
+
+
+// =====================================
+// ERROR HANDLER GLOBAL
+// =====================================
+
+app.use(errorHandler);
 
 
 // =====================================

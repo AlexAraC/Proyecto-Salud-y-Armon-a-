@@ -11,7 +11,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // OBTENER USUARIOS
 // =====================================
 
-const obtenerUsuarios = async (req, res) => {
+const obtenerUsuarios = async (req, res, next) => {
 
     try {
 
@@ -33,11 +33,7 @@ const obtenerUsuarios = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error obteniendo usuarios'
-        });
+        next(error);
 
     }
 
@@ -48,7 +44,7 @@ const obtenerUsuarios = async (req, res) => {
 // CREAR USUARIO
 // =====================================
 
-const crearUsuario = async (req, res) => {
+const crearUsuario = async (req, res, next) => {
 
     try {
 
@@ -152,7 +148,7 @@ const crearUsuario = async (req, res) => {
                 `
             });
         } catch (emailError) {
-            console.error('Error enviando email de verificación:', emailError);
+            // Error al enviar email, se ignora para no bloquear el registro
         }
 
         res.json({
@@ -160,8 +156,6 @@ const crearUsuario = async (req, res) => {
         });
 
     } catch (error) {
-
-        console.error(error);
 
         if (error.number === 2627) {
 
@@ -171,9 +165,7 @@ const crearUsuario = async (req, res) => {
 
         }
 
-        res.status(500).json({
-            mensaje: 'Error creando usuario'
-        });
+        next(error);
 
     }
 
@@ -184,7 +176,7 @@ const crearUsuario = async (req, res) => {
 // ACTUALIZAR USUARIO
 // =====================================
 
-const actualizarUsuario = async (req, res) => {
+const actualizarUsuario = async (req, res, next) => {
 
     try {
 
@@ -283,11 +275,7 @@ const actualizarUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error actualizando usuario'
-        });
+        next(error);
 
     }
 
@@ -299,7 +287,7 @@ const actualizarUsuario = async (req, res) => {
 // =====================================
 
 
-const eliminarUsuario = async (req, res) => {
+const eliminarUsuario = async (req, res, next) => {
 
     try {
 
@@ -395,17 +383,13 @@ const eliminarUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error eliminando usuario'
-        });
+        next(error);
 
     }
 
 };
 
-const cambiarRol = async (req, res) => {
+const cambiarRol = async (req, res, next) => {
 
     try {
 
@@ -535,16 +519,13 @@ const cambiarRol = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error cambiando rol del usuario'
-        });
+        next(error);
 
     }
 
 };
-const obtenerMiPerfil = async (req, res) => {
+
+const obtenerMiPerfil = async (req, res, next) => {
 
     try {
 
@@ -574,11 +555,7 @@ const obtenerMiPerfil = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error obteniendo perfil'
-        });
+        next(error);
 
     }
 
@@ -592,7 +569,7 @@ const verificarAdministrador = async (req, res) => {
 
 };
 
-const verificarCorreo = async (req, res) => {
+const verificarCorreo = async (req, res, next) => {
 
     try {
 
@@ -630,18 +607,14 @@ const verificarCorreo = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error verificando correo'
-        });
+        next(error);
 
     }
 
 };
 
 
-const banearUsuario = async (req, res) => {
+const banearUsuario = async (req, res, next) => {
 
     try {
 
@@ -699,11 +672,7 @@ const banearUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error al cambiar estado del usuario'
-        });
+        next(error);
 
     }
 

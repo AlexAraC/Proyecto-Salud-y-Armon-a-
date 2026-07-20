@@ -1,7 +1,7 @@
 const { sql } = require('../config/db');
 
 
-const actualizarStock = async (req, res) => {
+const actualizarStock = async (req, res, next) => {
 
     try {
 
@@ -70,18 +70,14 @@ const actualizarStock = async (req, res) => {
 
     } catch (error) {
 
-        console.error('Error al actualizar el stock:', error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
 };
 
 
-const obtenerStocks = async (req, res) => {
+const obtenerStocks = async (req, res, next) => {
 
     try {
 
@@ -108,11 +104,7 @@ const obtenerStocks = async (req, res) => {
 
     } catch (error) {
 
-        console.error('Error al obtener el stock:', error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 

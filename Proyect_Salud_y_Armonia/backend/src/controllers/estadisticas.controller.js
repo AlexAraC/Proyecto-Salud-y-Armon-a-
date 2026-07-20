@@ -1,6 +1,6 @@
 const sql = require('mssql');
 
-const obtenerEstadisticas = async (req, res) => {
+const obtenerEstadisticas = async (req, res, next) => {
 
     try {
 
@@ -56,13 +56,7 @@ const obtenerEstadisticas = async (req, res) => {
 
     catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 

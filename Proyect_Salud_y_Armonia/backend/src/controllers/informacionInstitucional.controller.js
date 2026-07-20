@@ -4,7 +4,7 @@ const { sql } = require('../config/db');
 // OBTENER INFORMACIÓN INSTITUCIONAL
 // =====================================
 
-const obtenerInformacionInstitucional = async (req, res) => {
+const obtenerInformacionInstitucional = async (req, res, next) => {
 
     try {
 
@@ -32,13 +32,7 @@ const obtenerInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -49,7 +43,7 @@ const obtenerInformacionInstitucional = async (req, res) => {
 // CREAR INFORMACIÓN INSTITUCIONAL
 // =====================================
 
-const crearInformacionInstitucional = async (req, res) => {
+const crearInformacionInstitucional = async (req, res, next) => {
 
     try {
 
@@ -111,13 +105,7 @@ const crearInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -128,7 +116,7 @@ const crearInformacionInstitucional = async (req, res) => {
 // ACTUALIZAR INFORMACIÓN INSTITUCIONAL
 // =====================================
 
-const actualizarInformacionInstitucional = async (req, res) => {
+const actualizarInformacionInstitucional = async (req, res, next) => {
 
     try {
 
@@ -222,13 +210,7 @@ const actualizarInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -239,7 +221,7 @@ const actualizarInformacionInstitucional = async (req, res) => {
 // ELIMINAR INFORMACIÓN INSTITUCIONAL
 // =====================================
 
-const eliminarInformacionInstitucional = async (req, res) => {
+const eliminarInformacionInstitucional = async (req, res, next) => {
 
     try {
 
@@ -283,13 +265,7 @@ const eliminarInformacionInstitucional = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 

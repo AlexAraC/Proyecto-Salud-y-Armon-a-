@@ -1,10 +1,10 @@
-const { sql } = require('../config/db'); // Pedimos la conexión a la base de datos
+const { sql } = require('../config/db');
 
 
 // =====================================
 // OBTENER COMENTARIOS
 // =====================================
-const obtenerComentarios = async (req, res) => {
+const obtenerComentarios = async (req, res, next) => {
 
     try {
 
@@ -32,11 +32,7 @@ const obtenerComentarios = async (req, res) => {
 
     } catch (error) {
 
-        console.error('Error al obtener comentarios:', error);
-
-        res.status(500).json({
-            error: 'Error al obtener comentarios'
-        });
+        next(error);
 
     }
 
@@ -46,7 +42,7 @@ const obtenerComentarios = async (req, res) => {
 // Crear comentario
 // =====================================
 
-const crearComentario = async (req, res) => {
+const crearComentario = async (req, res, next) => {
 
     try {
 
@@ -96,17 +92,12 @@ const crearComentario = async (req, res) => {
 
     } catch (error) {
 
-        console.error('Error al crear comentario:', error);
+        next(error);
 
-        res.status(500).json({
-
-            error: 'Error al crear comentario'
-
-        });
     }
 }
 
-const eliminarComentario = async (req, res) => {
+const eliminarComentario = async (req, res, next) => {
 
     try {
 
@@ -159,13 +150,7 @@ const eliminarComentario = async (req, res) => {
 
     } catch (error) {
 
-        console.error('Error al eliminar comentario:', error);
-
-        res.status(500).json({
-
-            error: 'Error al eliminar comentario'
-
-        });
+        next(error);
 
     }
 
@@ -175,7 +160,7 @@ const eliminarComentario = async (req, res) => {
 // SEPARAR COMENTARIOS POR TIPO
 // =====================================
 
-const separarComentariosPorTipo = async (req, res) => {
+const separarComentariosPorTipo = async (req, res, next) => {
 
     try {
 
@@ -227,16 +212,7 @@ const separarComentariosPorTipo = async (req, res) => {
 
     } catch (error) {
 
-        console.error(
-            'Error al separar comentarios:',
-            error
-        );
-
-        res.status(500).json({
-
-            error: 'Error al obtener comentarios'
-
-        });
+        next(error);
 
     }
 

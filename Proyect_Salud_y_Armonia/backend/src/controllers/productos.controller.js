@@ -95,7 +95,7 @@ const validarCategoria = async (categoria_id) => {
 // OBTENER PRODUCTOS DESTACADOS
 // =====================================
 
-const obtenerProductosDestacados = async (req, res) => {
+const obtenerProductosDestacados = async (req, res, next) => {
 
     try {
 
@@ -132,11 +132,7 @@ const obtenerProductosDestacados = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -147,7 +143,7 @@ const obtenerProductosDestacados = async (req, res) => {
 // AGREGAR A DESTACADOS
 // =====================================
 
-const agregarDestacado = async (req, res) => {
+const agregarDestacado = async (req, res, next) => {
 
     try {
 
@@ -177,11 +173,7 @@ const agregarDestacado = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -192,7 +184,7 @@ const agregarDestacado = async (req, res) => {
 // QUITAR DE DESTACADOS
 // =====================================
 
-const quitarDestacado = async (req, res) => {
+const quitarDestacado = async (req, res, next) => {
 
     try {
 
@@ -222,11 +214,7 @@ const quitarDestacado = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -237,7 +225,7 @@ const quitarDestacado = async (req, res) => {
 // CREAR PRODUCTO
 // =====================================
 
-const crearProducto = async (req, res) => {
+const crearProducto = async (req, res, next) => {
 
     const transaction = new sql.Transaction();
 
@@ -379,11 +367,7 @@ const crearProducto = async (req, res) => {
             // Ignorar si ya fue revertida
         }
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -394,7 +378,7 @@ const crearProducto = async (req, res) => {
 // OBTENER PRODUCTOS
 // =====================================
 
-const obtenerProductos = async (req, res) => {
+const obtenerProductos = async (req, res, next) => {
 
     try {
 
@@ -432,11 +416,7 @@ const obtenerProductos = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -447,7 +427,7 @@ const obtenerProductos = async (req, res) => {
 // OBTENER PRODUCTO POR ID
 // =====================================
 
-const obtenerProductoPorId = async (req, res) => {
+const obtenerProductoPorId = async (req, res, next) => {
 
     try {
 
@@ -497,11 +477,7 @@ const obtenerProductoPorId = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -512,7 +488,7 @@ const obtenerProductoPorId = async (req, res) => {
 // ACTUALIZAR PRODUCTO
 // =====================================
 
-const actualizarProducto = async (req, res) => {
+const actualizarProducto = async (req, res, next) => {
 
     const transaction = new sql.Transaction();
 
@@ -668,11 +644,7 @@ const actualizarProducto = async (req, res) => {
             // Ignorar si ya fue revertida
         }
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -683,7 +655,7 @@ const actualizarProducto = async (req, res) => {
 // ELIMINAR PRODUCTO (DESACTIVAR)
 // =====================================
 
-const eliminarProducto = async (req, res) => {
+const eliminarProducto = async (req, res, next) => {
 
     try {
 
@@ -713,11 +685,7 @@ const eliminarProducto = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 

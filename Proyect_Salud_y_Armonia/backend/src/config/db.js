@@ -1,4 +1,5 @@
 const sql = require('mssql');
+const { logError } = require('../utils/logger');
 
 require('dotenv').config();
 
@@ -35,7 +36,7 @@ const conectarDB = async () => {
 
     } catch (error) {
 
-        console.log(error);
+        logError(error, 'DB_CONNECTION');
 
     }
 

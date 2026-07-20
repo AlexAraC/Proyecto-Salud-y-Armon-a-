@@ -1,10 +1,6 @@
-/* Controlador de autenticación. Maneja login, logout, recuperación de contraseña y cambio de contraseña. */
 const { sql } = require('../config/db');
-
 const bcrypt = require('bcrypt');
-
 const jwt = require('jsonwebtoken');
-
 const transporter = require('../config/mail');
 
 
@@ -14,7 +10,7 @@ const transporter = require('../config/mail');
  * @returns {Object} Token JWT y mensaje de éxito.
  * Endpoint: POST /api/auth/login
  */
-const login = async (req, res) => {
+const login = async (req, res, next) => {
 
     try {
 
@@ -126,13 +122,7 @@ const login = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -144,7 +134,7 @@ const login = async (req, res) => {
  * @returns {Object} Mensaje de confirmación.
  * Endpoint: POST /api/auth/logout
  */
-const logout = async (req, res) => {
+const logout = async (req, res, next) => {
 
     try {
 
@@ -156,13 +146,7 @@ const logout = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -175,7 +159,7 @@ const logout = async (req, res) => {
  * @returns {Object} Mensaje indicando que el código fue enviado.
  * Endpoint: POST /api/auth/enviar-codigo
  */
-const enviarCodigoRecuperacion = async (req, res) => {
+const enviarCodigoRecuperacion = async (req, res, next) => {
 
     try {
 
@@ -286,13 +270,7 @@ const enviarCodigoRecuperacion = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -305,7 +283,7 @@ const enviarCodigoRecuperacion = async (req, res) => {
  * @returns {Object} Mensaje indicando si el código es válido.
  * Endpoint: POST /api/auth/verificar-codigo
  */
-const verificarCodigo = async (req, res) => {
+const verificarCodigo = async (req, res, next) => {
 
     try {
 
@@ -394,13 +372,7 @@ const verificarCodigo = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 
@@ -411,7 +383,7 @@ const verificarCodigo = async (req, res) => {
 // CAMBIAR PASSWORD
 // =====================================
 
-const nuevaPassword = async (req, res) => {
+const nuevaPassword = async (req, res, next) => {
 
     try {
 
@@ -528,13 +500,7 @@ const nuevaPassword = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-
-            mensaje: 'Error interno del servidor'
-
-        });
+        next(error);
 
     }
 

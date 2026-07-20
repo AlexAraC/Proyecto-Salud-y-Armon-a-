@@ -47,7 +47,7 @@ const obtenerVentasFisicoId = async (transaction) => {
 // REGISTRAR VENTA FÍSICA
 // =====================================
 
-const registrarVenta = async (req, res) => {
+const registrarVenta = async (req, res, next) => {
 
     const transaction = new sql.Transaction();
 
@@ -238,11 +238,7 @@ const registrarVenta = async (req, res) => {
             // Si la transacción ya fue revertida, ignorar el error
         }
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 

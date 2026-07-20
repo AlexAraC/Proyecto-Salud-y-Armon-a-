@@ -37,7 +37,7 @@ const TRANSICIONES_VALIDAS = {
 // CREAR PEDIDO
 // =====================================
 
-const crearPedido = async (req, res) => {
+const crearPedido = async (req, res, next) => {
 
     const transaction = new sql.Transaction();
 
@@ -320,11 +320,7 @@ const crearPedido = async (req, res) => {
             // Ignorar si ya fue revertida
         }
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -335,7 +331,7 @@ const crearPedido = async (req, res) => {
 // CANCELAR PEDIDO
 // =====================================
 
-const cancelarPedido = async (req, res) => {
+const cancelarPedido = async (req, res, next) => {
 
     const transaction = new sql.Transaction();
 
@@ -507,11 +503,7 @@ const cancelarPedido = async (req, res) => {
             // Ignorar si ya fue revertida
         }
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -522,7 +514,7 @@ const cancelarPedido = async (req, res) => {
 // OBTENER PEDIDO POR ID
 // =====================================
 
-const obtenerPedidoPorId = async (req, res) => {
+const obtenerPedidoPorId = async (req, res, next) => {
 
     try {
 
@@ -593,11 +585,7 @@ const obtenerPedidoPorId = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -608,7 +596,7 @@ const obtenerPedidoPorId = async (req, res) => {
 // ACTUALIZAR ESTADO PEDIDO
 // =====================================
 
-const actualizarEstadoPedido = async (req, res) => {
+const actualizarEstadoPedido = async (req, res, next) => {
 
     try {
 
@@ -704,11 +692,7 @@ const actualizarEstadoPedido = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -719,7 +703,7 @@ const actualizarEstadoPedido = async (req, res) => {
 // VER PEDIDOS ADMIN
 // =====================================
 
-const verPedidosAdmin = async (req, res) => {
+const verPedidosAdmin = async (req, res, next) => {
 
     try {
 
@@ -765,11 +749,7 @@ const verPedidosAdmin = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -780,7 +760,7 @@ const verPedidosAdmin = async (req, res) => {
 // VER PEDIDOS CLIENTE
 // =====================================
 
-const verPedidosCliente = async (req, res) => {
+const verPedidosCliente = async (req, res, next) => {
 
     try {
 
@@ -810,11 +790,7 @@ const verPedidosCliente = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -825,7 +801,7 @@ const verPedidosCliente = async (req, res) => {
 // OBTENER ESTADÍSTICAS DE PEDIDOS
 // =====================================
 
-const obtenerEstadisticasPedidos = async (req, res) => {
+const obtenerEstadisticasPedidos = async (req, res, next) => {
 
     try {
 
@@ -897,11 +873,7 @@ const obtenerEstadisticasPedidos = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
@@ -912,7 +884,7 @@ const obtenerEstadisticasPedidos = async (req, res) => {
 // OBTENER PEDIDOS POR USUARIO
 // =====================================
 
-const obtenerPedidosPorUsuario = async (req, res) => {
+const obtenerPedidosPorUsuario = async (req, res, next) => {
 
     try {
 
@@ -942,11 +914,7 @@ const obtenerPedidosPorUsuario = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: 'Error interno del servidor'
-        });
+        next(error);
 
     }
 
