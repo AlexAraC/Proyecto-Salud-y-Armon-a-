@@ -235,6 +235,13 @@ function ConfirmarPedido() {
                     )}
 
                 </div>
+                {tipoEnvio === 'Normal' && (
+
+                <p className="confirmar-normal-warning">
+                    El pedido debe ser recogido en la dirección del local, ubicada en la página principal.
+                </p>
+
+                )}
 
                 <div className="confirmar-acciones">
                     <button

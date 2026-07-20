@@ -64,7 +64,7 @@ function DestacadoItem({ producto, index }) {
 
                     <button
                         className="destacados-item-btn"
-                        onClick={() => navigate(`/producto/${producto.id}`)}
+                        onClick={() => navigate(`/catalogo?productoId=${producto.id}`)}
                     >
                         Comprar
                     </button>

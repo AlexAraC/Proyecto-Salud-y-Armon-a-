@@ -41,6 +41,8 @@ function DesplegarCatalogo(){
 
     const [notificacion, setNotificacion] = useState(false);
 
+    const [productoPendiente, setProductoPendiente] = useState(null);
+
     const usuarioLogueado = !!localStorage.getItem('token');
 
     const cargarCarrito = useCallback(async () => {
@@ -126,6 +128,54 @@ function DesplegarCatalogo(){
             setCancelando(null);
         }
     };
+
+    useEffect(() => {
+        const productoId = searchParams.get('productoId');
+        if (productoId) {
+            const productoEncontrado = productos.find(p => String(p.id) === String(productoId));
+            setSearchParams({}, { replace: true });
+            if (productoEncontrado) {
+                // Scroll to the product's card and click "Ver detalles" button
+                setTimeout(() => {
+                    const target = document.getElementById(`producto-${productoId}`);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        target.classList.add('producto-destacado');
+                        setTimeout(() => target.classList.remove('producto-destacado'), 2000);
+                    }
+                    // Click the "Ver detalles" button inside this product's CardProducto
+                    const verDetallesBtn = target?.querySelector('.boton-detalles');
+                    if (verDetallesBtn) {
+                        verDetallesBtn.click();
+                    }
+                }, 500);
+            } else {
+                // Products not loaded yet, store the id to process later
+                setProductoPendiente(productoId);
+            }
+        }
+    }, [searchParams, setSearchParams, productos]);
+
+    // Process pending product when productos finishes loading
+    useEffect(() => {
+        if (productoPendiente && productos.length > 0) {
+            const productoId = productoPendiente;
+            setProductoPendiente(null);
+            setTimeout(() => {
+                const target = document.getElementById(`producto-${productoId}`);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.classList.add('producto-destacado');
+                    setTimeout(() => target.classList.remove('producto-destacado'), 2000);
+                }
+                // Click the "Ver detalles" button inside this product's CardProducto
+                const verDetallesBtn = target?.querySelector('.boton-detalles');
+                if (verDetallesBtn) {
+                    verDetallesBtn.click();
+                }
+            }, 500);
+        }
+    }, [productoPendiente, productos]);
 
     useEffect(() => {
         if (searchParams.get('carrito') === 'abierto') {
@@ -239,6 +289,7 @@ function DesplegarCatalogo(){
     const pedidosCrono = [...pedidos].reverse();
 
     return(
+        <>
         <div className="catalogo-layout">
 
             <h2 className="catalogo-titulo">
@@ -342,6 +393,7 @@ function DesplegarCatalogo(){
                                         idx++;
                                         return (
                                             <div
+                                                id={`producto-${p.id}`}
                                                 key={p.id}
                                                 className="catalogo-producto-wrapper"
                                                 style={{ animationDelay: `${delay}s` }}
@@ -645,6 +697,8 @@ function DesplegarCatalogo(){
             )}
 
         </div>
+
+        </>
     );
 
 }

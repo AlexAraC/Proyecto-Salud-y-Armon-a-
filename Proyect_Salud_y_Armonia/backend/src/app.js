@@ -7,6 +7,7 @@ const helmet = require('helmet');
 // IMPORTAR EXPRESS
 // =====================================
 
+const express = require('express');
 const { logError } = require('./utils/logger');
 const { errorHandler } = require('./middlewares/errorHandler.middleware');
 
@@ -16,7 +17,10 @@ const { errorHandler } = require('./middlewares/errorHandler.middleware');
 // =====================================
 
 const app = express();
-app.use(helmet());
+app.use(cors());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 
 // =====================================
@@ -144,8 +148,6 @@ app.use(
     )
 
 );
-app.use(cors());
-
 // Productos
 app.use('/productos', productosRoutes);
 

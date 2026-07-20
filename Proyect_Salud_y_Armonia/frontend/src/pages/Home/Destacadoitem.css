@@ -15,5 +15,16 @@
 }
 .destacados-item-nombre {
     margin-top: 20px;
-    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .destacados-item:not(.reverso) .destacados-item-img,
+    .destacados-item.reverso .destacados-item-img {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .destacados-item-descripcion {
+        margin: 0 !important;
+    }
 }

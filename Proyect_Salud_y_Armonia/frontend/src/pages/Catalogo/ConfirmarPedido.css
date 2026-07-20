@@ -152,7 +152,18 @@
 .confirmar-envio-option:hover {
     border-color: #6f8c4e;
 }
-
+.confirmar-normal-warning {
+    color: #3A312B;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 14px 0 24px; 
+    padding: 10px 14px;
+    background: rgba(111, 140, 78, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(111, 140, 78, 0.25);
+    line-height: 1.4;
+    animation: warningFade .3s ease;
+}
 .confirmar-envio-option.activo {
     border-color: #6f8c4e;
     background: rgba(111, 140, 78, 0.1);
@@ -177,6 +188,7 @@
     border-radius: 10px;
     border: 1px solid rgba(197, 83, 83, 0.2);
     line-height: 1.4;
+    margin-bottom: 20px;
 }
 
 .confirmar-perfil-direccion {

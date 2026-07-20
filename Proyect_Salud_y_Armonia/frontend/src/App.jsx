@@ -22,12 +22,14 @@ function AppContent() {
     const navigate = useNavigate();
     const { expired, warning, remaining, dismiss } = useSessionExpiry();
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('loginTime');
-        navigate('/');
-    };
+        const handleLogout = () => {
+            dismiss(); // Reinicia los estados del hook
 
+            localStorage.removeItem('token');
+            localStorage.removeItem('loginTime');
+
+            navigate('/');
+        };
     // Determinar qué mode pasarle al modal
     const modalMode = expired ? 'expired' : warning ? 'warning' : null;
 
